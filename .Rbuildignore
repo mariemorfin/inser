@@ -1,0 +1,8 @@
+^inser\.Rproj$
+^\.Rproj\.user$
+^dev$
+^_pkgdown\.yml$
+^pkgdown$
+^ci/lib$
+^\.gitlab-ci\.yml$
+^\.gitlab$

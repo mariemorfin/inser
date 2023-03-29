@@ -1,0 +1,182 @@
+---
+title: "Dev history - Package"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 1
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  eval = FALSE
+  )
+```
+
+In this document, you will find the useful steps/commands to start the development of a package (structure, documentation, ...)
+
+# At the beggining of the developments
+## Set the dev tools
+
+### Add git templates
+
+```{r}
+# GitLab MR and git commit templates
+lozen::add_git_templates()
+```
+
+### Add kit package
+
+```{r}
+lozen::add_kit_package(type = c("package", "deliverables"))
+lozen::add_kit_project()
+```
+
+### Create a `inst` dir
+
+```{r}
+dir.create("inst")
+```
+
+### Hide some files in .Rbuildignore and .gitignore
+
+```{r}
+usethis::use_build_ignore("dev")
+usethis::use_build_ignore("ci/lib")
+usethis::use_build_ignore("rsconnect")
+
+usethis::use_git_ignore("docs/")
+usethis::use_git_ignore("rsconnect/")
+usethis::git_vaccinate()
+usethis::use_git_ignore(c(".DS_Store", ".Rproj.user", ".Rdata", ".Rhistory", ".httr-oauth"))
+```
+
+### Add some required packages
+
+```{r}
+# Pipe ----
+usethis::use_pipe()
+# _Tests ----
+usethis::use_testthat()
+```
+
+### Set the CI
+
+```{r}
+# _CI (cf {gitlabr} templates) ----
+lozen::use_gitlab_ci(image = "rocker/verse",
+                              gitlab_url = "https://forge.thinkr.fr",
+                              repo_name = "https://packagemanager.rstudio.com/all/__linux__/focal/latest",
+                              type = "check-coverage-pkgdown") # "check-coverage-pkgdown-renv"
+
+# GitHub Actions ----
+# usethis::use_github_action_check_standard()
+# usethis::use_github_action("pkgdown")
+#  _Add remotes::install_github("ThinkR-open/thinkrtemplate") in this action
+# usethis::use_github_action("test-coverage")
+```
+
+## Add general information/documentation about the package
+
+### Update DESCRIPTION
+
+```{r}
+library(desc)
+unlink("DESCRIPTION")
+# Utiliser `lozen::get_author()` pour aider à remplir DESCRIPTION'
+lozen::get_author()
+
+my_desc <- description$new("!new")
+my_desc$set_version("0.0.0.9000")
+my_desc$set(Package = "deeptools")
+my_desc$set(Title = "Tools to analyze video images")
+my_desc$set(Description = "Images were analyzed in a game. This package explores the results of the game.")
+my_desc$set(
+  "Authors@R",
+  'c(
+  person("Sebastien", "Rochette", email = "sebastien@thinkr.fr", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-1565-9313")),
+  person("Colin", "Fay", email = "colin@thinkr.fr", role = c("aut"), comment = c(ORCID = "0000-0001-7343-1846")),
+  person("Vincent", "Guyader", email = "vincent@thinkr.fr", role = c("aut"), comment = c(ORCID = "0000-0003-0671-9270")),
+  person(given = "ThinkR", role = "cph")
+)'
+)
+my_desc$set("VignetteBuilder", "knitr")
+my_desc$del("Maintainer")
+my_desc$del("URL")
+my_desc$del("BugReports")
+my_desc$write(file = "DESCRIPTION")
+```
+
+### Licence
+
+```{r}
+usethis::use_proprietary_license("ThinkR")
+# usethis::use_mit_license("ThinkR")
+```
+
+### README
+
+```{r}
+# usethis::use_readme_rmd()
+papillon::generate_readme_rmd()
+papillon::generate_readme_rmd(parts = "description")
+
+# _Badges GitLab
+usethis::use_badge(badge_name = "pipeline status",
+                   href = "https://forge.thinkr.fr/<group>/<project>/-/commits/main",
+                   src = "https://forge.thinkr.fr/<group>/<project>/badges/main/pipeline.svg")
+# usethis::use_badge(badge_name = "coverage report",
+#                    href = "http://<group>.pages.thinkr.fr/<project>/coverage.html",
+#                    src = "https://forge.thinkr.fr/<group>/<project>/badges/main/coverage.svg")
+```
+
+### NEWS
+
+```{r}
+usethis::use_news_md()
+```
+
+### Code of conduct
+
+```{r}
+usethis::use_code_of_conduct()
+```
+
+### Contributing guide
+
+```{r}
+usethis::use_tidy_contributing()
+```
+
+### Package-level documentation
+
+```{r}
+usethis::use_package_doc()
+```
+
+### Add a css for the vignettes
+
+```{r}
+file.copy(system.file("templates/html/header_hide.html", package = "lozen"),
+          "vignettes")
+lozen::add_thinkr_css(path = "vignettes")
+
+lozen::create_vignette_thinkr("aa-data-exploration")
+```
+
+### Description and Bibliography
+
+```{r}
+papillon::create_pkg_desc_file(out.dir = "inst", source = c("archive"), to = "html")
+lozen::create_pkg_biblio_file_thinkr()
+```
+
+## Tools to help to resolve issues
+
+```{r}
+# Get global variables
+checkhelper::print_globals()
+# Hexadecimal translation of an accent - if there are notes about non ASCII characters
+stringi::stri_trans_general("é", "hex")
+```
+
