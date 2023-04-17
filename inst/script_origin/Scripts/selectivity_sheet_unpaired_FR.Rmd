@@ -1,0 +1,794 @@
+---
+title: "Fiche de sélectivité - InseR"
+subtitle: "Protocole non apparié"
+output: word_document
+---
+
+## Engins testés
+
+```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
+
+##Création d'une table contenant le nom des engins, le dispositif sélectitif, le maillage du cul, 
+#la longueur de corde de dos
+
+df<-data %>%
+  group_by(gear_label) %>%
+  summarise(type=unique(gear_type),sel=unique(selective_device),mesh=unique(mesh_gauge_codend_mm),length=unique(headline_cumulative_length)) %>% as.data.frame()
+
+names(df)<-c("","Engin","Dispositif sélectif","Maillage du cul (mm)","Corde de dos (m)")
+  
+kable(df)
+
+```
+
+
+# 1. Description de la marée
+
+### Navire et marées étudiées
+
+```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
+
+##Création d'une table contenant le nom des navires, des marées
+#Pour chaque navire x marée: nombre de stations, dates
+
+df<-data %>%
+  group_by(project,vessel_identifier,vessel_name,trip_code) %>%
+  summarise(NombreOP=length(unique(station_number)),Debut=unique(departure_date_time),Fin=unique(return_date_time)) %>% as.data.frame()
+  
+  names(df)<-c("Projet","ID Navire","Navire","ID Marée","Opérations de pêche","Début","Fin")
+  
+kable(df)
+
+
+```
+
+
+### Carte des opérations de pêche
+
+```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE,fig.width=30,fig.height=12}
+
+Maps
+
+```
+
+### Conditions de pêche
+
+
+```{r, echo=FALSE,warning=FALSE,fig.cap="Histogramme des durées de pêche.",comment="",message=FALSE,fig.asp=0.5}
+
+tab_OP<- TAB %>% group_by(project,vessel_identifier,trip_code,station_number,gear_label)%>%
+    summarize(fishing_duration=unique(fishing_duration),gear_depth=unique(gear_depth),
+              wind_force_beaufort=unique(wind_force_beaufort),gear_speed=unique(gear_speed),
+              sea_state=unique(sea_state))
+
+if(length(which(is.na(tab_OP$fishing_duration)==FALSE))>0){
+  
+  ggplot(tab_OP,aes(y=fishing_duration,x=gear_label,fill=gear_label))+
+  geom_boxplot(width=0.5)+labs(y="Durée de pêche (heures)")+
+  stat_summary(fun=mean, geom="point", shape=4, lwd=2)+
+  #geom_point(aes(x=0,y=mean(fishing_duration)),shape=4) + 
+  theme(legend.position = "None",axis.text=element_text(size=8),
+        axis.title=element_text(size=10))+
+    xlab("")
+}
+
+nNA<-length(which(is.na(tab_OP$fishing_duration)==T))
+if(nNA>0){cat(paste0("Note : il manque ",nNA," valeurs sur les ", nrow(tab_OP), " opérations de pêche."))}
+
+```
+
+
+```{r, echo=FALSE,warning=FALSE,fig.cap="Histogramme des profondeurs de pêche.",comment="",message=FALSE,fig.asp=0.5}
+
+if(length(which(is.na(tab_OP$gear_depth)==FALSE))>0){
+ 
+    ggplot(tab_OP,aes(y=gear_depth,x=gear_label,fill=gear_label))+
+  geom_boxplot(width=0.5)+labs(y="Profondeur (m)")+
+  stat_summary(fun=mean, geom="point", shape=4, lwd=2)+
+  theme(legend.position = "None",axis.text=element_text(size=8),
+        axis.title=element_text(size=10))+
+    xlab("")
+}
+
+nNA<-length(which(is.na(tab_OP$gear_label)==T))
+if(nNA>0){cat(paste0("Note : il manque ",nNA," valeurs sur les ", nrow(tab_OP), " opérations de pêche."))}
+
+
+```
+
+
+```{r, echo=FALSE,warning=FALSE,fig.cap="Histogramme de la vitesse de l'engin.",comment="",message=FALSE,fig.asp=0.5}
+
+if(length(which(is.na(tab_OP$gear_speed)==FALSE))>0){
+  
+   ggplot(tab_OP,aes(y=gear_speed,x=gear_label,fill=gear_label))+
+  geom_boxplot(width=0.5)+labs(y="Vitesse de pêche (noeuds)")+
+  stat_summary(fun=mean, geom="point", shape=4, lwd=2)+
+  theme(legend.position = "None",axis.text=element_text(size=8),
+        axis.title=element_text(size=10))+
+    xlab("")
+}
+
+nNA<-length(which(is.na(tab_OP$gear_speed)==T))
+if(nNA>0){cat(paste0("Note : il manque ",nNA," valeurs sur les ", nrow(tab_OP), " opérations de pêche."))}
+
+
+```
+
+
+```{r, echo=FALSE,warning=FALSE,fig.cap="Force du vent.",comment="",message=FALSE,fig.asp=0.5}
+
+if(length(which(is.na(tab_OP$wind_force_beaufort)==FALSE))>0){
+     ggplot(tab_OP,aes(y=wind_force_beaufort,x=gear_label,fill=gear_label))+
+  geom_boxplot(width=0.5)+labs(y="Force du vent (Beaufort)")+
+  stat_summary(fun=mean, geom="point", shape=4, lwd=2)+
+  theme(legend.position = "None",axis.text=element_text(size=8),
+        axis.title=element_text(size=10))+
+    xlab("")
+}
+
+nNA<-length(which(is.na(tab_OP$wind_force_beaufort)==T))
+if(nNA>0){cat(paste0("Note : il manque ",nNA," valeurs sur les ", nrow(tab_OP), " opérations de pêche."))}
+
+```
+
+```{r, echo=FALSE,warning=FALSE,fig.cap="Etat de la mer.",comment="",message=FALSE,fig.asp=0.5}
+
+if(length(which(is.na(tab_OP$sea_state)==FALSE))>0){
+     ggplot(tab_OP,aes(y=sea_state,x=gear_label,fill=gear_label))+
+  geom_boxplot(width=0.5)+labs(y="Etat de la mer (Douglas)")+
+  stat_summary(fun=mean, geom="point", shape=4, lwd=2)+
+  theme(legend.position = "None",axis.text=element_text(size=8),
+        axis.title=element_text(size=10))+
+    xlab("")
+}
+
+nNA<-length(which(is.na(tab_OP$sea_state)==T))
+if(nNA>0){cat(paste0("Note : il manque ",nNA," valeurs sur les ", nrow(tab_OP), " opérations de pêche."))}
+
+```
+
+```{r, echo=FALSE,warning=FALSE,fig.cap="Etat de la mer.",comment="",message=FALSE,fig.asp=0.5}
+
+#Conditions de pêche /OP - variables catégorielles
+tab_OP2<- TAB %>% group_by(project,vessel_identifier,trip_code,station_number,gear_label)%>%
+    summarize(seabed_features=unique(seabed_features),
+              wind_cardinal_direction=unique(wind_cardinal_direction),diurnal_operation=unique(diurnal_operation))
+
+
+if(length(which(is.na(tab_OP2$sea_state)==FALSE))>0){
+ggplot(tab_OP2,aes(x=sea_state,fill=gear_label))+ 
+  geom_bar(stat = 'count',position="dodge") +
+ labs(y = "Opérations de pêche",x="Etat de la mer")+
+  theme(legend.position = "top")+#,axis.text=element_text(size=12),axis.title=element_text(size=14))
+labs(fill="Engin")
+}
+
+nNA<-length(which(is.na(tab_OP2$sea_state)==T))
+if(nNA>0){cat(paste0("Note : il manque ",nNA," valeurs sur les ", nrow(tab_OP2), " opérations de pêche."))}
+
+```
+
+```{r, echo=FALSE,warning=FALSE,fig.cap="Types de fond.",comment="",message=FALSE,fig.asp=0.5}
+
+if(length(which(is.na(tab_OP$seabed_features)==FALSE))>0){
+ggplot(tab_OP2,aes(x=seabed_features,fill=gear_label))+ 
+  geom_bar(stat = 'count',position="dodge") +
+ labs(y = "Opérations de pêche",x="Type de fond")+
+  theme(legend.position = "top")+#,axis.text=element_text(size=12),axis.title=element_text(size=14))
+labs(fill="Engin")
+}
+
+nNA<-length(which(is.na(tab_OP2$seabed_features)==T))
+if(nNA>0){cat(paste0("Note : il manque ",nNA," valeurs sur les ", nrow(tab_OP2), " opérations de pêche."))}
+
+```
+
+
+
+```{r, echo=FALSE,warning=FALSE,fig.cap="Direction du vent.",comment="",message=FALSE,fig.asp=0.5}
+
+
+if(length(which(is.na(tab_OP2$wind_cardinal_direction)==FALSE))>0){
+ggplot(tab_OP2,aes(x=wind_cardinal_direction,fill=gear_label))+ 
+  geom_bar(stat = 'count',position="dodge") +
+ labs(y = "Opérations de pêche",x="Direction du vent")+
+   theme(legend.position = "top")+#,axis.text=element_text(size=12),axis.title=element_text(size=14))
+labs(fill="Engin")
+}
+
+nNA<-length(which(is.na(tab_OP2$wind_cardinal_direction)==T))
+if(nNA>0){cat(paste0("Note : il manque ",nNA," valeurs sur les ", nrow(tab_OP2), " opérations de pêche."))}
+
+```
+
+
+```{r, echo=FALSE,warning=FALSE,fig.cap="Occurences jour/nuit.",comment="",message=FALSE,fig.asp=0.5}
+
+tab_OP2$diurnal_operation<-factor(tab_OP2$diurnal_operation,levels=c("Y","N"),labels=c("Jour","Nuit"))
+
+  
+if(length(which(is.na(tab_OP2$diurnal_operation)==FALSE))>0){
+ggplot(tab_OP2,aes(x=diurnal_operation,fill=gear_label))+ 
+  geom_bar(stat = 'count',position="dodge") +
+ labs(y = "Opérations de pêche",x="Période de pêche")+
+  theme(legend.position = "top")+#,axis.text=element_text(size=12),axis.title=element_text(size=14))
+labs(fill="Engin")
+}
+
+nNA<-length(which(is.na(tab_OP2$diurnal_operation)==T))
+if(nNA>0){cat(paste0("Note : il manque ",nNA," valeurs sur les ", nrow(tab_OP2), " opérations de pêche."))}
+
+```
+
+
+### Résumé des conditions de pêche 
+
+```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
+
+##Tableau de statistiques pour les variables continues uniquement
+
+varC<-c("fishing_duration","gear_depth","gear_speed","wind_force_beaufort","sea_state")
+
+df<-data.frame(Variable=c("Durée de pêche","Profondeur de pêche","Vitesse de pêche","Force du vent","Etat de la mer"))  
+df$min<-apply(tab_OP[,varC],2,"min",na.rm=T)
+df$max<-apply(tab_OP[,varC],2,"max",na.rm=T)
+df$mean<-apply(tab_OP[,varC],2,"mean",na.rm=T)
+df$median<-apply(tab_OP[,varC],2,"median",na.rm=T)
+
+df$diff<-data.frame(tab_OP) %>%
+  summarize(fishing_duration=mean(fishing_duration[gear_label=="TEST"]-fishing_duration[gear_label=="STD"],na.rm=T),
+            gear_depth=mean(gear_depth[gear_label=="TEST"]-gear_depth[gear_label=="STD"],na.rm=T),
+            gear_speed=mean(gear_speed[gear_label=="TEST"]-gear_speed[gear_label=="STD"],na.rm=T),
+            wind_force_beaufort=mean(wind_force_beaufort[gear_label=="TEST"]-wind_force_beaufort[gear_label=="STD"],na.rm=T),
+            sea_state=mean(sea_state[gear_label=="TEST"]-sea_state[gear_label=="STD"],na.rm=T))%>%as.numeric()
+  
+  
+df[,-1]<-round(df[,-1],1)
+
+df$nNA<-apply(tab_OP[,varC],2,function(x){length(which(is.na(x)==TRUE))})
+
+# #Pour la capture totale et le temps de tri
+# var<-c("catch_weight","sorting_time")
+# 
+# df2<-data.frame(Variable=c("Poids de la capture (kg)","Durée de tri (min)"))  
+# df2$min<-apply(tab_capture[,var],2,"min",na.rm=T)
+# df2$max<-apply(tab_capture[,var],2,"max",na.rm=T)
+# df2$mean<-apply(tab_capture[,var],2,"mean",na.rm=T)
+# df2$median<-apply(tab_capture[,var],2,"median",na.rm=T)
+# 
+# df2[,-1]<-round(df2[,-1],1)
+# df2$nNA<-apply(tab_capture[,var],2,function(x){length(which(is.na(x)==TRUE))})
+# 
+# df2$diff<-data.frame(tab_capture) %>%
+#   summarize(catch_weight=mean(catch_weight[gear_label=="TEST"])-mean(catch_weight[gear_label=="STD"],na.rm=T),
+#             sorting_time=mean(sorting_time[gear_label=="TEST"])-mean(sorting_time[gear_label=="STD"],na.rm=T))%>%as.numeric()
+# 
+# df<-rbind(df,df2)
+
+if(sum(df$nNA>0)){
+names(df)<-c("","Min","Max","Moyenne","Médiane","Différence","Valeurs NA")
+
+kable(df)
+}else{df<-select(df,-nNA)
+names(df)<-c("","Min","Max","Moyenne","Médiane","Différence")
+kable(df)
+}
+
+
+```
+
+
+# 2. Analyse des captures
+
+## 2.1. Capture totale
+
+### Poids des captures
+```{r, echo=FALSE,warning=FALSE,fig.cap="Poids total des captures par opération de pêche.",comment="",message=FALSE}
+
+#Comparaison des poids de captures, temps de tri, poids des rejets / paire :
+
+##Calcul de la durée de tri
+TAB$sorting_start_date_time<-as.POSIXct(TAB$sorting_start_date_time,format="%Y-%m-%d %H:%M:%S")
+TAB$sorting_end_date_time<-as.POSIXct(TAB$sorting_end_date_time,format="%Y-%m-%d %H:%M:%S")
+TAB$sorting_time<-with(TAB,difftime(sorting_end_date_time,sorting_start_date_time,units="mins"))
+
+#Valeur par capture
+tab_capture<- TAB %>% 
+  group_by(project,vessel_identifier,trip_code,station_number,gear_label)%>%
+  summarize(catch_weight=unique(catch_weight),sorting_time=unique(sorting_time),
+              discard_weight=unique(discard_weight))
+
+if(length(which(is.na(tab_capture$catch_weight)==FALSE))>0){
+
+  ggplot(tab_capture,aes(y=catch_weight,x=gear_label))+
+  geom_boxplot(width=0.5,aes(fill=gear_label))+labs(y="Poids de la capture (kg)")+
+   stat_summary(fun=mean, geom="point", shape=4, position = position_dodge(0.75),lwd=2)+
+  theme(legend.position = "None",axis.text=element_text(size=8),
+        axis.title=element_text(size=10))+
+    xlab("")
+}
+
+nNA<-length(which(is.na(tab_capture$catch_weight)==T))
+if(nNA>0){cat(paste0("Note : il manque ",nNA," valeurs sur les ", nrow(tab_capture), " opérations de pêche."))}
+```
+
+
+### Durée du tri
+```{r, echo=FALSE,warning=FALSE,fig.cap="Durée du tri de la capture par opération de pêche.",comment="",message=FALSE,fig.height=5}
+
+if(length(which(is.na(tab_capture$sorting_time)==FALSE))>0){
+
+  ggplot(tab_capture,aes(y=sorting_time,x=gear_label))+
+  geom_boxplot(width=0.5,aes(fill=gear_label))+labs(y="Poids de la capture (kg)")+
+   stat_summary(fun=mean, geom="point", shape=4, position = position_dodge(0.75),lwd=2)+
+  theme(legend.position = "None",axis.text=element_text(size=8),
+        axis.title=element_text(size=10))+
+    xlab("")
+}
+nNA<-length(which(is.na(tab_capture$sorting_time)==T))
+if(nNA>0){cat(paste0("Note : il manque ",nNA," valeurs sur les ", nrow(tab_capture), " opérations de pêche."))}
+
+##Test sur temps de tri?
+
+```
+
+```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
+
+#Difference de rejets TEST-STD:
+DIS_STD<-filter(tab_capture,gear_label=="STD")$sorting_time
+DIS_TEST<-filter(tab_capture,gear_label=="TEST")$sorting_time
+
+#a. Test de Shapiro-Wilk de normalité
+test1_STD<-tryCatch(shapiro.test(DIS_STD), error = function(e){"e"})
+test1_TEST<-tryCatch(shapiro.test(DIS_TEST), error = function(e){"e"})
+
+#b. Test de Fisher d'égalité des variances:
+test1b<-tryCatch(var.test(DIS_STD,DIS_TEST), error = function(e){"e"})
+
+if(class(test1_STD) =="htest" & class(test1_TEST) =="htest" & class(test1b) =="htest"){
+  
+  #Si les 2 tests non rejetés (p-value >0.05)=> test de Student:
+  if(test1_TEST$p.value > 0.05 & test1_STD$p.value > 0.05 & test1b$p.value > 0.05){
+    test2<-tryCatch(t.test(x=DIS_STD,y=DIS_TEST)  , error = function(e){"e"})
+  }else{
+    #Sinon test de Mann-Whitney/Wilcoxon:
+    test2<-tryCatch(wilcox.test(DIS_STD,DIS_TEST, paired =F, correct = T, exact = F), error = function(e){"e"})
+  }
+
+
+if(class(test2) == "htest"){#si pas d'erreur
+    
+    if(test2$p.value<=0.05){
+      
+      cat("Les durées de tri sont significativement différentes entre l'engin standard et l'engin testé.")
+    }else{ cat("Les durées de tri ne sont pas significativement différentes entre l'engin standard et l'engin testé.")
+    }
+}    
+      
+
+  if(test1_TEST$p.value > 0.05 & test1_STD$p.value > 0.05 & test1b$p.value > 0.05){
+    diff_DIS<-mean(DIS_TEST)-mean(DIS_STD)
+        cat(paste("Il y a en médiane",abs(round(diff_DIS,3)),"minutes de",c("moins","plus")[as.numeric(eval(diff_DIS>0))+1],"pour l'engin testé comparé à l'engin standard (p-value=",round(test2$p.value,4),")."))  
+      }else{
+  
+     diff_DIS<-median(DIS_TEST)-median(DIS_STD)
+       cat(paste("Il y a en moyenne",abs(round(diff_DIS,3)),"minutes de",c("moins","plus")[as.numeric(eval(diff_DIS>0))+1],"pour l'engin testé comparé à l'engin standard (p-value=",round(test2$p.value,4),")."))  
+ 
+      }
+   
+}
+
+```
+
+
+
+### Taux de variation des durées de tri pour l'engin test par rapport à l'engin standard
+
+```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
+
+#Taux de variation (TEST-STD)/STD
+Tot_TEST<-sum(filter(tab_capture,gear_label=="TEST")$sorting_time)
+Tot_STD<-sum(filter(tab_capture,gear_label=="STD")$sorting_time)
+
+Var_Rate<-(Tot_TEST-Tot_STD)/Tot_STD*100
+  
+cat(paste("Une perte de",round(Var_Rate,2) ,"% de la durée de tri est observée pour l'engin testé sur l’ensemble des OPs suivies."))
+
+
+```
+
+### Poids des rejets
+
+```{r, echo=FALSE,warning=FALSE,fig.cap="Poids total des rejets par opération de pêche.",message=FALSE,fig.width=5}
+
+if(length(which(is.na(tab_capture$discard_weight)==FALSE))>0){
+ggplot(tab_capture,aes(y=discard_weight,x=gear_label,fill=gear_label))+
+  geom_boxplot(width=0.5)+labs(y = "Poids des rejets (kg)")+
+  xlab("Engin")+
+    theme(legend.position = "None",axis.text=element_text(size=12),
+        axis.title=element_text(size=14))+
+  stat_summary(fun=mean, geom="point", shape=4, position = position_dodge(0.75),lwd=2)
+}
+
+```
+
+
+```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
+
+#Difference de rejets TEST-STD:
+DIS_STD<-filter(tab_capture,gear_label=="STD")$discard_weight
+DIS_TEST<-filter(tab_capture,gear_label=="TEST")$discard_weight
+
+#a. Test de Shapiro-Wilk de normalité
+test1_STD<-tryCatch(shapiro.test(DIS_STD), error = function(e){"e"})
+test1_TEST<-tryCatch(shapiro.test(DIS_TEST), error = function(e){"e"})
+
+#b. Test de Fisher d'égalité des variances:
+test1b<-tryCatch(var.test(DIS_STD,DIS_TEST), error = function(e){"e"})
+
+if(class(test1_STD) =="htest" & class(test1_TEST) =="htest" & class(test1b) =="htest"){
+  
+  #Si les 2 tests non rejetés (p-value >0.05)=> test de Student:
+  if(test1_TEST$p.value > 0.05 & test1_STD$p.value > 0.05 & test1b$p.value > 0.05){
+    test2<-tryCatch(t.test(x=DIS_STD,y=DIS_TEST)  , error = function(e){"e"})
+  }else{
+    #Sinon test de Mann-Whitney/Wilcoxon:
+    test2<-tryCatch(wilcox.test(DIS_STD,DIS_TEST, paired =F, correct = T, exact = F), error = function(e){"e"})
+  }
+}
+
+if(class(test2) == "htest"){#si pas d'erreur
+    
+    if(test2$p.value<=0.05){
+      
+      cat("Le poids des rejets totaux sont significativement différents entre l'engin standard et l'engin testé.")
+    }else{ cat("Les poids rejetés ne sont pas significativement différents entre l'engin standard et l'engin testé.")
+    }
+}    
+      
+
+  if(test1_TEST$p.value > 0.05 & test1_STD$p.value > 0.05 & test1b$p.value > 0.05){
+    diff_DIS<-mean(DIS_TEST)-mean(DIS_STD)
+        cat(paste("Il y a en médiane",abs(round(diff_DIS,3)),"kg de",c("moins","plus")[as.numeric(eval(diff_DIS>0))+1],"dans l'engin testé comparé à l'engin standard (p-value=",round(test2$p.value,4),")."))  
+      }else{
+  
+     diff_DIS<-median(DIS_TEST)-median(DIS_STD)
+       cat(paste("Il y a en moyenne",abs(round(diff_DIS,3)),"kg de",c("moins","plus")[as.numeric(eval(diff_DIS>0))+1],"dans l'engin testé comparé à l'engin standard (p-value=",round(test2$p.value,4),")."))  
+ 
+      }
+   
+```
+
+
+### Taux de variation des poids rejetés totaux de l'engin testé par rapport à l'engin standard
+
+```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
+
+#Taux de variation (TEST-STD)/STD
+Tot_TEST<-sum(filter(tab_capture,gear_label=="TEST")$discard_weight)
+Tot_STD<-sum(filter(tab_capture,gear_label=="STD")$discard_weight)
+
+Var_Rate<-(Tot_TEST-Tot_STD)/Tot_STD*100
+  
+cat(paste("Une perte de",round(Var_Rate,2) ,"% de rejets en poids est observée dans l'engin testé en considérant le poids de l’ensemble des rejets des OPs suivies."))
+
+
+```
+
+
+
+## 2.2. Comparaison des poids débarqués et rejetés par espèce étudiée
+
+### Liste des espèces débarquées étudiées :
+```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
+List_LAN<-unique(filter(TAB,catch_category=="LAN")$species)
+cat(List_LAN,sep=", ")
+```
+
+### Liste des espèces rejetées étudiées :
+```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
+List_DIS<-unique(filter(TAB,catch_category=="DIS")$species)
+cat(List_DIS,", ")
+```
+
+```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
+List_sp<-unique(TAB$species)
+
+#Pour chaque espèce, boxplot des poids de chaque fraction et engin / paire: 
+weight_species<-TAB %>% group_by(project,vessel_identifier,trip_code,station_number,gear_label,catch_category,species)%>%
+ summarize(weight=sum(weight)*10^(-3))%>%as.data.frame()
+
+weight_species<-as.data.frame(complete(weight_species,nesting(project,vessel_identifier,trip_code,station_number),gear_label,catch_category,species,fill=list(weight=0)))
+
+#Un graphe par espece
+List_ggplot<-vector(mode="list",length=length(List_sp))
+
+for(sp in 1:length(List_sp)){
+  
+  List_ggplot[[sp]]<-ggplot(filter(weight_species,species==List_sp[sp]),aes(y=weight,x=catch_category,fill=gear_label))+
+    geom_boxplot()+labs(y = "Poids par capture (Kg)")+ggtitle(List_sp[sp]) +
+    stat_summary(fun=mean, geom="point", shape=4, position = position_dodge(0.75),lwd=2)+
+    xlab("")+
+    scale_x_discrete(labels=c("Rejets","Débarquements"))+
+    labs(fill = "Engin")
+  print(List_ggplot[[sp]])
+}
+
+```
+
+
+```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
+
+Ftest<-function(sp,cat){
+  
+  weight_sp_frac<-filter(weight_species,species==sp & catch_category==cat)
+  
+   #Conditions du test de Student: normalité des 2 échantillons + égalité des variances
+  weight_STD<-filter(weight_sp_frac,gear_label=="STD")$weight
+  weight_TEST<-filter(weight_sp_frac,gear_label=="TEST")$weight
+  
+  #1.Test de Shapiro-Wilk de normalité
+  test1_STD<-tryCatch(shapiro.test(weight_STD),error=function(e){"e"})  
+  test1_TEST<-tryCatch(shapiro.test(weight_TEST),error=function(e){"e"})  
+  
+  #2.Test de Fisher d'égalité des variances:
+  test1b<-tryCatch(var.test(weight_STD,weight_TEST),error=function(e){"e"})  
+
+  if(class(test1_STD) =="htest" & class(test1_TEST) =="htest" & class(test1b) =="htest"){
+      
+    #Si les 2 tests non rejetés (p-value >0.05)=> test de Student:
+    if(test1_TEST$p.value > 0.05 & test1_STD$p.value > 0.05 & test1b$p.value > 0.05){
+      test2<-tryCatch(t.test(x=weight_STD,y=weight_TEST) ,error=function(e){"e"})   
+    }else{
+      #Sinon test de Mann-Whitney/Wilcoxon:
+      test2<-tryCatch(wilcox.test(weight_STD,weight_TEST, paired =F, correct = T, exact = F),error=function(e){"e"})  
+    }
+  }
+  
+  ##Resultat du test: 
+  if(class(test2) =="htest"){
+  if(test1_TEST$p.value > 0.05 & test1_STD$p.value > 0.05 & test1b$p.value > 0.05){
+    tab_test<-data.frame(pvalue=round(test2$p.value,4),moyenne=mean(weight_TEST)-mean(weight_STD),mediane=median(weight_TEST)-median(weight_STD),test="Fisher")
+  }else{
+    tab_test<-data.frame(pvalue=round(test2$p.value,4),moyenne=mean(weight_TEST)-mean(weight_STD),mediane=median(weight_TEST)-median(weight_STD),test="Kolmogorov")
+  }
+  
+  }else{
+    tab_test<-data.frame(pvalue=NA,moyenne=mean(weight_TEST)-mean(weight_STD),mediane=median(weight_TEST)-median(weight_STD),test=NA)
+  }
+    
+  #Taux de variation des poids débarqués du TEST par rapport au STD
+  Tot_TEST<-sum(weight_TEST)
+  Tot_STD<-sum(weight_STD)
+
+  Taux_sp<-round(100*(Tot_TEST-Tot_STD)/Tot_STD,2)#sur le total des marées
+  
+  tab_test<-data.frame(tab_test, Taux_Var_Tot=Taux_sp)
+  
+  return(tab_test)
+}
+
+
+
+test_LAN<-matrix(NA,ncol=5,nrow=length(List_LAN))
+row.names(test_LAN)<-List_LAN
+test_LAN<-as.data.frame(test_LAN)
+
+for(ii in 1:length(List_LAN)){
+  
+  #Test non apparié:  (H0) Diff_Poids=0 versus (H1) Diff_Poids non nulle sur médiane ou moyenne
+  #+ Taux de variation TEST/STD
+  test_LAN[ii,]<-Ftest(List_LAN[ii],"LAN")
+}
+names(test_LAN)<-names(Ftest(List_LAN[ii],"LAN"))
+
+test_LAN$moyenne<-round(test_LAN$moyenne,2)
+test_LAN$mediane<-round(test_LAN$mediane,2)
+
+test_LAN$moyenne[test_LAN$test=="Fisher"]<-paste(test_LAN$moyenne[test_LAN$test=="Fisher"],"*",sep="")
+test_LAN$mediane[test_LAN$test=="Kolmogorov"]<-paste(test_LAN$moyenne[test_LAN$test=="Kolmogorov"],"*",sep="")
+
+test_LAN$pvalue[test_LAN$pvalue< 10^(-2)]<-"< 10-2"
+test_LAN$pvalue[test_LAN$pvalue>0.1]<-">0.1"
+
+names(test_LAN)<-c("p-value","Différence moyenne (kg)","Différence médiane (kg)","Test","Taux de variation total (%)")
+
+kable(test_LAN[,-c(4)],digits=2,caption="Résultats des tests de différence de poids débarqués pour chaque espèce. La statistique testée est identifiée par '*'. Plus la p-value est faible, plus la différence est significative.")
+
+
+```
+
+*Rejets*
+```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
+
+test_DIS<-matrix(NA,ncol=5,nrow=length(List_DIS))
+row.names(test_DIS)<-List_DIS
+test_DIS<-as.data.frame(test_DIS)
+
+for(ii in 1:length(List_DIS)){
+  #Test apparié:  (H0) Diff_Poids=0 versus (H1) Diff_Poids non nulle sur médiane ou moyenne
+  #+ Taux de variation TEST/STD
+  test_DIS[ii,]<-Ftest(List_DIS[ii],"DIS")
+}
+
+names(test_DIS)<-names(Ftest(List_DIS[ii],"LAN"))
+
+test_DIS$pvalue[test_DIS$pvalue< 10^(-2)]<-"< 10-2"
+test_DIS$pvalue[test_DIS$pvalue>0.1]<-">0.1"
+
+test_DIS$moyenne<-round(test_DIS$moyenne,2)
+test_DIS$mediane<-round(test_DIS$mediane,2)
+
+test_DIS$moyenne[which(test_DIS$test=="Fisher")]<-paste(test_DIS$moyenne[which(test_DIS$test=="Fisher")],"*",sep="")
+test_DIS$mediane[which(test_DIS$test=="Kolmogorov")]<-paste(test_DIS$moyenne[which(test_DIS$test=="Kolmogorov")],"*",sep="")
+
+names(test_DIS)<-c("p-value","Différence moyenne (kg)","Différence médiane (kg)","Test","Taux de variation total (%)")
+
+kable(test_DIS[,-c(4)],digits=2,caption="Résultats des tests de différence de poids rejetés pour chaque espèce. La statistique testée est identifiée par '*'.")
+
+```
+
+
+
+# 3. Etude de la sélectivité en taille
+
+### Liste des espèces étudiées :
+```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
+
+List_M<-unique(filter(TAB,is.na(number_at_length)==FALSE)$species)
+cat(List_M,sep=", ")
+
+
+```
+
+
+### Pour chaque espèce, distribution en tailles des débarquements et rejets par engin
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE,comment="",message=FALSE}
+
+List_E<-vector(mode="list",length=length(List_M))
+
+for(sp in 1:length(List_M)){
+  
+  ##Bornes des tailles pour les graphes
+  Taille_min<-min(filter(TAB,species==List_M[sp])$length_class)
+  Taille_max<-max(filter(TAB,species==List_M[sp])$length_class)
+   
+ #Titre en abscisse
+ unit<-unique(filter(TAB,species==List_M[sp])$length_code)
+ type<-unique(filter(TAB,species==List_M[sp])$measure_type)
+
+   if(type=="CL" | type=="LC"){
+   Nom_Taille<-paste0("Longueur céphalothoracique (", unit,")")  
+  }
+   if(type=="TL" | type=="LT"){
+   Nom_Taille<-paste0("Longueur totale (", unit,")")  
+  }
+  
+  Taille_com<-filter(min_length,species==List_M[sp])$min_length
+  
+  #Effectifs en taille dans les captures
+  length_ALL<-filter(TAB,species==List_M[sp]) %>%
+  group_by(gear_label,length_class)%>%
+    summarize(n=sum(elevated_number_at_length,na.rm=T))
+  
+  p<-ggplot(data=length_ALL, aes(x=length_class, fill=gear_label)) +
+      xlim(Taille_min,Taille_max)+
+      geom_bar(stat='identity',aes(y=n),position = 'dodge')+
+     theme(legend.position="bottom")+
+      theme_light()+
+    labs(y = "Nombre d'individus",x=Nom_Taille)+
+    geom_vline(xintercept=Taille_com,color="yellowgreen",size=1,linetype = "dashed")+
+    ylim(c(0,max(length_ALL$n)))+
+     ggtitle(paste0(List_M[sp]," (Total)"))
+   
+  print(p)
+  
+  #Effectifs en taille par fraction
+  length_cat<-filter(TAB,species==List_M[sp]) %>%
+  group_by(gear_label,length_class,catch_category)%>%
+    summarize(n=sum(elevated_number_at_length,na.rm=T))
+  
+  p<-ggplot(data=filter(length_cat,catch_category=="LAN"), aes(x=length_class, fill=gear_label)) +
+      xlim(Taille_min,Taille_max)+
+      geom_bar(stat='identity',aes(y=n),position = 'dodge')+
+     theme(legend.position="bottom")+
+      theme_light()+
+    ylim(c(0,max(length_ALL$n)))+
+    labs(y = "Nombre d'individus",x=Nom_Taille)+
+      geom_vline(xintercept=Taille_com,color="yellowgreen",size=1,linetype = "dashed")+
+     ggtitle(paste0(List_M[sp]," (Débarquements)"))
+  print(p)
+  
+  p<-ggplot(data=filter(length_cat,catch_category=="DIS"), aes(x=length_class, fill=gear_label)) +
+      xlim(Taille_min,Taille_max)+
+      geom_bar(stat='identity',aes(y=n),position = 'dodge')+
+     theme(legend.position="bottom")+
+      theme_light()+
+    ylim(c(0,max(length_ALL$n)))+
+    labs(y = "Nombre d'individus",x=Nom_Taille)+
+      geom_vline(xintercept=Taille_com,color="yellowgreen",size=1,linetype = "dashed")+
+     ggtitle(paste0(List_M[sp]," (Rejets)"))
+  print(p)
+  
+  
+  ##Liste par espèce des taux d'échappements (STD-SEL)/STD: 
+  #sur toute la capture, HT et taille com.
+  
+  nSTD<-sum(filter(length_ALL,gear_label=="STD")$n,na.rm=T)
+  nSEL<-sum(filter(length_ALL,gear_label=="TEST")$n,na.rm=T)
+  taux_Total<-(nSTD-nSEL)/nSTD
+  
+  nSTD<-sum(filter(length_ALL,gear_label=="STD" & length_class >= Taille_com)$n,na.rm=T)
+  nSEL<-sum(filter(length_ALL,gear_label=="TEST" & length_class >= Taille_com)$n,na.rm=T)
+  taux_com<-(nSTD-nSEL)/nSTD
+  
+  nSTD<-sum(filter(length_ALL,gear_label=="STD" & length_class < Taille_com)$n,na.rm=T)
+  nSEL<-sum(filter(length_ALL,gear_label=="TEST" & length_class < Taille_com)$n,na.rm=T)
+  taux_HT<-(nSTD-nSEL)/nSTD
+  
+  tab_E<-data.frame(Espece=List_M[sp],taux_Total*100,taux_com*100,taux_HT*100)
+  
+  List_E[[sp]]<-tab_E
+
+}
+
+
+Tab_E<-bind_rows(List_E)
+
+names(Tab_E)<-c("Espece","Global (toutes les tailles)","Taille com.","Hors taille")
+```
+
+
+
+```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
+
+kable(Tab_E,digits=2,caption="Taux d'échappement de l'engin test par rapport au standard.")
+
+
+```
+
+
+### Courbes de sélectivité relative du chalut test par rapport le chalut standard
+
+```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE,fig.asp=0.7}
+
+for(sp in 1:length(List_M)){
+  
+
+  length_sp<-filter(TAB,species==List_M[sp]) %>% group_by(gear_label,length_class) %>%
+  summarize(n=sum(elevated_number_at_length,na.rm=T)) %>%as.data.frame()
+  
+  #sel relative = TEST/TOTAL
+  length_sp<-complete(length_sp,gear_label,length_class,fill=list(n=0))
+
+  Rel_Sel<-length_sp %>% group_by(length_class)%>%
+    summarize(rel_sel=n[gear_label=="TEST"]/sum(n),n_STD=sum(n[gear_label=="STD"]),n_TEST=sum(n[gear_label=="TEST"]))%>%as.data.frame()
+
+  taille_com<-filter(min_length,species==List_M[sp])$min_length
+    
+ #Titre en abscisse
+ unit<-unique(filter(TAB,species==List_M[sp])$length_code)
+ type<-unique(filter(TAB,species==List_M[sp])$measure_type)
+
+   if(type=="CL" | type=="LC"){
+   Nom_Taille<-paste0("Longueur céphalothoracique (", unit,")")  
+   }
+   if(type=="TL" | type=="LT"){
+   Nom_Taille<-paste0("Longueur totale (", unit,")")  
+   }
+ 
+  p<-ggplot(data=Rel_Sel)+
+    geom_point(aes(x=length_class,y=rel_sel,size=n_STD+n_TEST))+
+    guides(size=guide_legend(title = "n"))+
+    xlab(Nom_Taille)+ylab("Sélectivité relative")+
+   geom_hline(yintercept=0.5, linetype="dashed", color = "grey")+
+     geom_vline(xintercept=taille_com,size=1, linetype="dashed", color = "green")+
+    ggtitle(List_M[sp])
+  
+  print(p)
+  
+}
+
+```
