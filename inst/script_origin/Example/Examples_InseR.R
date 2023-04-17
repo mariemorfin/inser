@@ -2,7 +2,7 @@
 
 ##### Formatage des données + Fiches de sélectivité
 
-setwd("C:/Users/mmorfin/Documents/IFREMER/InseR/Developpement_Package/Package/")
+setwd("inst/script_origin")
 
 #library(sp)#Est chargé automatiquement avec load ci-dessous
 
@@ -15,15 +15,21 @@ source("Scripts/create_maps.R")#Fonction interne au package
 load("Data/ICES_areas/ICES_areas2.Rdata",verbose=T)#SpatialPolygonsDataFrame => load sp package
 
 ###A. Example for protocol 'twin'
-TR<-read.table("Data/Example_OTT/TR.csv",sep=";",header=T)
-HH<-read.table("Data/Example_OTT/HH.csv",sep=";",header=T)#,colClasses = colClasses)
-SL<-read.table("Data/Example_OTT/SL.csv",sep=";",header=T)
-HL<-read.table("Data/Example_OTT/HL.csv",sep=";",header=T)
+TR <- readr::read_delim(
+  file = "Data/Example_OTT/TR.csv",
+  delim = ";",
+  escape_double = FALSE,
+  locale = locale(encoding = "WINDOWS-1252"),
+  trim_ws = TRUE
+)
+HH<-read.table("Data/Example_OTT/HH.csv",sep=";",header=T, encoding = "WINDOWS-1252")#,colClasses = colClasses)
+SL<-read.table("Data/Example_OTT/SL.csv",sep=";",header=T, encoding = "WINDOWS-1252")
+HL<-read.table("Data/Example_OTT/HL.csv",sep=";",header=T, encoding = "WINDOWS-1252")
 
 colClasses<-rep(NA,ncol(HH))
 colClasses[which(names(HH)=="statistical_rectangle")]<-"character"
 
-HH<-read.table("Data/Example_OTT/HH.csv",sep=";",header=T,colClasses = colClasses)
+HH<-read.table("Data/Example_OTT/HH.csv",sep=";",header=T,colClasses = colClasses, encoding = "WINDOWS-1252")
 
 ###Merge the 4 tables in a unique table, while testing for inconsistencies
 #Filter on vessel, project, trip, station, species
@@ -44,7 +50,13 @@ create_selectivity_sheet(data=TAB,output_dir="Example/Outputs",output_file="fich
 
 ### B. Example for OTB, protocol="paired"
 #Read dataset
-TR<-read.table("Data/Example_OTB_alternate/TR.csv",sep=";",header=T)
+TR <- readr::read_delim(
+  file = "Data/Example_OTT/TR.csv",
+  delim = ";",
+  escape_double = FALSE,
+  locale = locale(encoding = "WINDOWS-1252"),
+  trim_ws = TRUE
+)
 HH<-read.table("Data/Example_OTB_alternate/HH.csv",sep=";",header=T)#,colClasses = colClasses)
 SL<-read.table("Data/Example_OTB_alternate/SL.csv",sep=";",header=T)
 HL<-read.table("Data/Example_OTB_alternate/HL.csv",sep=";",header=T)
