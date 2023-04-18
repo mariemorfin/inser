@@ -4,3 +4,4 @@
 rsconnect/
 docs
 !.gitlab/*/*
+inst/doc
