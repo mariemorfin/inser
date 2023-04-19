@@ -11,15 +11,18 @@ Imports:
     dplyr,
     ggplot2,
     ggpubr,
+    knitr,
     magrittr,
     maps,
+    rmarkdown,
     sf,
     sp,
-    stringr
+    stats,
+    stringr,
+    tidyr
 Suggests: 
-    knitr,
+    purrr,
     readr,
-    rmarkdown,
     testthat (>= 3.0.0)
 VignetteBuilder: 
     knitr

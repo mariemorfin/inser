@@ -53,7 +53,7 @@ Maps
 
 ```{r, echo=FALSE,warning=FALSE,fig.cap="Durées des opérations de pêche en heures.",comment="",message=FALSE,fig.asp=0.5}
 
-tab_OP<- TAB %>% group_by(project,vessel_identifier,trip_code,station_number)%>%
+tab_OP<- data %>% group_by(project,vessel_identifier,trip_code,station_number)%>%
     summarize(fishing_duration=unique(fishing_duration),gear_depth=unique(gear_depth),
               wind_force_beaufort=unique(wind_force_beaufort),gear_speed=unique(gear_speed),sea_state=unique(sea_state))
 
@@ -149,7 +149,7 @@ if(nNA>0){cat(paste0("Note : il manque ",nNA," valeurs sur les ", nrow(tab_OP), 
 
 #Conditions de pêche /OP - variables catégorielles
 
-tab_OP2<- TAB %>% group_by(project,vessel_identifier,trip_code,station_number)%>%
+tab_OP2<- data %>% group_by(project,vessel_identifier,trip_code,station_number)%>%
     summarize(seabed_features=unique(seabed_features),
               wind_cardinal_direction=unique(wind_cardinal_direction),diurnal_operation=unique(diurnal_operation))
 
@@ -258,11 +258,11 @@ kable(df)
 #Comparaison des poids de captures, temps de tri, poids des rejets / OP :
 
 ##Calcul de la durée de tri
-TAB$sorting_start_date_time<-as.POSIXct(TAB$sorting_start_date_time,format="%Y-%m-%d %H:%M:%S")
-TAB$sorting_end_date_time<-as.POSIXct(TAB$sorting_end_date_time,format="%Y-%m-%d %H:%M:%S")
-TAB$sorting_time<-with(TAB,difftime(sorting_end_date_time,sorting_start_date_time,units="mins"))
+data$sorting_start_date_time<-as.POSIXct(data$sorting_start_date_time,format="%Y-%m-%d %H:%M:%S")
+data$sorting_end_date_time<-as.POSIXct(data$sorting_end_date_time,format="%Y-%m-%d %H:%M:%S")
+data$sorting_time<-with(data,difftime(sorting_end_date_time,sorting_start_date_time,units="mins"))
 
-tab_capture<- TAB %>% 
+tab_capture<- data %>% 
   group_by(project,vessel_identifier,trip_code,station_number,gear_label)%>%
   summarize(catch_weight=unique(catch_weight),sorting_time=unique(sorting_time),
               discard_weight=unique(discard_weight))
@@ -479,24 +479,24 @@ cat(paste("Une",c("diminution" ,"augmentation")[as.numeric(eval(mean(Var_Rate2)>
 
 ### Liste des espèces débarquées étudiées :
 ```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
-List_LAN<-unique(filter(TAB,catch_category=="LAN")$species)
+List_LAN<-unique(filter(data,catch_category=="LAN")$species)
 cat(List_LAN,sep=", ")
 
 ```
 
 ### Liste des espèces rejetées étudiées :
 ```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
-List_DIS<-unique(filter(TAB,catch_category=="DIS")$species)
+List_DIS<-unique(filter(data,catch_category=="DIS")$species)
 cat(List_DIS,sep=", ")
   cat("\n   \n")
   cat("\n   \n") 
 ```
 
 ```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
-List_sp<-unique(TAB$species)
+List_sp<-unique(data$species)
 
 #Boxplot des poids débarqués de chaque fraction / OP: 
-weight_species<-TAB %>% group_by(project,vessel_identifier,trip_code,station_number,gear_label,catch_category,species)%>%
+weight_species<-data %>% group_by(project,vessel_identifier,trip_code,station_number,gear_label,catch_category,species)%>%
  summarize(weight=sum(weight)*10^(-3))%>%as.data.frame()
 
 weight_species<-as.data.frame(complete(weight_species,nesting(project,vessel_identifier,trip_code,station_number),gear_label,catch_category,species,fill=list(weight=0)))
@@ -643,7 +643,7 @@ kable(test_DIS[,-c(4)],digits=2,caption="Résultats des tests de différence de 
 ### Liste des espèces étudiées :
 ```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
 
-List_M<-unique(filter(TAB,is.na(number_at_length)==FALSE)$species)
+List_M<-unique(filter(data,is.na(number_at_length)==FALSE)$species)
 cat(List_M,sep=", ")
 
 ```
@@ -659,12 +659,12 @@ List_E<-vector(mode="list",length=length(List_M))
 for(sp in 1:length(List_M)){
   
   ##Bornes des tailles pour les graphes
-  Taille_min<-min(filter(TAB,species==List_M[sp])$length_class)
-  Taille_max<-max(filter(TAB,species==List_M[sp])$length_class)
+  Taille_min<-min(filter(data,species==List_M[sp])$length_class)
+  Taille_max<-max(filter(data,species==List_M[sp])$length_class)
    
   #Titre en abscisse
-  unit<-unique(filter(TAB,species==List_M[sp])$length_code)
-  type<-unique(filter(TAB,species==List_M[sp])$measure_type)
+  unit<-unique(filter(data,species==List_M[sp])$length_code)
+  type<-unique(filter(data,species==List_M[sp])$measure_type)
   
   if(type=="CL" | type=="LC"){
    Nom_Taille<-paste0("Longeur céphalothoracique (", unit,")")  
@@ -676,7 +676,7 @@ for(sp in 1:length(List_M)){
   Taille_com<-filter(min_length,species==List_M[sp])$min_length
   
   #Effectifs en taille dans les captures
-  length_ALL<-filter(TAB,species==List_M[sp]) %>%
+  length_ALL<-filter(data,species==List_M[sp]) %>%
   group_by(gear_label,length_class)%>%
     summarize(n=sum(elevated_number_at_length,na.rm=T))
   
@@ -697,7 +697,7 @@ for(sp in 1:length(List_M)){
   #print(p1)
   
   #Effectifs en taille par fraction
-  length_cat<-filter(TAB,species==List_M[sp]) %>%
+  length_cat<-filter(data,species==List_M[sp]) %>%
   group_by(gear_label,length_class,catch_category)%>%
     summarize(n=sum(elevated_number_at_length,na.rm=T))
   
@@ -774,7 +774,7 @@ kable(Tab_E,digits=2,caption="Taux d'échappement de l'engin test par rapport au
 for(sp in 1:length(List_M)){
   
 
-  length_sp<-filter(TAB,species==List_M[sp]) %>% group_by(gear_label,length_class) %>%
+  length_sp<-filter(data,species==List_M[sp]) %>% group_by(gear_label,length_class) %>%
   summarize(n=sum(elevated_number_at_length,na.rm=T)) %>%as.data.frame()
   
   #sel relative = TEST/TOTAL
@@ -786,8 +786,8 @@ for(sp in 1:length(List_M)){
   taille_com<-filter(min_length,species==List_M[sp])$min_length
   
    #Titre en abscisse
-  unit<-unique(filter(TAB,species==List_M[sp])$length_code)
-  type<-unique(filter(TAB,species==List_M[sp])$measure_type)
+  unit<-unique(filter(data,species==List_M[sp])$length_code)
+  type<-unique(filter(data,species==List_M[sp])$measure_type)
 
    if(type=="CL" | type=="LC"){
    Nom_Taille<-paste0("Longueur céphalothoracique (", unit,")")  

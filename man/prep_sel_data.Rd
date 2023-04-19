@@ -19,7 +19,16 @@ prep_sel_data(
 data.frame A data.frame object corresponding to the join of the four tables.
 }
 \description{
-Transforme et prépare base de donnée pour le calcul des indicateurs dans la fonction create_selectivity_sheet(). Les données d’entrée sont issues d’observations de captures en mer dans le cadre d’une expérimentation pour comparer la sélectivité d’un engin de pêche test par rapport à un engin standard (de référence).  Typiquement les données issues de ce type d’expérimentation sont saisies sous forme d’une base de données composées de 4 tables : TR correspond aux informations relatives au duo marée x engin ; HH correspond au duo opération de pêche x engin ; SL correspond aux informations de poids une fois le tri de la capture réalisé : par partie de la capture (rejet/débarquement) et espèce (obligatoires), et éventuellement également par catégorie commerciale, sexe. HL correspond aux effectifs par classe de taille. Toutes les espèces ne sont pas forcément pesées ni mesurées. S'assure de la cohérence entre les 4 tables. Filtre la base sur les bateaux/marées/stations/espèces sur lesquelles réaliser la fiche. Calcul des effectifs élevés à partir des fractions échantillonnées si les informations manquent.
+Transforme et prépare base de donnée pour le calcul des indicateurs dans la fonction create_selectivity_sheet().
+Les données d’entrée sont issues d’observations de captures en mer dans le cadre d’une expérimentation pour comparer la sélectivité d’un engin de pêche test par rapport à un engin standard (de référence).
+Typiquement les données issues de ce type d’expérimentation sont saisies sous forme d’une base de données composées de 4 tables :
+TR correspond aux informations relatives au duo marée x engin ;
+HH correspond au duo opération de pêche x engin ;
+SL correspond aux informations de poids une fois le tri de la capture réalisé : par partie de la capture (rejet/débarquement) et espèce (obligatoires), et éventuellement également par catégorie commerciale, sexe.
+HL correspond aux effectifs par classe de taille. Toutes les espèces ne sont pas forcément pesées ni mesurées.
+S'assure de la cohérence entre les 4 tables.
+Filtre la base sur les bateaux/marées/stations/espèces sur lesquelles réaliser la fiche.
+Calcul des effectifs élevés à partir des fractions échantillonnées si les informations manquent.
 }
 \details{
 If the field ‘elevated_number_at_length’ is not provided in HL or some values are missing, the function calculate them using ‘number_at_length’ and the ratio between the subsample_weight and the weight (table SL).
