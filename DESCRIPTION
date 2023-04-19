@@ -7,7 +7,15 @@ Authors@R:
 Description: What the package does (one paragraph).
 License: file LICENSE
 Imports: 
-    dplyr
+    broom,
+    dplyr,
+    ggplot2,
+    ggpubr,
+    magrittr,
+    maps,
+    sf,
+    sp,
+    stringr
 Suggests: 
     knitr,
     readr,

@@ -51,7 +51,7 @@ create_selectivity_sheet(data=TAB,output_dir="Example/Outputs",output_file="fich
 ### B. Example for OTB, protocol="paired"
 #Read dataset
 TR <- readr::read_delim(
-  file = "Data/Example_OTT/TR.csv",
+  file = "Data/Example_OTB_alternate/TR.csv",
   delim = ";",
   escape_double = FALSE,
   locale = locale(encoding = "WINDOWS-1252"),

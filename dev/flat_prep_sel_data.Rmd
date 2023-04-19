@@ -281,7 +281,7 @@ test_that("prep_sel_data works", {
   # create TAB output
   TAB<-prep_sel_data(data=list(TR,HH,SL,HL))
   
-  #' @description Testing the 10 first rows of the data.frame output from `prep_sel_data`
+  #' @description Testing the first rows of the data.frame output from `prep_sel_data`
   expect_equal(object = head(TAB),
                expected = structure(
                # start long dput ----

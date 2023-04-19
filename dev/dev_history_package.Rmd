@@ -180,3 +180,12 @@ checkhelper::print_globals()
 stringi::stri_trans_general("é", "hex")
 ```
 
+# During development
+
+## Store ICES data as RDS
+
+```{r}
+load(system.file("script_origin", "Data", "ICES_areas", "ICES_areas2.Rdata", package = "inser"), verbose=T)
+saveRDS(object = ICES_areas2, file = here::here("inst","script_origin", "Data", "ICES_areas", "ICES_areas2.Rds"))
+```
+
