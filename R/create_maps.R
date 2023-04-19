@@ -2,9 +2,7 @@
 
 #' create_maps
 #'
-#' @param data data.frame The prepared data.frame object with selectivity counts
-#' @param zones character The vector of zones used in the report. Default to NULL uses all the available area
-#' @param protocol character The capture protocol, either "twin", "paired" or "unpaired"
+#' @inheritParams create_selectivity_sheet
 #' @param ices_data sp object The spatial polygon data.frame of the study area
 #' 
 #' @importFrom maps map
