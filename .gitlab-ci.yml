@@ -2,7 +2,7 @@ image: rocker/verse
 
 variables:
   GIT_DEPTH: 10
-  REPO_NAME: "https://packagemanager.rstudio.com/all/__linux__/focal/latest"
+  REPO_NAME: "https://packagemanager.rstudio.com/all/__linux__/jammy/latest"
   R_LIBS_USER: "ci/lib"
 
 cache:
