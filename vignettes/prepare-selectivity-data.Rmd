@@ -31,9 +31,9 @@ Calcul les poids/effectifs élevés à partir des fractions échantillonnées si
 ```{r examples-prep_sel_data}
 ### Example for protocol 'twin'
 
-OTT_data_folder <- system.file("script_origin", "Data", "Example_OTT",
-                               package = "inser"
-)
+OTT_data_folder <-
+  system.file("script_origin", "Data", "Example_OTT",
+              package = "inser")
 
 TR <- readr::read_delim(
   file = file.path(OTT_data_folder, "TR.csv"),
@@ -65,7 +65,8 @@ HL <- read.table(
 )
 
 colClasses <- rep(NA, ncol(HH))
-colClasses[which(names(HH) == "statistical_rectangle")] <- "character"
+colClasses[which(names(HH) == "statistical_rectangle")] <-
+  "character"
 
 HH <- read.table(
   file.path(OTT_data_folder, "HH.csv"),
