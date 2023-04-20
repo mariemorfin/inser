@@ -36,9 +36,9 @@ If the field ‘elevated_number_at_length’ is not provided in HL or some value
 \examples{
 ### Example for protocol 'twin'
 
-OTT_data_folder <- system.file("script_origin", "Data", "Example_OTT",
-                               package = "inser"
-)
+OTT_data_folder <-
+  system.file("script_origin", "Data", "Example_OTT",
+              package = "inser")
 
 TR <- readr::read_delim(
   file = file.path(OTT_data_folder, "TR.csv"),
@@ -70,7 +70,8 @@ HL <- read.table(
 )
 
 colClasses <- rep(NA, ncol(HH))
-colClasses[which(names(HH) == "statistical_rectangle")] <- "character"
+colClasses[which(names(HH) == "statistical_rectangle")] <-
+  "character"
 
 HH <- read.table(
   file.path(OTT_data_folder, "HH.csv"),

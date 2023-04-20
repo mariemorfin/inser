@@ -2,7 +2,7 @@
 
 test_that("prep_sel_data works", {
   
-  # Setup input data
+  # Setup OTT input data
   OTT_data_folder <- system.file("script_origin","Data","Example_OTT", package = "inser")
   
   TR <- readr::read_delim(
@@ -24,7 +24,7 @@ test_that("prep_sel_data works", {
   # create TAB output
   TAB<-prep_sel_data(data=list(TR,HH,SL,HL))
   
-  #' @description Testing the first rows of the data.frame output from `prep_sel_data`
+  #' @description Testing the first rows of the OTT data.frame output from `prep_sel_data`
   expect_equal(object = head(TAB),
                expected = structure(
                # start long dput ----
@@ -259,4 +259,244 @@ test_that("prep_sel_data works", {
                  ), row.names = c(NA, 6L), class = "data.frame")
                #end ----
                )
+  
+  # Setup OTB input data
+  OTB_data_folder <- system.file("script_origin","Data","Example_OTB_alternate", package = "inser")
+
+  TR <- readr::read_delim(
+    file = file.path(OTB_data_folder, "TR.csv"),
+    delim = ";",
+    escape_double = FALSE,
+    locale = readr::locale(encoding = "WINDOWS-1252"),
+    trim_ws = TRUE
+  )
+  HH<-read.table(file.path(OTB_data_folder, "HH.csv"),sep=";",header=TRUE, encoding = "WINDOWS-1252")#,colClasses = colClasses)
+  SL<-read.table(file.path(OTB_data_folder, "SL.csv"),sep=";",header=TRUE, encoding = "WINDOWS-1252")
+  HL<-read.table(file.path(OTB_data_folder, "HL.csv"),sep=";",header=TRUE, encoding = "WINDOWS-1252")
+  
+  colClasses<-rep(NA,ncol(HH))
+  colClasses[which(names(HH)=="statistical_rectangle")]<-"character"
+  
+  HH<-read.table(file.path(OTB_data_folder, "HH.csv"),sep=";",header=TRUE,colClasses = colClasses, encoding = "WINDOWS-1252")
+  
+  # create TAB output
+  TAB<-prep_sel_data(data=list(TR,HH,SL,HL))
+
+  #' @description Testing the first rows of the OTB data.frame output from `prep_sel_data`
+  expect_equal(
+    object = head(TAB),
+    expected = structure(
+      # start long dput ----
+      list(
+        trip_code = c(3, 3, 3, 3, 3, 3),
+        sampling_type = c("S","S", "S", "S", "S", "S"),
+        landing_country = c("FRA", "FRA", "FRA","FRA", "FRA", "FRA"),
+        vessel_flag_country = c("FRA", "FRA", "FRA", "FRA", "FRA", "FRA"),
+        year = c(2023, 2023, 2023, 2023, 2023,2023),
+        project = c("InseR", "InseR", "InseR", "InseR", "InseR","InseR"),
+        vessel_length = c(14.85, 14.85, 14.85, 14.85, 14.85,14.85),
+        vessel_power = c(249, 249, 249, 249, 249, 249),
+        vessel_size = c(45,45, 45, 45, 45, 45),
+        vessel_type = c(1, 1, 1, 1, 1, 1),
+        harbour = c(
+          "Lorient",
+          "Lorient",
+          "Lorient",
+          "Lorient",
+          "Lorient",
+          "Lorient"
+        ),
+        number_of_sets = c(NA,NA, NA, NA, NA, NA),
+        days_at_sea = c(NA, NA, NA, NA, NA, NA),
+        vessel_identifier = c(
+          "vessel1",
+          "vessel1",
+          "vessel1",
+          "vessel1",
+          "vessel1",
+          "vessel1"
+        ),
+        sampling_country = c("FRA", "FRA","FRA", "FRA", "FRA", "FRA"),
+        sampling_method = c(
+          "Observer",
+          "Observer",
+          "Observer",
+          "Observer",
+          "Observer",
+          "Observer"
+        ),
+        departure_date_time = c(NA, NA, NA, NA, NA, NA),
+        return_date_time = c(NA,NA, NA, NA, NA, NA),
+        gear_identifier = c(1, 1, 1, 1, 1, 1),
+        gear_type = c("OTB", "OTB", "OTB", "OTB", "OTB", "OTB"),
+        sub_gear_identifier = c(1, 1, 1, 1, 1, 1),
+        gear_label = c("STD","STD", "STD", "STD", "STD", "STD"),
+        buoy_weight_kg = c(NA,NA, NA, NA, NA, NA),
+        door_type = c(
+          "OSPRET MORGERE",
+          "OSPRET MORGERE",
+          "OSPRET MORGERE",
+          "OSPRET MORGERE",
+          "OSPRET MORGERE",
+          "OSPRET MORGERE"
+        ),
+        entremise_length = c(NA, NA, NA, NA, NA, NA),
+        groundrope_type = c(NA,NA, NA, NA, NA, NA),
+        headline_cumulative_length = c(NA, NA,NA, NA, NA, NA),
+        mesh_gauge_back = c(90, 90, 90, 90, 90,90),
+        mesh_gauge_belly = c(90, 90, 90, 90, 90, 90),
+        mesh_gauge_gor = c(90,90, 90, 90, 90, 90),
+        selective_device = c(
+          "Grille à langoustine",
+          "Grille à langoustine",
+          "Grille à langoustine",
+          "Grille à langoustine",
+          "Grille à langoustine",
+          "Grille à langoustine"
+        ),
+        station_number = c(1L,1L, 1L, 1L, 1L, 1L),
+        fishing_validity = c("V", "V", "V","V", "V", "V"),
+        aggregation_level = c("H", "H", "H", "H","H", "H"),
+        catch_registration = c("All", "All", "All", "All","All", "All"),
+        species_registration = c("Par", "Par", "Par","Par", "Par", "Par"),
+        date = c(
+          "2021-05-12",
+          "2021-05-12",
+          "2021-05-12",
+          "2021-05-12",
+          "2021-05-12",
+          "2021-05-12"
+        ),
+        time = c("06:30", "06:30", "06:30", "06:30", "06:30", "06:30"),
+        fishing_duration = c(3.75, 3.75, 3.75, 3.75, 3.75, 3.75),
+        pos_start_lat_dec = c(
+          47.5138888888889,
+          47.5138888888889,
+          47.5138888888889,
+          47.5138888888889,
+          47.5138888888889,
+          47.5138888888889
+        ),
+        pos_start_lon_dec = c(
+          -4.04305555555556,
+          -4.04305555555556,
+          -4.04305555555556,
+          -4.04305555555556,
+          -4.04305555555556,
+          -4.04305555555556
+        ),
+        pos_stop_lat_dec = c(
+          47.5583333333333,
+          47.5583333333333,
+          47.5583333333333,
+          47.5583333333333,
+          47.5583333333333,
+          47.5583333333333
+        ),
+        pos_stop_lon_dec = c(
+          -4.19166666666667,
+          -4.19166666666667,
+          -4.19166666666667,
+          -4.19166666666667,
+          -4.19166666666667,
+          -4.19166666666667
+        ),
+        area = c(NA, NA, NA,
+                 NA, NA, NA),
+        statistical_rectangle = c("24E5", "24E5", "24E5",
+                                  "24E5", "24E5", "24E5"),
+        subpolygon = c(NA, NA, NA, NA, NA,NA),
+        tag_operation = c(3L, 3L, 3L, 3L, 3L, 3L),
+        diurnal_operation = c("Y","Y", "Y", "Y", "Y", "Y"),
+        gear_speed = c(3.5, 3.5, 3.5, 3.5,3.5, 3.5),
+        gear_depth = c(99L, 99L, 99L, 99L, 99L, 99L),
+        sea_state = c(4L, 4L, 4L, 4L, 4L, 4L),
+        wind_force_beaufort = c(4L,4L, 4L, 4L, 4L, 4L),
+        wind_cardinal_direction = c("Ouest","Ouest", "Ouest", "Ouest", "Ouest", "Ouest"),
+        recilinear_operation = c("N","N", "N", "N", "N", "N"),
+        seabed_features = c(NA, NA, NA,NA, NA, NA),
+        sub_gear_position = c("B", "B", "B", "B", "B","B"),
+        sorting_start_date_time = c(
+          "2021-05-12 10:25:00",
+          "2021-05-12 10:25:00",
+          "2021-05-12 10:25:00",
+          "2021-05-12 10:25:00",
+          "2021-05-12 10:25:00",
+          "2021-05-12 10:25:00"
+        ),
+        sorting_end_date_time = c(
+          "2021-05-12 12:00:00",
+          "2021-05-12 12:00:00",
+          "2021-05-12 12:00:00",
+          "2021-05-12 12:00:00",
+          "2021-05-12 12:00:00",
+          "2021-05-12 12:00:00"
+        ),
+        catch_weight = c(NA,NA, NA, NA, NA, NA),
+        discard_weight = c(
+          123.849998474121,
+          123.849998474121,
+          123.849998474121,
+          123.849998474121,
+          123.849998474121,
+          123.849998474121
+        ),
+        coef_discard = c(
+          0.0834880926926171,
+          0.0834880926926171,
+          0.0834880926926171,
+          0.0834880926926171,
+          0.0834880926926171,
+          0.0834880926926171
+        ),
+        species = c(
+          "Lepidorhombus whiffiagonis",
+          "Lepidorhombus whiffiagonis",
+          "Lepidorhombus whiffiagonis",
+          "Lepidorhombus whiffiagonis",
+          "Nephrops norvegicus",
+          "Nephrops norvegicus"
+        ),
+        catch_category = c("LAN", "LAN", "LAN", "LAN", "DIS","DIS"),
+        landing_category = c("HUC", "HUC", "HUC", "HUC","HUC", "HUC"),
+        commercial_size_category_scale = c(NA, NA,NA, NA, "P/G", "P/G"),
+        commercial_size_category = c(
+          NA_character_,
+          NA_character_,
+          NA_character_,
+          NA_character_,
+          NA_character_,
+          NA_character_
+        ),
+        subsampling_category = c(NA, NA, NA, NA,"Vrac", "Vrac"),
+        sex = c(NA, NA, NA, NA, NA, NA),
+        length_code = c("cm","cm", "cm", "cm", "mm", "mm"),
+        subsample_weight = c(1000L,1000L, 1000L, 1000L, 500L, 500L),
+        coef_subsampling = c(
+          0.0166666666666667,
+          0.0166666666666667,
+          0.0166666666666667,
+          0.0166666666666667,
+          0.416666666666667,
+          0.416666666666667
+        ),
+        sample_weight = c(1000L,1000L, 1000L, 1000L, 2900L, 2900L),
+        weight = c(60000, 60000,60000, 60000, 1200, 1200),
+        length_class = c(25L, 28L, 31L,32L, 18L, 19L),
+        number_at_length = c(1L, 1L, 1L, 2L, 1L, 2L),
+        elevated_number_at_length = c(60, 60, 60, 120, 2.4,4.8),
+        measure_type = c("TL", "TL", "TL", "TL", "CL", "CL"),
+        vessel_name = c(NA, NA, NA, NA, NA, NA),
+        mesh_gauge_codend_mm = c(NA, NA, NA, NA, NA, NA),
+        water_depth = c(NA, NA, NA, NA, NA,NA),
+        start_sorting_date_time = c(NA, NA, NA, NA, NA, NA),
+        end_sorting_date_time = c(NA, NA, NA, NA, NA, NA),
+        wind_force = c(NA,NA, NA, NA, NA, NA)
+      ),
+      row.names = c(NA, 6L),
+      class = "data.frame"
+    )
+      # end long dput ----
+  )
+
 })
