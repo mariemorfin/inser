@@ -99,6 +99,9 @@ create_selectivity_sheet<-function(data,protocol,output_dir = NULL,output_file =
   
   # Setup template report path
   sheet_folder <- system.file("script_origin","Scripts", package = "inser")
+  
+  # Setup report language
+  trad <- create_translate_dict(language = language)
 
 
   if(protocol=="twin"){
