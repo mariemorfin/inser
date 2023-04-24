@@ -22,10 +22,7 @@ library(inser)
 
 # `prep_sel_data()` : prepare selectivity dataset
 
-Prépare la base de donnée pour le calcul des indicateurs: 
-S'assure de la cohérence entre les 4 tables
-Sélection des marées /OP sur lesquelles réaliser la fiche
-Calcul les poids/effectifs élevés à partir des fractions échantillonnées si les infos manquent
+Transform and prepare the database in order to compute the indices of the create_selectivity_sheet() function.
 
 
 ```{r examples-prep_sel_data}
