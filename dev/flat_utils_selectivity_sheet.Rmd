@@ -1,0 +1,161 @@
+---
+title: "flat_utils_selectivity_sheet.Rmd empty"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r development, include=FALSE}
+library(testthat)
+```
+
+```{r development-load}
+# Load already included functions if relevant
+pkgload::load_all(export_all = FALSE)
+```
+
+# Translating selectivity sheets
+
+## `create_translate_dict()` : generate object with translated text
+
+This function will provide all the necessary text to generate the selectivity sheet in the required language. The text is stored in a named list that will be accessible when calling the `create_selectivity_sheet()` function.
+
+```{r function-create_translate_dict}
+#' create_translate_dict
+#' 
+#' Create a list with all the text elements of the selectivity sheet in the selected language
+#'
+#' @param path character. The path to the csv translation file
+#' @param language character. The chosen language for the text, must be "FR" or "EN" (default)
+#' @param encoding character. The encoding of the csv file, default to "UTF-8"
+#' @param sep character. The field separator used in the CSV file
+#' 
+#' @importFrom glue glue
+#' @importFrom tools file_ext
+#' @importFrom stats setNames
+#' @importFrom utils read.csv
+#' 
+#' @return list. A list of translated text, with names referring to their location in the sheet
+#' @export
+create_translate_dict <- function(path = system.file("template", "translation.csv", package = "inser"),
+                                  language = c("EN", "FR"),
+                                  encoding = "UTF-8",
+                                  sep = ";") {
+  # check selected language
+  language <- match.arg(language)
+  
+  # check translation file exist
+  if (isFALSE(file.exists(path))) {
+    stop(glue("Translation file {path} not found"))
+  }
+  
+  # check if translation file is a csv
+  if (isTRUE(file_ext(path) != "csv")) {
+    stop(glue("Translation file {path} is not a csv file"))
+  }
+  
+  # read csv and extract language as named list
+  translator <- read.csv(file = path,
+                         encoding = encoding,
+                         sep = sep)
+  
+  translator <- setNames(object = translator[[language]],
+                         nm = as.character(translator[["id"]])
+                         )
+  
+  # warn user of the translation being used
+  message(glue("Using the {language} version of the selectivity template"))
+  
+  # return list
+  return(translator)
+}
+```
+
+```{r examples-create_translate_dict}
+# create the en translator
+trad <- create_translate_dict()
+
+# call one item by its id (e.g. main title)
+cat(trad[["0_main_title"]])
+```
+
+Once the translation list object is loaded in the environment, we can call it inside Rmd chunks to display the correct text. We can call this translator at several places, as explained below.
+
+* **Translating file title and subtitle**
+  - edit yaml header
+  - _example_ : c.f. chunk below
+  
+```{r, eval = FALSE, echo = TRUE}
+---
+title: "`r trad[['0_main_title']]`"
+subtitle: "`r trad[['0_sub_title_twin']]`"
+output: word_document
+---
+```
+
+* **Translating chapter and text**
+  - use inline r evaluation code
+  - _example_ : `` `r
+trad[['0_main_title']]` `` will be shown as `r trad[['0_main_title']]` in the text
+
+<!-- line break in r inline code prevents it to be evaluated so we can show the verbatim -->
+
+* **Translating chunk headers**
+  - use direct call to the list object
+  - _example_ : using `fig.cap = trad[['0_title_device']]` in chunk header will render the proper plot label
+
+> This translation strategy has been implemented for the **title** and **lala chunk** of the `selectivity_sheet_twin_FR.Rmd` template
+
+```{r tests-create_translate_dict}
+test_that("create_translate_dict works", {
+
+  # create csv with wrong extension
+  output_dir <- tempfile(pattern = "translate_dict")
+  dir.create(output_dir)
+  file.copy(from = system.file("template", "translation.csv", package = "inser"),
+            to = file.path(output_dir, "notacsvfile.txt"))
+  bad_ext_file <- file.path(output_dir, "notacsvfile.txt")
+  
+  #' @description Test `create_translate_dict` returns error for incorrect csv or language
+  expect_error(
+    object = create_translate_dict(path = "notaexistingfile"),
+    regexp = "Translation file notaexistingfile not found"
+    )
+  expect_error(
+    object = create_translate_dict(
+      path = bad_ext_file
+      ),
+    regexp = glue::glue("Translation file {bad_ext_file} is not a csv file")
+    )
+  expect_error(
+    object = create_translate_dict(
+      language = "IT"
+    ),
+    regexp = "\\'arg\\' should be one of .EN., .FR."
+  )
+  
+  # run function for EN and FR output (testing both upper and lower case)
+  en_output <- create_translate_dict(language = "EN")
+  fr_output <- create_translate_dict(language = "FR")
+  
+  #' @description Test english output of `create_translate_dict`
+  expect_equal(object = en_output[["0_test_entry"]],
+               expected = "This is the text output of the example entry")
+  expect_equal(object = fr_output[["0_test_entry"]],
+               expected = "Ceci est la sortie de texte de l'entrée d'exemple")
+  
+  # clean
+  unlink(output_dir,recursive = TRUE)
+})
+```
+
+
+```{r development-inflate, eval=FALSE}
+# Run but keep eval=FALSE to avoid infinite loop
+# Execute in the console directly
+fusen::inflate(flat_file = "dev/flat_utils_selectivity_sheet.Rmd",
+               vignette_name = "Manage selectivity sheet content",
+               overwrite = TRUE,
+               check = FALSE)
+```
+
