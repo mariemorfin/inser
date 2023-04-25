@@ -8,7 +8,7 @@ test_that("create_translate_dict works", {
   file.copy(from = system.file("template", "translation.csv", package = "inser"),
             to = file.path(output_dir, "notacsvfile.txt"))
   bad_ext_file <- file.path(output_dir, "notacsvfile.txt")
-
+  
   #' @description Test `create_translate_dict` returns error for incorrect csv or language
   expect_error(
     object = create_translate_dict(path = "notaexistingfile"),
@@ -26,17 +26,17 @@ test_that("create_translate_dict works", {
     ),
     regexp = "\\'arg\\' should be one of .EN., .FR."
   )
-
+  
   # run function for EN and FR output (testing both upper and lower case)
   en_output <- create_translate_dict(language = "EN")
   fr_output <- create_translate_dict(language = "FR")
-
+  
   #' @description Test english output of `create_translate_dict`
   expect_equal(object = en_output[["0_test_entry"]],
                expected = "This is the text output of the example entry")
   expect_equal(object = fr_output[["0_test_entry"]],
                expected = "Ceci est la sortie de texte de l'entrée d'exemple")
-
+  
   # clean
   unlink(output_dir,recursive = TRUE)
 })

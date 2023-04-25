@@ -1,0 +1,32 @@
+---
+title: "`r lg[['0_main_title']]`"
+subtitle: "`r lg[['0_sub_title_twin']]`"
+output: word_document
+---
+
+## `r lg[['0_title_device']]`
+
+```{r dummy-graph, echo=FALSE, warning=FALSE, comment="", message=FALSE, fig.asp=0.5, fig.cap = lg[['1_duration_caption']]}
+ggplot(tab_OP, aes(y = fishing_duration)) +
+  geom_boxplot(width = 0.5) +
+  labs(y = lg[["1_duration_labs"]]) +
+  geom_point(aes(x = 0, y = mean(fishing_duration)), shape = 4) +
+  theme(
+    legend.position = "None",
+    axis.text = element_text(size = 8),
+    axis.title = element_text(size = 10),
+    axis.text.x = element_blank()
+  ) +
+  xlab("")
+```
+
+```{r dummy-message, echo=FALSE, warning=FALSE, comment="", message=FALSE}
+# a dummy example data
+nNA <- 2
+nrow_data <- 10
+
+if (nNA > 0) {
+  cat(sprintf(lg[["1_missing_values"]], nNA, nrow_data))
+}
+```
+

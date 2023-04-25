@@ -1,5 +1,8 @@
 id;description;EN;FR
 0_test_entry;An example entry;This is the text output of the example entry;Ceci est la sortie de texte de l'entrée d'exemple
 0_main_title;The main title of the sheet;Selectivity sheet - InseR;Fiche de sélectivité - InseR
-0_sub_title_twin;The subtitle for twin protocol;Protocol de chaluts jumeaux;Twin trawls protocol
+0_sub_title_twin;The subtitle for twin protocol;Twin trawls protocol;Protocol de chaluts jumeaux
 0_title_device;The section title for selected devices;Tested devices;Engins testés
+1_missing_values;The message warning about missing values;Note : there are %i missing values among the %i fishing operations.;Note : il manque %i valeurs sur les %i opérations de pêche.
+1_duration_caption;The figure title for operation duration;Duration of fishing operation in hours;Durées des opérations de pêche en heures.
+1_duration_labs;The figure axis label;Fishing duration (hours);Durée de pêche (heures)

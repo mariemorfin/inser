@@ -17,11 +17,17 @@
 #' @return list. A list of translated text, with names referring to their location in the sheet
 #' @export
 #' @examples
-#' # create the en translator
-#' trad <- create_translate_dict()
+#' # create the EN translator
+#' lg <- create_translate_dict(language = "EN")
 #' 
-#' # call one item by its id (e.g. main title)
-#' cat(trad[["0_main_title"]])
+#' # call main title by its ID
+#' cat(lg[["0_main_title"]])
+#' 
+#' # create the FR translator
+#' lg <- create_translate_dict(language = "FR")
+#' 
+#' # call main title by its ID
+#' cat(lg[["0_main_title"]])
 create_translate_dict <- function(path = system.file("template", "translation.csv", package = "inser"),
                                   language = c("EN", "FR"),
                                   encoding = "UTF-8",
