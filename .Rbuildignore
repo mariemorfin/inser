@@ -6,3 +6,4 @@
 ^ci/lib$
 ^\.gitlab-ci\.yml$
 ^\.gitlab$
+^README\.Rmd$
