@@ -16,6 +16,8 @@ knitr::opts_chunk$set(
 # {inser}
 
 <!-- badges: start -->
+[![pipeline status](https://forge.thinkr.fr/ifremer-lorient/inser/badges/main/pipeline.svg)](https://forge.thinkr.fr/ifremer-lorient/inser/-/commits/main)
+[![coverage report](https://forge.thinkr.fr/ifremer-lorient/inser/badges/main/coverage.svg)](http://ifremer-lorient.pages.thinkr.fr/inser/coverage.html)
 <!-- badges: end -->
 
 The goal of {inser} is to automate the production of selectivity notes.
