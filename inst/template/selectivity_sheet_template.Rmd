@@ -2,6 +2,8 @@
 title: "`r lg[['0_main_title']]`"
 subtitle: "`r lg[['0_sub_title_twin']]`"
 output: word_document
+params:
+  lg: NULL
 ---
 
 ## `r lg[['0_title_device']]`

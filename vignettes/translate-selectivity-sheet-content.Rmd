@@ -70,7 +70,7 @@ csv_lg <- readr::read_csv2(
 head(csv_lg) %>% knitr::kable()
 ```
 
-To edit the text content of the Rmd report, edit the csv file according to its format specified above. Note that you will need to define one unique `id` per line of text, so you can call your new line of text as `lg[["new_id"]]` in the Rmd report.
+To edit the text content of the Rmd report, edit the csv file according to its format specified above. Note that you will need to define one unique `id` per line of text, so you can call your new line of text as `lg[["id"]]` in the Rmd report.
 
 
 ## Rendering reports with translation
@@ -87,15 +87,18 @@ Once the translation list object is loaded in the environment, we can call it in
 title: "`r lg[['0_main_title']]`"
 subtitle: "`r lg[['0_sub_title_twin']]`"
 output: word_document
+params:
+  lg: NULL
 ---
 ```
 
 * **Translating chapter and text**
   - use inline r evaluation code
   - _example_ : `` `r
-lg[['0_main_title']]` `` will be shown in the text as : `r lg[['0_main_title']]`
-
+  lg[['0_main_title']]` `` will be shown in the text as : `r lg[['0_main_title']]`
+  
 <!-- line break in r inline code prevents it to be evaluated so we can show the verbatim -->
+
 
 * **Translating graph caption and labels**
   - use direct call to the list object
@@ -151,30 +154,39 @@ if(nNA>0){
 
 * **Rendering report**
   - Once the report is correctly including the calls to the translation object, we can render it with `rmarkdown::render()`
-  - Language of rendering will depend on the pre-loaded translation object
-  - _example_ : c.f. chunk below rendering the example `selectivity_sheet_template.Rmd` file in both EN and FR
+  - The rendering language will be determined by the translation dictionary `lg` passed as parameter the call to `rmarkdown::render()`
   
-> The path to the template and its docx outputs can be retrieved with `system.file("template", package = "inser")`.
-
-
-```{r vign-render}
+  
+Rendering an English version
+  
+```{r vign-render-en}
 # select template file
 template_file <- system.file("template","selectivity_sheet_template.Rmd", package = "inser")
 
 # load EN translation object
-lg <- create_translate_dict(language = "EN")
+lg_en <- create_translate_dict(language = "EN")
 
 # render template (will generate EN report)
-rmarkdown::render(input = template_file,
-       output_file = "selectivity_sheet_en.docx",
-       quiet = TRUE)
+rmarkdown::render(
+  input = template_file,
+  output_file = "selectivity_sheet_en.docx",
+  quiet = TRUE,
+  params = list(lg = lg_en)
+)
+```
 
+Rendering a French version
+
+```{r vign-render-fr}
 # create the FR translator
-lg <- create_translate_dict(language = "FR")
+lg_fr <- create_translate_dict(language = "FR")
 
 # render template (will generate FR report)
-rmarkdown::render(input = template_file,
-       output_file = "selectivity_sheet_fr.docx",
-       quiet = TRUE)
+rmarkdown::render(
+  input = template_file,
+  output_file = "selectivity_sheet_fr.docx",
+  quiet = TRUE,
+  params = list(lg = lg_fr)
+)
 ```
 

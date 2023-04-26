@@ -46,13 +46,16 @@ create_translate_dict <- function(path = system.file("template", "translation.cs
   }
   
   # read csv and extract language as named list
-  translator <- read.csv(file = path,
-                         encoding = encoding,
-                         sep = sep)
-  
-  translator <- setNames(object = translator[[language]],
-                         nm = as.character(translator[["id"]])
-                         )
+  translator <- read.csv(
+    file = path,
+    encoding = encoding,
+    sep = sep
+  )
+
+  translator <- setNames(
+    object = translator[[language]],
+    nm = as.character(translator[["id"]])
+  )
   
   # warn user of the translation being used
   message(glue("Using the {language} version of the selectivity template"))
