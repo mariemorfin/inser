@@ -528,53 +528,6 @@ tab_diff<-weight_species %>%group_by(project,vessel_identifier,trip_code,station
   summarize(diff_weight=weight[gear_label=="TEST"]-weight[gear_label=="STD"],
             weight_STD=weight[gear_label=="STD"],weight_TEST=weight[gear_label=="TEST"])
 
-Ftest<-function(sp,cat){
-  
-  #différence de poids de la fraction cat par paire de l'espèce sp
-  Diff_sp<-filter(tab_diff,species==sp & catch_category==cat)  
-  
-  #1.Test de Shapiro-Wilk de normalité
-  test1<-tryCatch(shapiro.test(Diff_sp$diff_weight),error=function(e){"e"})    
-  
-  if(class(test1) =="htest"){
-    
-    #Si normalité non rejetée (p-value >0.05 du test de Shapiro), test de Student:
-    if(test1$p.value > 0.05){
-      test2<-tryCatch(t.test(x=Diff_sp$diff_weight,mu=0),error=function(e){"e"})   
-    }
-      
-    #Si normalité rejetée (p-value <= 0.05 du test de Shapiro), test de Mann-Whitney/Wilcoxon:
-    if(test1$p.value <= 0.05){
-      test2<-tryCatch(wilcox.test(Diff_sp$diff_weight, paired =F, correct = T, exact = F),error=function(e){"e"})  
-    }
-      
-    ##Resultat du test de Student/Wilcoxon: 
-    if(test1$p.value <= 0.05){  
-     tab_test<-data.frame(pvalue=round(test2$p.value,4),moyenne=mean(Diff_sp$diff_weight),mediane=median(Diff_sp$diff_weight),test="Wilcoxon")
-    }
-  
-    if(test1$p.value > 0.05){
-      tab_test<-data.frame(pvalue=round(test2$p.value,4),moyenne=mean(Diff_sp$diff_weight),mediane=median(Diff_sp$diff_weight),test="Fisher")
-    }
-  
-  }else{
-    tab_test<-data.frame(pvalue=NA,moyenne=mean(Diff_sp$diff_weight),mediane=median(Diff_sp$diff_weight),test=NA)
-  }
-  
-  
-  #Taux de variation des poids débarqués du TEST par rapport au STD
-  Tot_TEST<-sum(Diff_sp$weight_TEST)
-  Tot_STD<-sum(Diff_sp$weight_STD)
-
-  Taux_sp<-round(100*(Tot_TEST-Tot_STD)/Tot_STD,2)#sur le total des marées
-  
-  Var_Rate2<-with(Diff_sp,diff_weight/weight_STD)*100
-  Taux_sp_OP<-round(mean(Var_Rate2,na.rm=T),2)#en moyenne par OP")
-  
-  tab_test<-data.frame(tab_test, Taux_Var_Tot=Taux_sp, Taux_Var_OP=Taux_sp_OP)
-  return(tab_test)
-}
-
 test_LAN<-matrix(NA,ncol=6,nrow=length(List_LAN))
 row.names(test_LAN)<-List_LAN
 test_LAN<-as.data.frame(test_LAN)
@@ -583,9 +536,9 @@ for(ii in 1:length(List_LAN)){
   
   #Test apparié:  (H0) Diff_Poids=0 versus (H1) Diff_Poids non nulle sur médiane ou moyenne
   #+ Taux de variation TEST/STD
-  test_LAN[ii,]<-Ftest(List_LAN[ii],"LAN")
+  test_LAN[ii,]<-f_test(tab_diff,List_LAN[ii],"LAN")
 }
-names(test_LAN)<-names(Ftest(List_LAN[ii],"LAN"))
+names(test_LAN)<-names(f_test(tab_diff,List_LAN[ii],"LAN"))
 
 
 test_LAN$moyenne<-round(test_LAN$moyenne,2)
@@ -614,10 +567,10 @@ test_DIS<-as.data.frame(test_DIS)
 for(ii in 1:length(List_DIS)){
   #Test apparié:  (H0) Diff_Poids=0 versus (H1) Diff_Poids non nulle sur médiane ou moyenne
   #+ Taux de variation TEST/STD
-  test_DIS[ii,]<-Ftest(List_DIS[ii],"DIS")
+  test_DIS[ii,]<-f_test(tab_diff,List_DIS[ii],"DIS")
 }
 
-names(test_DIS)<-names(Ftest(List_DIS[ii],"DIS"))
+names(test_DIS)<-names(f_test(tab_diff,List_DIS[ii],"DIS"))
 
 # kable(test_PR[,-4],digits=2,caption="Résultats des tests de différence de biomasses débarquées et rejetées pour chaque espèce. Si la distribution était gaussienne, un test de Fisher sur la moyenne a été effectué, sinon un test de Kolmogorov-Smirnov sur la médiane a été effectué. La statistique testée est identifiée par '*'.")
 

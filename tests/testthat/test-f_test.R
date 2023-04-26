@@ -50,7 +50,7 @@ test_that("f_test works", {
   
   # extract weight data per species
   weight_species <- data %>%
-    group_by(
+    dplyr::group_by(
       project,
       vessel_identifier,
       trip_code,
@@ -59,25 +59,25 @@ test_that("f_test works", {
       catch_category,
       species
     ) %>%
-    summarize(weight = sum(weight) * 10 ^ (-3)) %>%
+    dplyr::summarize(weight = sum(weight) * 10 ^ (-3)) %>%
     as.data.frame()
   
-  weight_species <- as.data.frame(complete(
+  weight_species <- as.data.frame(tidyr::complete(
     weight_species,
-    nesting(project, vessel_identifier, trip_code, station_number),
+    tidyr::nesting(project, vessel_identifier, trip_code, station_number),
     gear_label,
     catch_category,
     species,
     fill = list(weight = 0)
   ))
   
-  tab_diff <- weight_species %>% group_by(project,
+  tab_diff <- weight_species %>% dplyr::group_by(project,
                                           vessel_identifier,
                                           trip_code,
                                           station_number,
                                           catch_category,
                                           species) %>%
-    summarize(
+    dplyr::summarize(
       diff_weight = weight[gear_label == "TEST"] - weight[gear_label == "STD"],
       weight_STD = weight[gear_label == "STD"],
       weight_TEST = weight[gear_label == "TEST"]

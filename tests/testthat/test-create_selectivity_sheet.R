@@ -4,10 +4,10 @@ test_that("create_selectivity_sheet works", {
   # Create tmp folder
   output_dir <- tempfile(pattern = "inser")
   dir.create(output_dir)
-  
+
   # Setup input OTT data
   OTT_data_folder <- system.file("script_origin","Data","Example_OTT", package = "inser")
-  
+
   TR <- readr::read_delim(
     file = file.path(OTT_data_folder, "TR.csv"),
     delim = ";",
@@ -15,42 +15,42 @@ test_that("create_selectivity_sheet works", {
     locale = readr::locale(encoding = "WINDOWS-1252"),
     trim_ws = TRUE
   )
-  
+
   HH<-read.table(
     file.path(OTT_data_folder, "HH.csv"),
     sep=";",
     header=TRUE,
     encoding = "WINDOWS-1252")#,colClasses = colClasses)
-  
+
   SL<-read.table(
     file.path(OTT_data_folder, "SL.csv"),
     sep=";",
     header=TRUE,
     encoding = "WINDOWS-1252")
-  
+
   HL<-read.table(
     file.path(OTT_data_folder, "HL.csv"),
     sep=";",
     header=TRUE,
     encoding = "WINDOWS-1252")
-  
+
   colClasses<-rep(NA,ncol(HH))
   colClasses[which(names(HH)=="statistical_rectangle")]<-"character"
-  
+
   HH<-read.table(
     file.path(OTT_data_folder, "HH.csv"),
     sep=";",
     header=TRUE,
     colClasses = colClasses,
     encoding = "WINDOWS-1252")
-  
+
   # create TAB output
   TAB <- prep_sel_data(data=list(TR,HH,SL,HL))
-  
+
   # Setup zone and min_length params
   min_length <- data.frame(species=unique(TAB$species),min_length=c(27,24,20,NA,27,NA))
   zones <- c("8.a","8.b","7.d","7.e","7.h")
-  
+
   # run function for "twin" report
   create_selectivity_sheet(data = TAB,
                            output_dir = output_dir,
@@ -59,16 +59,16 @@ test_that("create_selectivity_sheet works", {
                            language = "FR",
                            zones=zones,
                            min_length=min_length)
-  
+
   #' @description Testing the "twin" report from `create_selectivity_sheet()` is created
   expect_true(file.exists(file.path(output_dir, "fiche_InseR_twin.docx")))
-  
+
   # unzip doc to access figures and tables
   unzip(
     zipfile = file.path(output_dir, "fiche_InseR_twin.docx"),
     exdir = file.path(output_dir, "unzip_twin")
   )
-  
+
   # list of expect files
   expected_figures_ott <- c("rId100.png", "rId104.png", "rId107.png", "rId110.png", "rId113.png",
     "rId116.png", "rId119.png", "rId22.png", "rId26.png", "rId29.png",
@@ -83,7 +83,7 @@ test_that("create_selectivity_sheet works", {
                                                 "word",
                                                 "media")),
                   expected = expected_figures_ott)
-  
+
   #' @description Testing all the figures in the "twin" report are visually correct
   purrr::walk(.x = expected_figures_ott,
               .f = \(x) expect_snapshot_file(
@@ -94,8 +94,8 @@ test_that("create_selectivity_sheet works", {
                                  x),
                 name = paste0("twin_", x)
               ))
-  
-  
+
+
   # Setup OTB input data
   OTB_data_folder <- system.file("script_origin","Data","Example_OTB_alternate", package = "inser")
 
@@ -109,15 +109,15 @@ test_that("create_selectivity_sheet works", {
   HH<-read.table(file.path(OTB_data_folder, "HH.csv"),sep=";",header=TRUE, encoding = "WINDOWS-1252")#,colClasses = colClasses)
   SL<-read.table(file.path(OTB_data_folder, "SL.csv"),sep=";",header=TRUE, encoding = "WINDOWS-1252")
   HL<-read.table(file.path(OTB_data_folder, "HL.csv"),sep=";",header=TRUE, encoding = "WINDOWS-1252")
-  
+
   colClasses<-rep(NA,ncol(HH))
   colClasses[which(names(HH)=="statistical_rectangle")]<-"character"
-  
+
   HH<-read.table(file.path(OTB_data_folder, "HH.csv"),sep=";",header=TRUE,colClasses = colClasses, encoding = "WINDOWS-1252")
-  
+
   # create TAB output
   TAB<-prep_sel_data(data=list(TR,HH,SL,HL))
-  
+
   # run function for "paired" report
   create_selectivity_sheet(
     data = TAB,
@@ -131,21 +131,21 @@ test_that("create_selectivity_sheet works", {
 
   #' @description Testing the "paired" report from `create_selectivity_sheet()` is created
   expect_true(file.exists(file.path(output_dir, "fiche_InseR_paired.docx")))
-  
+
   # unzip doc to access figures and tables
   unzip(
     zipfile = file.path(output_dir, "fiche_InseR_paired.docx"),
     exdir = file.path(output_dir, "unzip_paired")
   )
-  
+
   # list of expect files
-  expected_figures_otb <- c("rId100.png", "rId103.png", "rId106.png", "rId109.png", "rId112.png", 
-                        "rId115.png", "rId118.png", "rId121.png", "rId124.png", "rId127.png", 
-                        "rId130.png", "rId133.png", "rId136.png", "rId140.png", "rId143.png", 
-                        "rId146.png", "rId149.png", "rId152.png", "rId155.png", "rId22.png", 
-                        "rId26.png", "rId29.png", "rId32.png", "rId35.png", "rId38.png", 
-                        "rId41.png", "rId44.png", "rId51.png", "rId56.png", "rId63.png", 
-                        "rId66.png", "rId69.png", "rId72.png", "rId75.png", "rId78.png", 
+  expected_figures_otb <- c("rId100.png", "rId103.png", "rId106.png", "rId109.png", "rId112.png",
+                        "rId115.png", "rId118.png", "rId121.png", "rId124.png", "rId127.png",
+                        "rId130.png", "rId133.png", "rId136.png", "rId140.png", "rId143.png",
+                        "rId146.png", "rId149.png", "rId152.png", "rId155.png", "rId22.png",
+                        "rId26.png", "rId29.png", "rId32.png", "rId35.png", "rId38.png",
+                        "rId41.png", "rId44.png", "rId51.png", "rId56.png", "rId63.png",
+                        "rId66.png", "rId69.png", "rId72.png", "rId75.png", "rId78.png",
                         "rId85.png", "rId88.png", "rId91.png", "rId94.png", "rId97.png")
 
   #' @description Testing all figures in the "paired" report are created
@@ -154,7 +154,7 @@ test_that("create_selectivity_sheet works", {
                                                 "word",
                                                 "media")),
                   expected = expected_figures_otb)
-  
+
   #' @description Testing all the figures in the "paired" report are visually correct
   purrr::walk(.x = expected_figures_otb,
               .f = \(x) expect_snapshot_file(
@@ -165,8 +165,8 @@ test_that("create_selectivity_sheet works", {
                                  x),
                 name = paste0("paired_", x)
               ))
-  
-  
+
+
   # run function for "unpaired" report
   create_selectivity_sheet(
     data = TAB,
@@ -177,10 +177,10 @@ test_that("create_selectivity_sheet works", {
     zones = zones,
     min_length = min_length
   )
-  
+
   #' @description Testing the "unpaired" report from `create_selectivity_sheet()` is created
   expect_true(file.exists(file.path(output_dir, "fiche_InseR_unpaired.docx")))
-  
+
   # unzip doc to access figures and tables
   unzip(
     zipfile = file.path(output_dir, "fiche_InseR_unpaired.docx"),
@@ -193,7 +193,7 @@ test_that("create_selectivity_sheet works", {
                                                 "word",
                                                 "media")),
                   expected = expected_figures_otb)
-  
+
   #' @description Testing all the figures in the "paired" report are visually correct
   purrr::walk(.x = expected_figures_otb,
               .f = \(x) expect_snapshot_file(
@@ -204,7 +204,7 @@ test_that("create_selectivity_sheet works", {
                                  x),
                 name = paste0("unpaired_", x)
               ))
-  
+
   # Clear tmp folder
   unlink(output_dir, recursive = TRUE)
 })

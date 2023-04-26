@@ -22,12 +22,14 @@ pkgload::load_all(export_all = FALSE)
 #' 
 #' @importFrom dplyr filter
 #' @importFrom stats shapiro.test t.test wilcox.test
+#' @importFrom stats median
 
 #' @param tab_diff data.frame. The dataframe containing information on weight per catch category
 #' @param sp character. The species to use in test
 #' @param cat character. The category to use in test
 #' 
 #' @return data.frame. The summary table of the statistical tests
+#' @export
 f_test <- function(tab_diff, sp, cat) {
   # weight differences of the cat fraction by species sp pairs
   Diff_sp <- tab_diff %>%
@@ -41,7 +43,7 @@ f_test <- function(tab_diff, sp, cat) {
     }
   )
   
-  if (class(test1) == "htest") {
+  if (inherits(test1, "htest")) {
     # If normality is not rejected (Shapiro p-value > 0.05), Student t.test :
     if (test1$p.value > 0.05) {
       test2 <- tryCatch(
@@ -162,7 +164,7 @@ data <- prep_sel_data(data=list(TR,HH,SL,HL))
 
 # extract weight data per species
 weight_species <- data %>%
-  group_by(
+  dplyr::group_by(
     project,
     vessel_identifier,
     trip_code,
@@ -171,25 +173,25 @@ weight_species <- data %>%
     catch_category,
     species
   ) %>%
-  summarize(weight = sum(weight) * 10 ^ (-3)) %>%
+  dplyr::summarize(weight = sum(weight) * 10 ^ (-3)) %>%
   as.data.frame()
 
-weight_species <- as.data.frame(complete(
+weight_species <- as.data.frame(tidyr::complete(
   weight_species,
-  nesting(project, vessel_identifier, trip_code, station_number),
+  tidyr::nesting(project, vessel_identifier, trip_code, station_number),
   gear_label,
   catch_category,
   species,
   fill = list(weight = 0)
 ))
 
-tab_diff <- weight_species %>% group_by(project,
-                                        vessel_identifier,
-                                        trip_code,
-                                        station_number,
-                                        catch_category,
-                                        species) %>%
-  summarize(
+tab_diff <- weight_species %>% dplyr::group_by(project,
+                                               vessel_identifier,
+                                               trip_code,
+                                               station_number,
+                                               catch_category,
+                                               species) %>%
+  dplyr::summarize(
     diff_weight = weight[gear_label == "TEST"] - weight[gear_label == "STD"],
     weight_STD = weight[gear_label == "STD"],
     weight_TEST = weight[gear_label == "TEST"]
@@ -197,8 +199,8 @@ tab_diff <- weight_species %>% group_by(project,
 
 # run f_test
 f_test(tab_diff = tab_diff,
-      sp = "Solea solea",
-      cat = "LAN")
+       sp = "Solea solea",
+       cat = "LAN")
 
 # Clear tmp folder
 unlink(output_dir, recursive = TRUE)
@@ -255,7 +257,7 @@ test_that("f_test works", {
   
   # extract weight data per species
   weight_species <- data %>%
-    group_by(
+    dplyr::group_by(
       project,
       vessel_identifier,
       trip_code,
@@ -264,25 +266,25 @@ test_that("f_test works", {
       catch_category,
       species
     ) %>%
-    summarize(weight = sum(weight) * 10 ^ (-3)) %>%
+    dplyr::summarize(weight = sum(weight) * 10 ^ (-3)) %>%
     as.data.frame()
   
-  weight_species <- as.data.frame(complete(
+  weight_species <- as.data.frame(tidyr::complete(
     weight_species,
-    nesting(project, vessel_identifier, trip_code, station_number),
+    tidyr::nesting(project, vessel_identifier, trip_code, station_number),
     gear_label,
     catch_category,
     species,
     fill = list(weight = 0)
   ))
   
-  tab_diff <- weight_species %>% group_by(project,
+  tab_diff <- weight_species %>% dplyr::group_by(project,
                                           vessel_identifier,
                                           trip_code,
                                           station_number,
                                           catch_category,
                                           species) %>%
-    summarize(
+    dplyr::summarize(
       diff_weight = weight[gear_label == "TEST"] - weight[gear_label == "STD"],
       weight_STD = weight[gear_label == "STD"],
       weight_TEST = weight[gear_label == "TEST"]
