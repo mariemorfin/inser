@@ -20,3 +20,8 @@ remotes::install_gitlab(
   force = TRUE
 )
 ```
+
+## Package Documentation
+
+The package documentation website can be found here:
+<https://ifremer-lorient.pages.thinkr.fr/inser/>
