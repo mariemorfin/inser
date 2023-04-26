@@ -10,7 +10,7 @@ output:
 knitr::opts_chunk$set(
   echo = TRUE,
   eval = FALSE
-  )
+)
 ```
 
 In this document, you will find the useful steps/commands to start the development of a package (structure, documentation, ...)
@@ -65,9 +65,9 @@ usethis::use_testthat()
 ```{r}
 # _CI (cf {gitlabr} templates) ----
 lozen::use_gitlab_ci(image = "rocker/verse",
-                              gitlab_url = "https://forge.thinkr.fr",
-                              repo_name = "https://packagemanager.rstudio.com/all/__linux__/focal/latest",
-                              type = "check-coverage-pkgdown") # "check-coverage-pkgdown-renv"
+                     gitlab_url = "https://forge.thinkr.fr",
+                     repo_name = "https://packagemanager.rstudio.com/all/__linux__/focal/latest",
+                     type = "check-coverage-pkgdown") # "check-coverage-pkgdown-renv"
 
 # GitHub Actions ----
 # usethis::use_github_action_check_standard()
@@ -122,12 +122,16 @@ papillon::generate_readme_rmd()
 papillon::generate_readme_rmd(parts = "description")
 
 # _Badges GitLab
-usethis::use_badge(badge_name = "pipeline status",
-                   href = "https://forge.thinkr.fr/<group>/<project>/-/commits/main",
-                   src = "https://forge.thinkr.fr/<group>/<project>/badges/main/pipeline.svg")
-# usethis::use_badge(badge_name = "coverage report",
-#                    href = "http://<group>.pages.thinkr.fr/<project>/coverage.html",
-#                    src = "https://forge.thinkr.fr/<group>/<project>/badges/main/coverage.svg")
+usethis::use_badge(
+  badge_name = "pipeline status",
+  href = "https://forge.thinkr.fr/ifremer-lorient/inser/-/commits/main",
+  src = "https://forge.thinkr.fr/ifremer-lorient/inser/badges/main/pipeline.svg"
+)
+usethis::use_badge(
+  badge_name = "coverage report",
+  href = "http://ifremer-lorient.pages.thinkr.fr/inser/coverage.html",
+  src = "https://forge.thinkr.fr/ifremer-lorient/inser/badges/main/coverage.svg"
+  )
 ```
 
 ### NEWS
