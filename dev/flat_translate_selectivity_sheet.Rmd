@@ -60,13 +60,16 @@ create_translate_dict <- function(path = system.file("template", "translation.cs
   }
   
   # read csv and extract language as named list
-  translator <- read.csv(file = path,
-                         encoding = encoding,
-                         sep = sep)
-  
-  translator <- setNames(object = translator[[language]],
-                         nm = as.character(translator[["id"]])
-                         )
+  translator <- read.csv(
+    file = path,
+    encoding = encoding,
+    sep = sep
+  )
+
+  translator <- setNames(
+    object = translator[[language]],
+    nm = as.character(translator[["id"]])
+  )
   
   # warn user of the translation being used
   message(glue("Using the {language} version of the selectivity template"))
@@ -178,8 +181,7 @@ output: word_document
 
 * **Translating chapter and text**
   - use inline r evaluation code
-  - _example_ : `` `r
-lg[['0_main_title']]` `` will be shown in the text as : `r lg[['0_main_title']]`
+  - _example_ : `` `rlg[['0_main_title']]` `` will be shown in the text as : `r lg[['0_main_title']]`
 
 <!-- line break in r inline code prevents it to be evaluated so we can show the verbatim -->
 
@@ -247,25 +249,33 @@ template_file <- system.file("template","selectivity_sheet_template.Rmd", packag
 lg <- create_translate_dict(language = "EN")
 
 # render template (will generate EN report)
-rmarkdown::render(input = template_file,
-       output_file = "selectivity_sheet_en.docx",
-       quiet = TRUE)
+rmarkdown::render(
+  input = template_file,
+  output_file = "selectivity_sheet_en.docx",
+  quiet = TRUE,
+  params = list(lg = lg)
+)
 
 # create the FR translator
 lg <- create_translate_dict(language = "FR")
 
 # render template (will generate FR report)
-rmarkdown::render(input = template_file,
-       output_file = "selectivity_sheet_fr.docx",
-       quiet = TRUE)
+rmarkdown::render(
+  input = template_file,
+  output_file = "selectivity_sheet_fr.docx",
+  quiet = TRUE,
+  params = list(lg = lg)
+)
 ```
 
 ```{r development-inflate, eval=FALSE}
 # Run but keep eval=FALSE to avoid infinite loop
 # Execute in the console directly
-fusen::inflate(flat_file = "dev/flat_translate_selectivity_sheet.Rmd",
-               vignette_name = "Translate selectivity sheet content",
-               overwrite = TRUE,
-               check = FALSE)
+fusen::inflate(
+  flat_file = "dev/flat_translate_selectivity_sheet.Rmd",
+  vignette_name = "Translate selectivity sheet content",
+  overwrite = TRUE,
+  check = FALSE
+)
 ```
 
