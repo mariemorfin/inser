@@ -536,9 +536,9 @@ for(ii in 1:length(List_LAN)){
   
   #Test apparié:  (H0) Diff_Poids=0 versus (H1) Diff_Poids non nulle sur médiane ou moyenne
   #+ Taux de variation TEST/STD
-  test_LAN[ii,]<-f_test(tab_diff,List_LAN[ii],"LAN")
+  test_LAN[ii,]<-f_test_paired(tab_diff,List_LAN[ii],"LAN")
 }
-names(test_LAN)<-names(f_test(tab_diff,List_LAN[ii],"LAN"))
+names(test_LAN)<-names(f_test_paired(tab_diff,List_LAN[ii],"LAN"))
 
 
 test_LAN$moyenne<-round(test_LAN$moyenne,2)
@@ -567,10 +567,10 @@ test_DIS<-as.data.frame(test_DIS)
 for(ii in 1:length(List_DIS)){
   #Test apparié:  (H0) Diff_Poids=0 versus (H1) Diff_Poids non nulle sur médiane ou moyenne
   #+ Taux de variation TEST/STD
-  test_DIS[ii,]<-f_test(tab_diff,List_DIS[ii],"DIS")
+  test_DIS[ii,]<-f_test_paired(tab_diff,List_DIS[ii],"DIS")
 }
 
-names(test_DIS)<-names(f_test(tab_diff,List_DIS[ii],"DIS"))
+names(test_DIS)<-names(f_test_paired(tab_diff,List_DIS[ii],"DIS"))
 
 # kable(test_PR[,-4],digits=2,caption="Résultats des tests de différence de biomasses débarquées et rejetées pour chaque espèce. Si la distribution était gaussienne, un test de Fisher sur la moyenne a été effectué, sinon un test de Kolmogorov-Smirnov sur la médiane a été effectué. La statistique testée est identifiée par '*'.")
 
