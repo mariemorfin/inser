@@ -14,23 +14,28 @@ library(testthat)
 pkgload::load_all(export_all = FALSE)
 ```
 
-# `f_test()` : paired test on difference in weight per catch category
+# `f_test_paired()` : paired test on difference in weight per catch category
 
-```{r function-ftest}
-#' f_test
-#' Computes the paired tests on difference in weight per catch category
+```{r function-f_test_paired}
+#' f_test_paired
+#' 
+#' @description Computes the paired tests on difference in weight per catch category
+#' 
+#' @param tab_diff data.frame. A dataframe containing the computed differences in weight between TEST and STD device per catch category
+#' @param sp character. The species to use in test
+#' @param cat character. The category to use in test
 #' 
 #' @importFrom dplyr filter
 #' @importFrom stats shapiro.test t.test wilcox.test
 #' @importFrom stats median
-
-#' @param tab_diff data.frame. The dataframe containing information on weight per catch category
-#' @param sp character. The species to use in test
-#' @param cat character. The category to use in test
 #' 
 #' @return data.frame. The summary table of the statistical tests
 #' @export
-f_test <- function(tab_diff, sp, cat) {
+f_test_paired <- function(tab_diff,
+                   sp,
+                   cat
+                   ) {
+
   # weight differences of the cat fraction by species sp pairs
   Diff_sp <- tab_diff %>%
     filter(species == sp & catch_category == cat)
@@ -115,7 +120,7 @@ f_test <- function(tab_diff, sp, cat) {
 }
 ```
 
-```{r examples-f_test}
+```{r examples-f_test_paired}
 # Create tmp folder
 output_dir <- tempfile(pattern = "inser")
 dir.create(output_dir)
@@ -198,7 +203,7 @@ tab_diff <- weight_species %>% dplyr::group_by(project,
   )
 
 # run f_test
-f_test(tab_diff = tab_diff,
+f_test_paired(tab_diff = tab_diff,
        sp = "Solea solea",
        cat = "LAN")
 
@@ -206,7 +211,7 @@ f_test(tab_diff = tab_diff,
 unlink(output_dir, recursive = TRUE)
 ```
 
-```{r tests-f_test}
+```{r tests-f_test_paired}
 test_that("f_test works", {
 
   # Create tmp folder
@@ -291,12 +296,12 @@ test_that("f_test works", {
     )
   
   # run f_test
-  ftest_solea_solea <- f_test(tab_diff = tab_diff,
+  ftest_solea_solea <- f_test_paired(tab_diff = tab_diff,
         sp = "Solea solea",
         cat = "LAN")
   
   
-  #' @description Test f_test return teh correct statistical values
+  #' @description Test f_test_paired returns the correct statistical values
   expect_equal(object = ftest_solea_solea,
                expected = structure(
                  list(
@@ -316,6 +321,317 @@ test_that("f_test works", {
 })
 ```
 
+# `f_test_unpaired()` : unpaired test on difference in weight per catch category
+
+```{r function-f_test_unpaired}
+#' f_test_unpaired
+#' 
+#' @description Computes the unpaired tests on difference in weight per catch category
+#' 
+#' @param weight_species data.frame. A dataframe containing the weights of catch per category for TEST and STD device
+#' @param sp character. The species to use in test
+#' @param cat character. The category to use in test
+#' 
+#' @importFrom dplyr filter
+#' @importFrom stats shapiro.test t.test wilcox.test median var.test
+#' 
+#' @return data.frame. The summary table of the statistical tests
+#' @export
+f_test_unpaired <- function(weight_species,
+                   sp,
+                   cat
+                   ) {
+  # filter data.frame for species and category of interest
+  weight_sp_frac <- filter(weight_species, species == sp & catch_category == cat)
+  
+  # Student test conditions : normality of both samples + equality of variances
+  weight_STD <- filter(weight_sp_frac,gear_label=="STD")$weight
+  weight_TEST <- filter(weight_sp_frac,gear_label=="TEST")$weight
+  
+  #1.Normality test (Shapiro-Wilk)
+  test1_STD <-
+    tryCatch(
+      shapiro.test(weight_STD),
+      error = function(e) {
+        "e"
+      }
+    )
+  test1_TEST <-
+    tryCatch(
+      shapiro.test(weight_TEST),
+      error = function(e) {
+        "e"
+      }
+    )
+  
+  #2.Fisher test of equality of variances:
+  test1b <-
+    tryCatch(
+      var.test(weight_STD, weight_TEST),
+      error = function(e) {
+        "e"
+      }
+    )
+  
+  if (inherits(test1_STD, "htest") &
+      inherits(test1_TEST, "htest") &
+      inherits(test1b, "htest")
+      ) {
+    # If both tests are not rejected (p-value >0.05) => Student test:
+    if (test1_TEST[["p.value"]] > 0.05 &
+        test1_STD[["p.value"]] > 0.05 &
+        test1b[["p.value"]] > 0.05) {
+      test2 <-
+        tryCatch(
+          t.test(x = weight_STD, y = weight_TEST) ,
+          error = function(e) {
+            "e"
+          }
+        )
+    } else{
+      #Otherwise Mann-Whitney/Wilcoxon test:
+      test2 <-
+        tryCatch(
+          wilcox.test(
+            weight_STD,
+            weight_TEST,
+            paired = FALSE,
+            correct = TRUE,
+            exact = FALSE
+          ),
+          error = function(e) {
+            "e"
+          }
+        )
+    }
+  }
+  
+  ## Test results:
+  if (inherits(test2, "htest")) {
+    if (test1_TEST$p.value > 0.05 &
+        test1_STD$p.value > 0.05 &
+        test1b$p.value > 0.05) {
+      tab_test <-
+        data.frame(
+          pvalue = round(test2$p.value, 4),
+          moyenne = mean(weight_TEST) - mean(weight_STD),
+          mediane = median(weight_TEST) - median(weight_STD),
+          test = "Fisher"
+        )
+    } else{
+      tab_test <-
+        data.frame(
+          pvalue = round(test2$p.value, 4),
+          moyenne = mean(weight_TEST) - mean(weight_STD),
+          mediane = median(weight_TEST) - median(weight_STD),
+          test = "Kolmogorov"
+        )
+    }
+    
+  } else{
+    tab_test <-
+      data.frame(
+        pvalue = NA,
+        moyenne = mean(weight_TEST) - mean(weight_STD),
+        mediane = median(weight_TEST) - median(weight_STD),
+        test = NA
+      )
+  }
+  
+  # Variation rate of landing weights in TEST compared to STD
+  Tot_TEST <- sum(weight_TEST)
+  Tot_STD <- sum(weight_STD)
+  
+  Taux_sp <- round(100 * (Tot_TEST - Tot_STD) / Tot_STD, 2) #sur le total des marées
+  
+  tab_test <- data.frame(tab_test, Taux_Var_Tot = Taux_sp)
+  
+  return(tab_test)
+}
+```
+
+```{r examples-f_test_unpaired}
+# Setup OTB input data
+OTB_data_folder <-
+  system.file("script_origin", "Data", "Example_OTB_alternate", package = "inser")
+
+TR <- readr::read_delim(
+  file = file.path(OTB_data_folder, "TR.csv"),
+  delim = ";",
+  escape_double = FALSE,
+  locale = readr::locale(encoding = "WINDOWS-1252"),
+  trim_ws = TRUE
+)
+HH <-
+  read.table(
+    file.path(OTB_data_folder, "HH.csv"),
+    sep = ";",
+    header = TRUE,
+    encoding = "WINDOWS-1252"
+  )#,colClasses = colClasses)
+SL <-
+  read.table(
+    file.path(OTB_data_folder, "SL.csv"),
+    sep = ";",
+    header = TRUE,
+    encoding = "WINDOWS-1252"
+  )
+HL <-
+  read.table(
+    file.path(OTB_data_folder, "HL.csv"),
+    sep = ";",
+    header = TRUE,
+    encoding = "WINDOWS-1252"
+  )
+
+colClasses <- rep(NA, ncol(HH))
+colClasses[which(names(HH) == "statistical_rectangle")] <-
+  "character"
+
+HH <-
+  read.table(
+    file.path(OTB_data_folder, "HH.csv"),
+    sep = ";",
+    header = TRUE,
+    colClasses = colClasses,
+    encoding = "WINDOWS-1252"
+  )
+
+# create TAB output
+data <- prep_sel_data(data = list(TR, HH, SL, HL))
+
+# weight for each species
+weight_species <-
+  data %>% dplyr::group_by(
+    project,
+    vessel_identifier,
+    trip_code,
+    station_number,
+    gear_label,
+    catch_category,
+    species
+  ) %>%
+  dplyr::summarize(weight = sum(weight) * 10 ^ (-3)) %>% as.data.frame()
+
+weight_species <-
+  as.data.frame(
+    tidyr::complete(
+      weight_species,
+      tidyr::nesting(project, vessel_identifier, trip_code, station_number),
+      gear_label,
+      catch_category,
+      species,
+      fill = list(weight = 0)
+    )
+  )
+
+# run f_test_unpaired
+f_test_unpaired(weight_species = weight_species,
+                sp = "Solea solea",
+                cat = "LAN")
+
+```
+
+```{r tests-f_test_unpaired}
+test_that("f_test works", {
+
+  # Setup OTB input data
+  OTB_data_folder <-
+    system.file("script_origin", "Data", "Example_OTB_alternate", package = "inser")
+  
+  TR <- readr::read_delim(
+    file = file.path(OTB_data_folder, "TR.csv"),
+    delim = ";",
+    escape_double = FALSE,
+    locale = readr::locale(encoding = "WINDOWS-1252"),
+    trim_ws = TRUE
+  )
+  HH <-
+    read.table(
+      file.path(OTB_data_folder, "HH.csv"),
+      sep = ";",
+      header = TRUE,
+      encoding = "WINDOWS-1252"
+    )#,colClasses = colClasses)
+  SL <-
+    read.table(
+      file.path(OTB_data_folder, "SL.csv"),
+      sep = ";",
+      header = TRUE,
+      encoding = "WINDOWS-1252"
+    )
+  HL <-
+    read.table(
+      file.path(OTB_data_folder, "HL.csv"),
+      sep = ";",
+      header = TRUE,
+      encoding = "WINDOWS-1252"
+    )
+  
+  colClasses <- rep(NA, ncol(HH))
+  colClasses[which(names(HH) == "statistical_rectangle")] <-
+    "character"
+  
+  HH <-
+    read.table(
+      file.path(OTB_data_folder, "HH.csv"),
+      sep = ";",
+      header = TRUE,
+      colClasses = colClasses,
+      encoding = "WINDOWS-1252"
+    )
+  
+  # create TAB output
+  data <- prep_sel_data(data = list(TR, HH, SL, HL))
+  
+  # weight for each species
+  weight_species <-
+    data %>% dplyr::group_by(
+      project,
+      vessel_identifier,
+      trip_code,
+      station_number,
+      gear_label,
+      catch_category,
+      species
+    ) %>%
+    dplyr::summarize(weight = sum(weight) * 10 ^ (-3)) %>% as.data.frame()
+  
+  weight_species <-
+    as.data.frame(
+      tidyr::complete(
+        weight_species,
+        tidyr::nesting(project, vessel_identifier, trip_code, station_number),
+        gear_label,
+        catch_category,
+        species,
+        fill = list(weight = 0)
+      )
+    )
+  
+  # run f_test_unpaired
+  ftest_solea_solea <- f_test_unpaired(weight_species = weight_species,
+                  sp = "Solea solea",
+                  cat = "LAN")
+  
+  
+  #' @description Test f_test_unpaired returns the correct statistical values
+  expect_equal(object = ftest_solea_solea,
+               expected = structure(
+                 list(
+                   pvalue = 0.7052,
+                   moyenne = -50.5571534874102,
+                   mediane = 0,
+                   test = "Kolmogorov",
+                   Taux_Var_Tot = -82.21
+                 ),
+                 class = "data.frame",
+                 row.names = c(NA,
+                               -1L)
+               ))
+  
+})
+```
 
 ```{r development-inflate, eval=FALSE}
 # Run but keep eval=FALSE to avoid infinite loop

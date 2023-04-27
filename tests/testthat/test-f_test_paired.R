@@ -84,12 +84,12 @@ test_that("f_test works", {
     )
   
   # run f_test
-  ftest_solea_solea <- f_test(tab_diff = tab_diff,
+  ftest_solea_solea <- f_test_paired(tab_diff = tab_diff,
         sp = "Solea solea",
         cat = "LAN")
   
   
-  #' @description Test f_test return teh correct statistical values
+  #' @description Test f_test_paired returns the correct statistical values
   expect_equal(object = ftest_solea_solea,
                expected = structure(
                  list(

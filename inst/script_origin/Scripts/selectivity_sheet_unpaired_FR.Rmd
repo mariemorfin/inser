@@ -579,9 +579,9 @@ for(ii in 1:length(List_LAN)){
   
   #Test non apparié:  (H0) Diff_Poids=0 versus (H1) Diff_Poids non nulle sur médiane ou moyenne
   #+ Taux de variation TEST/STD
-  test_LAN[ii,]<-Ftest(List_LAN[ii],"LAN")
+  test_LAN[ii,]<-f_test_unpaired(weight_species, List_LAN[ii],"LAN")
 }
-names(test_LAN)<-names(Ftest(List_LAN[ii],"LAN"))
+names(test_LAN)<-names(f_test_unpaired(weight_species, List_LAN[ii],"LAN"))
 
 test_LAN$moyenne<-round(test_LAN$moyenne,2)
 test_LAN$mediane<-round(test_LAN$mediane,2)
@@ -609,10 +609,10 @@ test_DIS<-as.data.frame(test_DIS)
 for(ii in 1:length(List_DIS)){
   #Test apparié:  (H0) Diff_Poids=0 versus (H1) Diff_Poids non nulle sur médiane ou moyenne
   #+ Taux de variation TEST/STD
-  test_DIS[ii,]<-Ftest(List_DIS[ii],"DIS")
+  test_DIS[ii,]<-f_test_unpaired(weight_species, List_DIS[ii],"DIS")
 }
 
-names(test_DIS)<-names(Ftest(List_DIS[ii],"LAN"))
+names(test_DIS)<-names(f_test_unpaired(weight_species, List_DIS[ii],"LAN"))
 
 test_DIS$pvalue[test_DIS$pvalue< 10^(-2)]<-"< 10-2"
 test_DIS$pvalue[test_DIS$pvalue>0.1]<-">0.1"
