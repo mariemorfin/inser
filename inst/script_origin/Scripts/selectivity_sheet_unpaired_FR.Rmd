@@ -520,57 +520,6 @@ for(sp in 1:length(List_sp)){
 
 ```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
 
-Ftest<-function(sp,cat){
-  
-  weight_sp_frac<-filter(weight_species,species==sp & catch_category==cat)
-  
-   #Conditions du test de Student: normalité des 2 échantillons + égalité des variances
-  weight_STD<-filter(weight_sp_frac,gear_label=="STD")$weight
-  weight_TEST<-filter(weight_sp_frac,gear_label=="TEST")$weight
-  
-  #1.Test de Shapiro-Wilk de normalité
-  test1_STD<-tryCatch(shapiro.test(weight_STD),error=function(e){"e"})  
-  test1_TEST<-tryCatch(shapiro.test(weight_TEST),error=function(e){"e"})  
-  
-  #2.Test de Fisher d'égalité des variances:
-  test1b<-tryCatch(var.test(weight_STD,weight_TEST),error=function(e){"e"})  
-
-  if(class(test1_STD) =="htest" & class(test1_TEST) =="htest" & class(test1b) =="htest"){
-      
-    #Si les 2 tests non rejetés (p-value >0.05)=> test de Student:
-    if(test1_TEST$p.value > 0.05 & test1_STD$p.value > 0.05 & test1b$p.value > 0.05){
-      test2<-tryCatch(t.test(x=weight_STD,y=weight_TEST) ,error=function(e){"e"})   
-    }else{
-      #Sinon test de Mann-Whitney/Wilcoxon:
-      test2<-tryCatch(wilcox.test(weight_STD,weight_TEST, paired =F, correct = T, exact = F),error=function(e){"e"})  
-    }
-  }
-  
-  ##Resultat du test: 
-  if(class(test2) =="htest"){
-  if(test1_TEST$p.value > 0.05 & test1_STD$p.value > 0.05 & test1b$p.value > 0.05){
-    tab_test<-data.frame(pvalue=round(test2$p.value,4),moyenne=mean(weight_TEST)-mean(weight_STD),mediane=median(weight_TEST)-median(weight_STD),test="Fisher")
-  }else{
-    tab_test<-data.frame(pvalue=round(test2$p.value,4),moyenne=mean(weight_TEST)-mean(weight_STD),mediane=median(weight_TEST)-median(weight_STD),test="Kolmogorov")
-  }
-  
-  }else{
-    tab_test<-data.frame(pvalue=NA,moyenne=mean(weight_TEST)-mean(weight_STD),mediane=median(weight_TEST)-median(weight_STD),test=NA)
-  }
-    
-  #Taux de variation des poids débarqués du TEST par rapport au STD
-  Tot_TEST<-sum(weight_TEST)
-  Tot_STD<-sum(weight_STD)
-
-  Taux_sp<-round(100*(Tot_TEST-Tot_STD)/Tot_STD,2)#sur le total des marées
-  
-  tab_test<-data.frame(tab_test, Taux_Var_Tot=Taux_sp)
-  
-  return(tab_test)
-}
-
-
-
 test_LAN<-matrix(NA,ncol=5,nrow=length(List_LAN))
 row.names(test_LAN)<-List_LAN
 test_LAN<-as.data.frame(test_LAN)
