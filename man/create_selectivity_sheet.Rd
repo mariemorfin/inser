@@ -31,6 +31,8 @@ create_selectivity_sheet(
 }
 \value{
 None A Word document is generated in the output_dir as well as all the figures in png.
+For more details on the selectivity sheet format, see the related vignette :
+\code{vignette("create-selectivity-sheet", package = "inser")}
 }
 \description{
 Génère une fiche synthétique décrivant les données et contenant
