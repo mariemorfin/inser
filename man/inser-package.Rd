@@ -4,9 +4,9 @@
 \name{inser-package}
 \alias{inser}
 \alias{inser-package}
-\title{inser: What the Package Does (One Line, Title Case)}
+\title{inser: Generate Fishing Gear Selectivity Indicator Sheets}
 \description{
-What the package does (one paragraph).
+Generate a synthetic sheet of fishing gear selectivity indicators (statistics, graphics and tests) from catch comparison data collected at sea. These data can be obtained from three types of experimental protocols: 'twin', 'single paired' or 'independent' sampling, for which a test gear is compared to a standard gear.
 }
 \author{
 \strong{Maintainer}: Marie Morfin \email{first.last@example.com} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
