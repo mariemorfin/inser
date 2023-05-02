@@ -20,7 +20,9 @@ knitr::opts_chunk$set(
 [![coverage report](https://forge.thinkr.fr/ifremer-lorient/inser/badges/main/coverage.svg)](http://ifremer-lorient.pages.thinkr.fr/inser/coverage.html)
 <!-- badges: end -->
 
-The goal of {inser} is to automate the production of selectivity notes.
+The {inser} package generates a synthetic sheet of fishing gear selectivity indicators from 
+catch comparison data. These data can be obtained from three types of experimental protocols: 
+'twin', 'single paired' or 'independent' sampling for which a test gear is compared to a standard gear.
 
 ## Installation
 
