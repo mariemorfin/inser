@@ -50,7 +50,7 @@ coverage:
     - master
     - production
   script:
-    - Rscript -e 'remotes::install_local(upgrade = "never")'
+    - Rscript -e 'remotes::install_local(upgrade = "never", dependencies = TRUE)'
     - Rscript -e 'remotes::install_cran(c("covr", "DT"), upgrade = "never")'
     - Rscript -e 'covr::gitlab(quiet = FALSE)'
   coverage: '/Coverage: \d+\.\d+/'
@@ -71,10 +71,11 @@ integration:
     - master
     - production
     - test-ci
+    - 33-ci-fix
   script:
     - Rscript -e 'install.packages("thinkrtemplate", repos = c("thinkropen" = "https://thinkr-open.r-universe.dev"))'
     - Rscript -e 'remotes::install_cran(c("pkgdown"), upgrade = "never")'
-    - Rscript -e 'remotes::install_local(upgrade = "never")'
+    - Rscript -e 'remotes::install_local(upgrade = "never", dependencies = TRUE)'
     - Rscript -e 'pkgdown::build_site()'
   artifacts:
     paths:

@@ -66,10 +66,8 @@ The catch sampling methodology consists of (Figure 1) :
 
 - Once the species in the bulk sample have been sorted, individuals of the species of interest are measured. The minimum size of the measured samples is assessed by the observer; the objective being to be able to describe the length distribution of the captured species. If a small length range is observed for a species, the distribution will stabilize fairly quickly and a small number of individuals (minimum 30) will be required. The sample size will be increased if a large length range is observed.
 
+![Figure 1 : Catch sampling protocol (landed fraction and discarded fraction). The same procedure is implemented separately for the STD trawl and for the TEST trawl](figure/catch_sampling_protocol.png){width="80%"}
 
-```{r fig1, echo = FALSE, out.width="95%", fig.cap="Figure 1 : Catch sampling protocol (landed fraction and discarded fraction). The same procedure is implemented separately for the STD trawl and for the TEST trawl"}
-knitr::include_graphics(path = here::here("vignettes","figure","catch_sampling_protocol.png"))
-```
 
 ## 2) Data format
 
