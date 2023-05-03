@@ -71,6 +71,7 @@ integration:
     - master
     - production
     - test-ci
+    - 33-ci-fix
   script:
     - Rscript -e 'install.packages("thinkrtemplate", repos = c("thinkropen" = "https://thinkr-open.r-universe.dev"))'
     - Rscript -e 'remotes::install_cran(c("pkgdown"), upgrade = "never")'
