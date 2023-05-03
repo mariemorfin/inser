@@ -23,6 +23,8 @@
 #' If the field ‘elevated_number_at_length’ is not provided in HL or some values are missing, the function calculate them using ‘number_at_length’ and the ratio between the subsample_weight and the weight (table SL).
 #' 
 #' @param data list A list of four data.frames (TR,HH,SL,HL) based on the ICES RDB data exchange format corresponding to each level of the dataset. EU/ICES have defined common format and processing tools, for fisheries statistics.
+#' For more details on the input data format, see the related vignette :
+#' \code{vignette("selectivity-data", package = "inser")}
 #' @param filters list A list of filters to apply on the dataset. The optional filters can apply directly on the fields ‘project’, ‘vessel_identifier’, ‘selective_device’, ‘trip_code’, ‘station_number’. For the fields ‘species_LAN’, ‘species_DIS’, and ‘species_length’, the filter apply on the landings (LAN), discards (DIS) and on the measured species, respectively.
 #'
 #' @importFrom dplyr filter left_join

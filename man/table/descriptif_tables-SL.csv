@@ -1,0 +1,15 @@
+Field names,Type,Status,Basic checks,Comments
+project,String,Obligatory,Code list,Name of the project underwhich the experiment was carried out
+vessel_identifier,Integer,Obligatory,1 - 999 999,Encripted vessel identifier. ID encrypted so that no-one can map the ID to the real vessel
+trip_code,NA,Obligatory,NA,Identifier of the trip for a given project and vessel
+station_number,Integer,Obligatory,1 - 999 999,Sequential numbering of hauls. Starting by 1 for each new trial
+gear_label,String,Obligatory,Code list,Identify the subgear (for twin protocol) or the gear (for paired/unpaired protocol): STD for Standard gear or TEST for experimental gear
+species,String,Obligatory,Free text,Species name
+catch_category,String,Obligatory,Code list,"""DIS"" =  Discards and ""LAN"" = Landings"
+landing_category,String,Optional,Free text,The intended usage at the time of landing. This should match the same field in SL record.
+commercial_size_category,String,Optional,Free text,Commercial sorting category in the given scale.This should match the same field in SL record.
+subsampling_category,String,Optional,Free text,If different subsampling is applied within the catch (e.g. in the DIS fraction).This should match the same field in SL record.
+sex,String,Optional,Free text,Sex category.This should match the same field in SL record.
+weight,Integer,Obligatory,1 - 999 999,Whole weight of the stratum (Species / Catch_Category / Size_Category) in gramme. Decimals are not allowed?
+subsample_weight,Integer,Obligatory,1 - 999 999,Weight of subsample in grammes of the corresponding stratum (Species / Catch_Category) for the measurement (HL table)
+length_code,String,Obligatory,code list,"Unit of length measurement : 1mm =""mm"", 0.5cm=""scm"",1cm=""cm"""
