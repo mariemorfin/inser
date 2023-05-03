@@ -7,13 +7,20 @@ editor_options:
 
 ```{r development, include=FALSE}
 library(testthat)
-library(here)
 ```
 
 ```{r development-load}
 # Load already included functions if relevant
 pkgload::load_all(export_all = FALSE)
 ```
+
+```{r pkg}
+# package for reading and rendering tables
+library(here)
+library(readr)
+library(knitr)
+```
+
 
 In the ‘inser’ package, selectivity data can be obtained from three types of experimental protocols onboard fishing vessels: 'twin', 'single paired' or 'independent' sampling, for which a test fishing gear is compared to a standard fishing gear.
 
