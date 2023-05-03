@@ -1,8 +1,96 @@
 id;description;EN;FR
 0_test_entry;An example entry;This is the text output of the example entry;Ceci est la sortie de texte de l'entrée d'exemple
 0_main_title;The main title of the sheet;Selectivity sheet - InseR;Fiche de sélectivité - InseR
-0_sub_title_twin;The subtitle for twin protocol;Twin trawls protocol;Protocol de chaluts jumeaux
+0_sub_title_twin;The subtitle for twin protocol;Twin gear protocol;Protocole en engins jumeaux
 0_title_device;The section title for selected devices;Tested devices;Engins testés
-1_missing_values;The message warning about missing values;Note : there are %i missing values among the %i fishing operations.;Note : il manque %i valeurs sur les %i opérations de pêche.
-1_duration_caption;The figure title for operation duration;Duration of fishing operation in hours;Durées des opérations de pêche en heures.
+0_gear;The name for the gear field;Gear;Engin
+0_selective_device;The name for the selective device field;Selective device;Dispositif sélectif
+0_codend_mesh;The name for the codend mesh size field;Codend mesh size (mm);Maillage du cul (mm)
+0_headline;The name for the headline's length field;Headline (m);Corde de dos (m)
+1_title;Title of the section 1;Trip description;Description de la marée
+1_subtitle_vessel_trip;Subtitle for the vessels and trips descriptions;Vessels and trips;Navires et marées étudiées
+1_project;name of the project's field;Project;Projet
+1_ID_vessel;name of the vessel ID field;Vessel ID;ID Navire
+1_vessel;Name of the vessel field;Vessel;Navire
+1_ID_trip;Name of the trip ID field;Trip ID;ID Marée
+1_FO;Name of the fishing operation field;Fishing operations;Opérations de pêche
+1_start_date;Name of the starting date field;Starting date;Début
+1_end_date;Name of the end date field;End date;Fin
+1_subtitle_maps;Subtitle for the maps;Mapping of the fishing operations;Cartographie des opérations de pêche
+1_subtitle_fishing_conditions;Subtitle for the fishing conditions;Fishing conditions;Conditions de pêche
+1_missing_values;The message warning about missing values;Note : there are %g missing values among the %g fishing operations.;Note : il manque %g valeurs sur les %g opérations de pêche.
+1_duration_caption;The figure title for operation duration;Duration of fishing operation in hours.;Durées des opérations de pêche en heures.
 1_duration_labs;The figure axis label;Fishing duration (hours);Durée de pêche (heures)
+1_depth_caption;The figure title for depth;Depth of the fishing gear at each fishing operation in meters.;Profondeur de pêche en mètres.
+1_depth_labs;The figure axis label for depth;Fishing depth (m);Profondeur de pêche (m)
+1_speed_caption;The figure title for speed;Gear speed at each fishing operation in knots.;Vitesse de l'engin en nœuds.
+1_speed_labs;The figure axis label for speed;Gear speed (knots);Vitesse de l'engin (nœuds)
+1_sea_state_caption;The figure title for sea state;Sea state at each fishing operation in Douglas scale.;Etat de la mer à chaque opération en échelle de Douglas.
+1_sea_state_labs;The figure axis label for sea state;Sea state (Douglas);Etat de la mer (Douglas)
+1_wind_caption;The figure title for wind force;Wind force at each fishing operation in Beaufort scale.;Force du vent à chaque opération en échelle de Beaufort.
+1_wind_labs;The figure axis label for wind force;Wind force (Beaufort);Force du vent (Beaufort)
+1_seabed_caption;The figure title for seabed;Seabed type at each fishing operation.;Type de fond à chaque opération de pêche.
+1_seabed_labs;The figure axis label for seabed;Seabed type;Type de fond
+1_wind_dir_caption;The figure title for wind direction;Wind direction at each fishing operation.;Direction du vent à chaque opération de pêche.
+1_wind_dir_labs;The figure axis label for wind direction;Wind direction;Direction du vent
+1_day_caption;The figure title for time of the day;Time of the day (day/night) for each fishing operation.;Période de la journée (jour/nuit) de chaque opération de pêche.
+1_day;Day;Day;Jour
+1_night;Night;Night;Nuit
+1_subtitle_fishing_summary;Subtitle for the summary of the fishing conditions;Summary of the fishing conditions;Résumé des conditions de pêche
+1_mean;Mean;Mean;Moyenne
+1_median;Median;Median;Médiane
+1_difference;Difference;Difference;Différence
+1_values;NA Values;NA values;Valeurs NA
+2_title;Title of the section 2;Catch analysis;Analyse des captures
+2_1_subtitle;Subtitle for the total catches analysis;Total catches;Capture totale
+2_1_subtitle_catch_weight;Subtitle for the catch weight analysis;Catches weights;Poids des captures
+2_1_catch_caption;The figure title for the catches weights;Catch weight at each fishing operation, in kilograms. ;Poids de la capture à chaque opération de pêche, en kilogrammes.
+2_1_catch_labs;The figure axis label for catch weight;Catch weight (kg);Poids de la capture (kg)
+2_1_subtitle_sorting;Subtitle for the sorting time;Sorting time;Durée de tri
+2_1_sorting_caption;The figure title for the sorting time;Sorting time at each fishing operation, in minutes. ;Durée de tri à chaque opération de pêche, en minutes.
+2_1_sorting_labs;The figure axis label for sorting time;Sorting time (min);Durée de tri (min)
+2_1_sorting_test_diff;Conclusion of the test on sorting time if significant difference;Catch sorting times are significantly different between the standard and the test gear.;Les durées de tri sont significativement différentes entre l'engin test et le standard.
+2_1_sorting_test_nodiff;Conclusion of the test on sorting time if no difference;Catch sorting times are not significantly different between the standard and the test gear.;Les durées de tri ne sont pas significativement différentes entre l'engin test et le standard.
+2_1_sorting_test_med;Sentence on the difference between sorting time medians;The median sorting time is %g minutes %g with the test gear compared to the standard gear (p-value=%g).;Le tri médian dure %g minutes %g dans l'engin test comparé à l'engin standard (p-value=%g).
+2_1_sorting_test_mean;Sentence on the difference between sorting time means;The mean sorting time is %g minutes %g with the test gear compared to the standard gear (p-value=%g).;Le tri moyen dure %g minutes de %g dans l'engin test comparé à l'engin standard (p-value=%g).
+2_1_less;Less;less;de moins
+2_1_more;More;more;de plus
+2_1_subtitle_sorting_variation;Subtitle for the variation rate of the sorting time;Variation rate of the sorting time of the test gear compared to the standard gear;Taux de variation des durées de tri pour l'engin test par rapport à l'engin standard
+2_1_sorting_var1;Sentence on the first variation rate;A %s of %g %% of the sorting time is observed when considering the total sorting time from all the fishing operations.;Une %s de %g %% de la durée de tri est observée avec l'engin test en considérant la durée totale sur l'ensemble des opérations suivies.
+2_1_sorting_var2;Sentence on the second variation rate;A %s of %g %% of the sorting time is observed when considering the mean sorting time.;Une %s de %g %% de la durée de tri est observée avec l'engin test en considérant la durée moyenne.
+2_1_decrease;Decrease word;decrease;diminution
+2_1_increase;Increase word;increase;augmentation
+2_1_subtitle_discard_weight;Subtitle for the discards weight;Discards weights;Poids des rejets
+2_1_discard_weight_labs;Figure axis label for the discards weight;Discards weight by catch (kg);Poids des rejets par capture (kg)
+2_1_discard_test_diff;Conclusion of the test on the discard weight if significant difference;Discards weights are significantly different between the standard and the test gear.;Le poids total des rejets est significativement différent entre l'engin test et le standard.
+2_1_discard_test_nodiff;Conclusion of the test on discard weight if no difference;Discard weights is not significantly different between the standard and the test gear.;Le poids total des rejets n'est pas significativement différent entre l'engin test et le standard.
+2_1_discard_test_med;Sentence on the difference between discard weights medians;The median discard weight is %g kg %g with the test gear compared to the standard gear (p-value=%g).;Le poids des rejets médian est de %g kg %g dans l'engin test comparé à l'engin standard (p-value=%g).
+2_1_discard_test_mean;Sentence on the difference between discard weights means;The mean discard weight is %g kg %s with the test gear compared to the standard gear (p-value=%g).;Le poids des rejets moyen est de %g kg de %s dans l'engin test comparé à l'engin standard (p-value=%g).
+2_1_subtitle_discard_variation;Subtitle for the discards weight variation rate;Variation rate of total discards weights from the test gear compared to the standard gear;Taux de variation des poids rejetés totaux de l'engin test par rapport à l'engin standard
+2_1_discard_var1;Sentence on the first variation rate;A %s of %g %% of the total discard weight is observed when considering the total discard weight from all the fishing operations.;Une %s de %g %% du poids total des rejets est observée avec l'engin test en considérant le poids total sur l'ensemble des opérations suivies.
+2_1_discard_var2;Sentence on the second variation rate;A %s of %g %% of the total discard weight is observed when considering the mean discard weight.;Une %s de %g %% du poids total des rejets est observée avec l'engin test en considérant le poids moyen.
+2_2_subtitle;Subtitle for the total catches analysis;Comparison of landed and discarded weights by studies species;Comparaison des poids débarqués et rejetés par espèce étudiée
+2_2_list_LAN;subtitle for the list of landed species;List of studied landed species:;Liste des espèces débarquées étudiées :
+2_2_list_DIS;subtitle for the list of discarded species;List of studied discarded species:;Liste des espèces rejetées étudiées :
+2_2_catch_labs;The figure axis label for species weight;Species weight by catch (kg);Poids de l'espèce par capture (kg)
+2_2_DIS;Discards;Discards;Rejets
+2_2_LAN;Landings;Landings;Débarquements
+2_2_mean_diff;Table field name for mean difference;Mean difference (kg);Différence moyenne (kg)
+2_2_median_diff;Table field name for median difference;Median difference;Différence médiane (kg)
+2_2_var1;Table field name for total variation rate;Total variation rate (%%);Taux de variation total (%%)
+2_2_var2;Table field name for mean variation rate;Mean variation rate (%%);Taux de variation moyen (%%)
+2_2_LAN_table_caption;Caption for the table about weights for each landed species;Results of the comparison tests on the landed weights for each species. The tested statistic is identified by '*'. The lower the p-value, the more significant is the difference.  ;Résultats des tests de différence de poids débarqués pour chaque espèce. La statistique testée est identifiée par '*'. Plus la p-value est faible, plus la différence est significative.
+2_2_DIS_table_caption;Caption for the table about weights for each discarded species;Results of the comparison tests on the discarded weights for each species. The tested statistic is identified by '*'. The lower the p-value, the more significant is the difference.  ;Résultats des tests de différence de poids rejetés pour chaque espèce. La statistique testée est identifiée par '*'.
+3_title;Title of the section 3;Size selectivity analysis;Analyse de la sélectivité en taille
+3_list_size;subtitle for the list of studied species;List of studied species:;Liste des espèces étudiées :
+3_size_distribution;subtitle for the size distribution of each species;For each species, size distribution of landings and discards by gear;Pour chaque espèce, distribution en tailles des débarquements/rejets par engin
+3_CL_labs;axis label for CL;Carapace length (%s);Longueur céphalothoracique (%s)
+3_TL_labs;axis label for TL;Total length (%s);Longueur totale (%s)
+3_n_labs;axis label for counts;Counts;Nombre d'individus
+3_species;Species;Species;Espèce
+3_global;Table field for overall lengths;Overall (all lengths);Global (toutes les tailles)
+3_taille_com;Table field for commercial lengths;Commercial lengths;Taille commerciale
+3_undersize;Table field for undersized individuals;Undersized;Hors taille
+3_escapement;Table caption for escapement rate;Escapement rate of the test gear compared to the standard gear;Taux d'échappement de l'engin test par rapport au standard.
+3_selectivity_curve;subtitle for the size selectivity curves;Relative size selectivity curves of the test gear compared to the standard gear;Courbes de sélectivité relative du chalut test par rapport le chalut standard
+3_rel_selectivity;subtitle for the size selectivity curves;Relative selectivity;Sélectivité relative
