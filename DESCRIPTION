@@ -33,6 +33,7 @@ Imports:
     tools,
     utils
 Suggests: 
+    here,
     purrr,
     readr,
     testthat (>= 3.0.0)

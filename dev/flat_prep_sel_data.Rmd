@@ -14,9 +14,119 @@ library(testthat)
 pkgload::load_all(export_all = FALSE)
 ```
 
-# `prep_sel_data()` : prepare selectivity dataset
+```{r pkg}
+# package for reading and rendering tables
+library(here)
+library(readr)
+library(knitr)
+```
 
-Transform and prepare the database in order to compute the indices of the create_selectivity_sheet() function.
+
+In the ‘inser’ package, selectivity data can be obtained from three types of experimental protocols onboard fishing vessels: 'twin', 'single paired' or 'independent' sampling, for which a test fishing gear is compared to a standard fishing gear.
+
+<div align="center">**Acronyms**</div>
+
+STD: stands for the standard fishing gear usually used, it is the reference gear 
+
+TEST: stands for the gear modified with a new selective device to be tested
+
+LAN: Fraction of the catch retained by the fisherman (= Landings)
+
+DIS: Part of the catch not retained by the fisherman (= Discards)
+
+FO: Fishing Operation
+
+## 1) Data Collection Protocol
+
+For the two paired protocol types (twin or paired-single hauls), the environmental (depth, type of bottom) and fishing (duration, speed, heading/current, characteristics of the gear apart from the tested device) conditions, as well as the available fished population are assumed to be equivalent between the two FOs of each pair.
+
+### Twin' gear protocol
+Some fishing gears allow the simultaneous comparison of a gear equipped with a selective device with a standard one during the same fishing trip.
+
+This is typically the case for a twin trawl, where the STD and TEST gear can be rigged simultaneously (the catches of two sub-gears will be compared as if they were two separate gears). This configuration can also be transposed to nets, lines, or pots gear deployed from a single vessel. 
+
+The 'twin' configuration is ideal as the variability of fishing conditions between the two gears is limited, as the two gears STD and TEST are paired within each FO (1 pair = 1 FO).
+
+### Single paired' protocol
+
+In the case of the single trawl, it is possible to implement a protocol where the FOs are paired: FOs are paired as STD/TEST when they take place under conditions considered similar (i.e. similar target species, depth, gear speed, orientation to the current and fishing duration). For example, STD and TEST FOs can be alternated so that two FOs close together in time and space (but not exactly at the same location) are matched to form a pair.
+
+### Independent' protocol
+
+The least restrictive protocol when the gear does not allow a 'matched' protocol is to conduct two sets of FOs (STD and TEST) independently. The available fishery resource, environmental and fishing conditions should nevertheless be similar, but only at the scale of the two sets of FOs. This protocol is subject to more uncertainties and will require more FOs to achieve the same accuracy as a paired protocol.
+
+### On-board catch sampling protocol
+
+Catch sampling is carried out by an observer on board a professional fishing vessel. Whether it is a twin trawl or a single trawl operation (alternating or parallel), the catch sampling method is the same. For each trawl, the discarded and landed fractions must be processed, and at least the total catch weight (discards + landings) must be recorded. 
+
+These selectivity experiments may focus on one or a few problematic species and not necessarily on all species caught. In this case, the catch sampling protocol focuses on a selection of species of interest (in addition to the total catch weight in each trawl).
+The catch sampling methodology consists of (Figure 1) : 
+
+- estimate the total quantity of the discarded fraction of a gear [1]. This quantity can be estimated by weighing only a part of the discard (e.g. a basket), assuming that the density of this sample is representative of the whole discarded fraction.
+
+- Collect, weigh and sort a 'bulk' sample of the discard [2]. The 'bulk' sample consists of a mixture of species representative of the discarded fraction. The ratio taken is recorded (1/n) [3]. 
+
+- Weigh the species of interest separately from the bulk sample [4] and measure the individuals [5]. (NB: if individuals of a species are measured, they must be measured for both fractions (landed and discarded) in order to describe a complete catch profile (same for weighing: the weight of a discarded species must be associated with the weight of the landed species if applicable). If a subsample per species is required, the ratio taken is recorded (1/m) [6].
+
+- record the weights by species of the landed fraction [7]. For each species of interest, a sample of individuals is measured [8] and its weight recorded [9]. If it is not possible to weigh the samples on board, a conversion to weight can be made later on land from the available length-weight relationships.
+
+- Individuals present in very small quantities and easily identifiable can be considered as "non-bulk". In this case, all individuals are extracted from the catch and are not subject to the same sampling rules as those described for the "bulk" sample: all individuals are weighed and measured and a sampling coefficient of 1:1 is applied to them [10].
+
+- Once the species in the bulk sample have been sorted, individuals of the species of interest are measured. The minimum size of the measured samples is assessed by the observer; the objective being to be able to describe the length distribution of the captured species. If a small length range is observed for a species, the distribution will stabilize fairly quickly and a small number of individuals (minimum 30) will be required. The sample size will be increased if a large length range is observed.
+
+
+```{r fig1, echo = FALSE, out.width="95%", fig.cap="Figure 1 : Catch sampling protocol (landed fraction and discarded fraction). The same procedure is implemented separately for the STD trawl and for the TEST trawl"}
+knitr::include_graphics(path = here::here("man","figure","catch_sampling_protocol.png"))
+```
+
+## 2) Data format
+
+The input data format is banked in the form of 4 data tables based on the [ICES RDB data exchange format](https://www.ices.dk/data/Documents/RDB/RDB%20Exchange%20Format.pdf) and corresponding to the different scales of the data.
+
+### TR table
+
+The TR table contains information relating to the fishing trip and the two compared gears.
+
+```{r tr, echo = FALSE}
+readr::read_csv(file = here::here("man","table","descriptif_tables-TR.csv"),
+                show_col_types = FALSE) %>%
+  knitr::kable()
+```
+
+### HH table
+
+The HH table contains information relating to the FO for each gear. For twin gears, both gears are deployed at each FO, so there are two different lines for each FO, while for single gears, there is one line for each FO (as only one gear is deployed at each FO).
+
+```{r hh, echo = FALSE}
+readr::read_csv(file = here::here("man","table","descriptif_tables-HH.csv"),
+                show_col_types = FALSE) %>%
+  knitr::kable()
+```
+
+### SL table
+
+The SL table contains information relating to the weight of the studies species, for the strata FO x species x catch category (and eventually x landing category x commercial size category x subsampling category x sex).
+
+```{r sl, echo = FALSE}
+readr::read_csv(file = here::here("man","table","descriptif_tables-SL.csv"),
+                show_col_types = FALSE) %>%
+  knitr::kable()
+```
+
+### HL table
+
+The HL table contains information relating to the size of individuals of the species studied, within the strata recorded in HL.
+
+```{r hl, echo = FALSE}
+readr::read_csv(file = here::here("man","table","descriptif_tables-HL.csv"),
+                show_col_types = FALSE) %>%
+  knitr::kable()
+```
+
+
+## 3) Prepare Selectivity Data
+
+The function `prep_sel_data()` transforms and prepare the database in order to compute the indices of the create_selectivity_sheet() function.
 
 ```{r function-prep_sel_data}
 #' prep_sel_data
@@ -42,6 +152,8 @@ Transform and prepare the database in order to compute the indices of the create
 #' If the field ‘elevated_number_at_length’ is not provided in HL or some values are missing, the function calculate them using ‘number_at_length’ and the ratio between the subsample_weight and the weight (table SL).
 #' 
 #' @param data list A list of four data.frames (TR,HH,SL,HL) based on the ICES RDB data exchange format corresponding to each level of the dataset. EU/ICES have defined common format and processing tools, for fisheries statistics.
+#' For more details on the input data format, see the related vignette :
+#' \code{vignette("selectivity-data", package = "inser")}
 #' @param filters list A list of filters to apply on the dataset. The optional filters can apply directly on the fields ‘project’, ‘vessel_identifier’, ‘selective_device’, ‘trip_code’, ‘station_number’. For the fields ‘species_LAN’, ‘species_DIS’, and ‘species_length’, the filter apply on the landings (LAN), discards (DIS) and on the measured species, respectively.
 #'
 #' @importFrom dplyr filter left_join
@@ -853,7 +965,7 @@ test_that("prep_sel_data works", {
 # Execute in the console directly
 fusen::inflate(
   flat_file = "dev/flat_prep_sel_data.Rmd",
-  vignette_name = "Prepare selectivity data",
+  vignette_name = "Selectivity data",
   check = FALSE,
   overwrite = TRUE)
 ```

@@ -193,3 +193,29 @@ load(system.file("script_origin", "Data", "ICES_areas", "ICES_areas2.Rdata", pac
 saveRDS(object = ICES_areas2, file = here::here("inst","script_origin", "Data", "ICES_areas", "ICES_areas2.Rds"))
 ```
 
+### Store input data info as csv files
+
+```{r}
+# get xls info
+xls_path <- here::here("man","table","descriptif_tables.xlsx")
+
+# a function to read excel sheets and export as csv
+read_then_csv <- function(sheet, path) {
+  pathbase <- path %>%
+    basename() %>%
+    tools::file_path_sans_ext()
+  path %>%
+    readxl::read_excel(sheet = sheet) %>% 
+    readr::write_csv(
+      file = file.path(
+        here::here("man","table", paste0(pathbase, "-", sheet, ".csv"))
+        )
+    )
+}
+
+# read csv and export
+xls_path %>%
+  readxl::excel_sheets() %>%
+  purrr::map(read_then_csv, path = xls_path)
+```
+
