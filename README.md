@@ -46,7 +46,11 @@ options(
   )
 )
 
-remotes::install_git("https://forge.thinkr.fr/ifremer-lorient/inser/")
+remotes::install_git(
+  url = "https://forge.thinkr.fr/ifremer-lorient/inser/",
+  upgrade = FALSE,
+  build_vignettes = TRUE
+)
 ```
 
 ## Package Documentation
