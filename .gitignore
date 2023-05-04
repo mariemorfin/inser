@@ -5,3 +5,4 @@ rsconnect/
 docs
 !.gitlab/*/*
 inst/doc
+data-raw/ICES_area
