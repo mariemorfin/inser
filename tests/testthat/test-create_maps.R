@@ -28,11 +28,11 @@ test_that("create_maps works", {
     zones = c("8.a","8.b","7.d","7.e","7.h"),
     protocol = "twin",
     data = TAB
-    )
+  )
   
   #' @description Testing the class of the output from `create_maps`
   expect_s3_class(
     object = output,
     class = c("gg", "ggplot", "ggarrange")
-    )
+  )
 })
