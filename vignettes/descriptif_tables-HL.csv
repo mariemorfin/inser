@@ -1,0 +1,16 @@
+Field names,Type,Status,Basic checks,Comments
+project,String,Obligatory,Code list,Name of the project underwhich the experiment was carried out
+vessel_identifier,Integer,Obligatory,1 - 999 999,Encripted vessel identifier. ID encrypted so that no-one can map the ID to the real vessel
+trip_code,NA,Obligatory,NA,Identifier of the trip for a given project and vessel
+station_number,Integer,Obligatory,1 - 999 999,Sequential numbering of hauls. Starting by 1 for each new trial
+gear_label,String,Obligatory,Code list,Identify the subgear (for twin protocol) or the gear (for paired/unpaired protocol): STD for Standard gear or TEST for experimental gear
+species,String,Obligatory,Free text,Species name
+catch_category,String,Obligatory,Code list,"""DIS"" =  Discards and ""LAN"" = Landings"
+landing_category,String,Optional,Free text,The intended usage at the time of landing.
+commercial_size_category,String,Optional,Free text,Commercial sorting category in the given scale.
+subsampling_category,String,Optional,Free text,If different subsampling is applied within the catch (e.g. in the DIS fraction).
+sex,String,Optional,Free text,Sex category.
+length_class,Integer,Obligatory,NA,Lower bound of the length class in mm (e.g. 650 for 65-66 cm)
+number_at_length,Integer,Obligatory,NA,Not raised to the whole catch. Length classes with zero should be excluded from the record
+measure_type,String,Obligatory,Code list,"Mesure type : ""LT"" for Total Length and ""LC"" for Carapace Length"
+elevated_number_at_length,Double,Optional,NA,Elevated number of individuals for the length class.

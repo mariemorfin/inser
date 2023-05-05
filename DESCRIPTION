@@ -16,7 +16,6 @@ Description: Generate a synthetic sheet of fishing gear selectivity
     sampling, for which a test gear is compared to a standard gear.
 License: file LICENSE
 Imports: 
-    broom,
     dplyr,
     ggplot2,
     ggpubr,
@@ -26,7 +25,6 @@ Imports:
     maps,
     rmarkdown,
     sf,
-    sp,
     stats,
     stringr,
     tidyr,

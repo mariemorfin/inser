@@ -7,6 +7,10 @@ editor_options:
 
 ```{r development, include=FALSE}
 library(testthat)
+library(dplyr)
+library(sf)
+library(stringr)
+library(ggpubr)
 ```
 
 ```{r development-load}
@@ -22,173 +26,368 @@ This function is internally called by `create_selectivity_sheet()`.
 #' create_maps
 #'
 #' @inheritParams create_selectivity_sheet
-#' @param ices_data sp object The spatial polygon data.frame of the study area
+#' @param data_zones_sf A sf object. The spatial polygons of the zones of interests.
+#' By default using ICES zones data. See https://gis.ices.dk/shapefiles/ICES_areas.zip.
 #' 
-#' @importFrom maps map
-#' @importFrom dplyr group_by summarize
-#' @importFrom ggplot2 ggplot coord_quickmap theme_light theme element_text annotation_map map_data geom_polygon aes geom_text geom_rect coord_sf theme_classic element_rect geom_line arrow unit guides xlab ylab labs
+#' @importFrom dplyr group_by summarize mutate filter select
+#' @importFrom ggplot2 ggplot coord_quickmap theme_light theme element_text annotation_map 
+#' @importFrom ggplot2 map_data aes geom_text geom_rect coord_sf theme_classic labs
+#' @importFrom ggplot2 element_rect geom_line arrow unit guides xlab ylab labs geom_sf
 #' @importFrom ggpubr ggarrange
-#' @importFrom sp SpatialPolygons SpatialPolygonsDataFrame CRS
-#' @importFrom sf st_geometry st_crs st_transform
+#' @importFrom sf st_set_agr st_centroid st_drop_geometry st_bbox
+#' @importFrom maps map
 #' @importFrom stringr str_c
-#' @importFrom broom tidy
 #'
 #' @return ggplot A ggplot object of the map and zoom graphs
-#' @export
-create_maps<-function(data,
-                      zones = NULL,
-                      protocol,
-                      ices_data = readRDS(
-                        system.file(
-                          "script_origin",
-                          "Data",
-                          "ICES_areas",
-                          "ICES_areas2.Rds",
-                          package = "inser")
-                        )
-                      ){
-
-##Create two maps: Map and Zoom
-
-  ###Map
-if(length(zones)!=0){
-    #identify the polygons corresponding to the study area
-    ind_zones<-match(zones,paste(ices_data$SubArea, ices_data$Division,sep="."))
-    SPs<-SpatialPolygons(ices_data@polygons[ind_zones])
-
-    MyDF<-data.frame(Area=zones)
-    row.names(MyDF) =row.names(ices_data@data)[ind_zones]
-
-    ZoneMer<-SpatialPolygonsDataFrame(SPs,data=MyDF)
-    ZoneMer_f<-tidy(ZoneMer)
-
-
-  ICESp<-ggplot() +coord_quickmap()+theme_light()+
-    theme(axis.text=element_text(size=18),axis.title = element_text(size=20))+
-    annotation_map(map_data("world"),alpha=0.5,fill="grey",col="white")+ #Add the map as a base layer before the points
-    geom_polygon(data = ZoneMer_f, aes( x = long, y = lat, group = group), alpha=0.5,fill="#69b3a2", color="white")
-
-  df_ICES<-data.frame(x=c(-2,-4,0,-4,-7),y=c(45,47,50.2,49.5,49),name=zones)
-  #Comment positionner les labels?
-
-  lon_min<-floor(ZoneMer@bbox[1,1])
-  lon_max<-ceiling(ZoneMer@bbox[1,2])
-  lat_min<-floor(ZoneMer@bbox[2,1])
-  lat_max<-ceiling(ZoneMer@bbox[2,2])
-  by_lat<-round((lat_max-lat_min)/5)
-  by_lon<-round((lon_max-lon_min)/5)
-
-  rangeX<-with(data,abs(min(pos_start_lon_dec,pos_stop_lon_dec)-max(pos_start_lon_dec,pos_stop_lon_dec)))
-  rangeY<-with(data,abs(min(pos_start_lat_dec,pos_stop_lat_dec)-max(pos_start_lat_dec,pos_stop_lat_dec)))
-  xlim=with(data,c(min(pos_start_lon_dec,pos_stop_lon_dec)-0.15*rangeX,max(pos_start_lon_dec,pos_stop_lon_dec)+0.15*rangeX))
-  ylim=with(data,c(min(pos_start_lat_dec,pos_stop_lat_dec)-0.15*rangeY,max(pos_start_lat_dec,pos_stop_lat_dec)+0.15*rangeY) )
-
-
-  Map<-ICESp+
-    geom_text(data=df_ICES,aes(x=x,y=y,label=name),col="white",fontface=3)+
-    geom_rect(mapping=aes(xmin =xlim[1], xmax = xlim[2], ymin =ylim[1], ymax =ylim[2]), fill = NA, colour = "#1b98e0", linewidth = 1)+
-       coord_sf( expand = TRUE,crs = CRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"))
-
-  }else{
-    areas<-unique(data$area)
-    if(length(which( is.na(areas)==FALSE)) >0) {
-      #Area level 3 (level 4 for Baltic, Mediterranean, and Black Seas) in the Data Collection Regulation (EC, 2008a, 2008b).
-      #=> Voir comment récupérer les zones correspondantes.
-
-      #Il y a aussi le champs "subpolygon: National level as defined by each country as child nodes (substratification)
-      #of the ICES rectangles. It is recommended that this is coordinated internationally, e.g. through the Regional Coordination Meetings (EC RCMs).
-
-    }
+create_maps <- function(
+    data,
+    zones = NULL,
+    protocol,
+    data_zones_sf = readRDS(
+      file = system.file("ices_data_sf.rds", package = "inser")
+    )
+){
+  
+  ## Create two maps: Map and Zoom
+  
+  ## Map ----
+  
+  if(!is.null(zones)) {
+    target_polygones_sf <- data_zones_sf %>%
+      mutate(
+        area = paste(SubArea, Division, sep = ".")
+      ) %>%
+      filter(
+        area %in% zones
+      )
+  } else {
+    target_polygones_sf <- data_zones_sf
   }
-
-
-  ##Ajouter un test pour vérifier qu'au moins une OP est localisée
-  PosX<-seq(floor(xlim[1]),ceiling(xlim[2]),5/60)
-  Deg<-ceiling(PosX)
-  Min<-round((Deg-PosX)*60)
-  LabX<-str_c(Deg,"\u00b0",Min,"\'W")
-  idX<-which(PosX >= xlim[1]  & PosX <= xlim[2])
-
-  PosY<-seq(floor(ylim[1]),ceiling(ylim[2]),5/60)
-  Deg<-floor(PosY)
-  Min<-round((PosY-Deg)*60)
-  LabY<-str_c(Deg,"\u00b0",Min,"\'N")
-  idY<-which(PosY >= ylim[1]  & PosY <= ylim[2])
-
-  if(protocol=="twin"){
-  Pos_Start<- data %>% group_by(project,vessel_identifier,trip_code,station_number)%>%
-    summarize(Lat=unique(pos_start_lat_dec),Lon=unique(pos_start_lon_dec))
-  Pos_Start$order<-"start"
-  Pos_Stop<- data %>% group_by(project,vessel_identifier,trip_code,station_number)%>%
-    summarize(Lat=unique(pos_stop_lat_dec),Lon=unique(pos_stop_lon_dec))
-  Pos_Stop$order<-"end"
-  Pos_Station<-rbind(Pos_Start,Pos_Stop)
-  Pos_Station$id_station<-with(Pos_Station,paste(project,vessel_identifier,trip_code,station_number))
-
-  Zoom<-ggplot() +coord_quickmap()+theme_classic()+
-    theme(panel.border = element_rect(color = "#1b98e0", fill = NA,linewidth = 3))+
-    annotation_map(map_data("world"),alpha=0.5,fill="grey",col="white")+ #Add the map as a base layer before the points
-    geom_polygon(data = ZoneMer_f, aes( x = long, y = lat, group = group), alpha=0.2,fill="#69b3a2", color="white")+
-    geom_text(data=df_ICES,aes(x=x,y=y,label=name),col="white",fontface=3)+
-    coord_sf(xlim = xlim, ylim = ylim, expand = FALSE,crs = CRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")) +
-    geom_line(data=Pos_Station,aes(group =id_station,x=Lon,y=Lat),color="grey",
-              arrow = arrow(type = "closed",length=unit(0.075, "inches")))#+
-    #scale_x_continuous("longitude",breaks = PosX[idX], labels=LabX[idX]) +
-    #scale_y_continuous("latitude", breaks = PosY[idY], labels = LabY[idY])
+  
+  ICESp <- ggplot() +
+    coord_quickmap() +
+    theme_light() +
+    theme(
+      axis.text = element_text(size = 18),
+      axis.title = element_text(size = 20)
+    ) +
+    annotation_map(
+      map = map_data("world"),
+      alpha = 0.5,
+      fill = "grey",
+      col = "white"
+    ) + #Add the map as a base layer before the points
+    geom_sf(
+      data = target_polygones_sf,
+      alpha = 0.5,
+      fill = "#69b3a2",
+      color = "white"
+    ) +
+    labs(
+      x = "long",
+      y = "lat"
+    )
+  
+  df_ICES <- target_polygones_sf %>%
+    select(
+      geometry,
+      name = area
+    ) %>%
+    st_set_agr("constant") %>%
+    st_centroid() %>%
+    mutate(
+      x = as.numeric(lapply(geometry, function(x) getElement(x, 1))),
+      y = as.numeric(lapply(geometry, function(x) getElement(x, 2)))
+    ) %>%
+    st_drop_geometry()
+  
+  
+  bbox_target_polygones_sf <- st_bbox(target_polygones_sf)
+  
+  lon_min <- floor(bbox_target_polygones_sf["xmin"])
+  lon_max <- ceiling(bbox_target_polygones_sf["xmax"])
+  lat_min <- floor(bbox_target_polygones_sf["ymin"])
+  lat_max <- ceiling(bbox_target_polygones_sf["ymax"])
+  by_lat <- round((lat_max - lat_min) / 5)
+  by_lon <- round((lon_max - lon_min) / 5)
+  
+  rangeX <- with(data, abs(
+    min(pos_start_lon_dec, pos_stop_lon_dec) - max(pos_start_lon_dec, pos_stop_lon_dec)
+  ))
+  rangeY <- with(data, abs(
+    min(pos_start_lat_dec, pos_stop_lat_dec) - max(pos_start_lat_dec, pos_stop_lat_dec)
+  ))
+  xlim = with(data, c(
+    min(pos_start_lon_dec, pos_stop_lon_dec) - 0.15 * rangeX,
+    max(pos_start_lon_dec, pos_stop_lon_dec) + 0.15 * rangeX
+  ))
+  ylim = with(data, c(
+    min(pos_start_lat_dec, pos_stop_lat_dec) - 0.15 * rangeY,
+    max(pos_start_lat_dec, pos_stop_lat_dec) + 0.15 * rangeY
+  ))
+  
+  
+  Map <- ICESp +
+    geom_text(
+      data = df_ICES,
+      aes(x = x, y = y, label = name),
+      col = "white",
+      fontface = 3
+    ) +
+    geom_rect(
+      mapping = aes(
+        xmin = xlim[1],
+        xmax = xlim[2],
+        ymin = ylim[1],
+        ymax = ylim[2]
+      ),
+      fill = NA,
+      colour = "#1b98e0",
+      linewidth = 1
+    ) 
+  
+  ## Zoom ----
+  
+  PosX <- seq(floor(xlim[1]), ceiling(xlim[2]), 5 / 60)
+  Deg <- ceiling(PosX)
+  Min <- round((Deg - PosX) * 60)
+  LabX <- str_c(Deg, "\u00b0", Min, "\'W")
+  idX <- which(PosX >= xlim[1]  & PosX <= xlim[2])
+  
+  PosY <- seq(floor(ylim[1]), ceiling(ylim[2]), 5 / 60)
+  Deg <- floor(PosY)
+  Min <- round((PosY - Deg) * 60)
+  LabY <- str_c(Deg, "\u00b0", Min, "\'N")
+  idY <- which(PosY >= ylim[1]  & PosY <= ylim[2])
+  
+  if (protocol == "twin") {
+    Pos_Start <- data %>%
+      group_by(project,
+               vessel_identifier, trip_code, station_number) %>%
+      summarize(Lat = unique(pos_start_lat_dec),
+                Lon = unique(pos_start_lon_dec))
+    Pos_Start$order <- "start"
+    Pos_Stop <- data %>%
+      group_by(project, vessel_identifier, trip_code, station_number) %>%
+      summarize(Lat = unique(pos_stop_lat_dec),
+                Lon = unique(pos_stop_lon_dec))
+    Pos_Stop$order <- "end"
+    Pos_Station <- rbind(Pos_Start, Pos_Stop)
+    Pos_Station$id_station <- with(
+      Pos_Station,
+      paste(project, vessel_identifier, trip_code, station_number)
+    )
+    
+    Zoom <- ggplot() +
+      coord_quickmap() +
+      theme_classic() +
+      theme(
+        panel.border = element_rect(
+          color = "#1b98e0",
+          fill = NA,
+          linewidth = 3
+        )
+      ) +
+      annotation_map(
+        map = map_data("world"),
+        alpha = 0.5,
+        fill = "grey",
+        col = "white"
+      ) +
+      geom_sf(
+        data = target_polygones_sf,
+        alpha = 0.2,
+        fill = "#69b3a2",
+        color = "white"
+      ) +
+      labs(
+        x = "long",
+        y = "lat"
+      ) +
+      geom_text(
+        data = df_ICES,
+        aes(x = x, y = y, label = name),
+        col = "white",
+        fontface = 3
+      ) +
+      coord_sf(
+        xlim = xlim,
+        ylim = ylim,
+        expand = FALSE
+      ) +
+      geom_line(
+        data = Pos_Station,
+        aes(group = id_station, x = Lon, y = Lat),
+        color = "grey",
+        arrow = arrow(type = "closed", length = unit(0.075, "inches"))
+      )
   }
-
-  if(protocol=="paired"){
-      Pos_Start<- data %>% group_by(project,vessel_identifier,trip_code,tag_operation,station_number,gear_label)%>%
-        summarize(Lat=unique(pos_start_lat_dec),Lon=unique(pos_start_lon_dec))
-      Pos_Start$order<-"start"
-      Pos_Stop<- data %>% group_by(project,vessel_identifier,trip_code,tag_operation,station_number,gear_label)%>%
-        summarize(Lat=unique(pos_stop_lat_dec),Lon=unique(pos_stop_lon_dec))
-      Pos_Stop$order<-"end"
-      Pos_Station<-rbind(Pos_Start,Pos_Stop)
-      Pos_Station$id_station<-with(Pos_Station,paste(project,vessel_identifier,trip_code,tag_operation,station_number))
-
-      Zoom<-ggplot() +coord_quickmap()+theme_classic()+
-        theme(legend.position="bottom",panel.border = element_rect(color = "#1b98e0", fill = NA,linewidth = 3))+
-        guides(col = FALSE)  +
-        xlab("")+ylab("")+
-        labs(linetype="Engin")+
-        annotation_map(map_data("world"),alpha=0.5,fill="grey",col="white")+ #Add the map as a base layer before the points
-        geom_polygon(data = ZoneMer_f, aes( x = long, y = lat, group = group), alpha=0.2,fill="#69b3a2", color="white")+
-        geom_text(data=df_ICES,aes(x=x,y=y,label=name),col="white",fontface=3)+
-        coord_sf(xlim = xlim, ylim = ylim, expand = TRUE,crs = CRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")) +
-        geom_line(data=Pos_Station,aes(group =id_station,x=Lon,y=Lat,color=as.factor(tag_operation),linetype=gear_label),
-                  arrow = arrow(type = "closed",length=unit(0.075, "inches")))
-    }
-
-
-  if(protocol=="unpaired"){
-    Pos_Start<- data %>% group_by(project,vessel_identifier,trip_code,station_number,gear_label)%>%
-      summarize(Lat=unique(pos_start_lat_dec),Lon=unique(pos_start_lon_dec))
-    Pos_Start$order<-"start"
-    Pos_Stop<- data %>% group_by(project,vessel_identifier,trip_code,station_number,gear_label)%>%
-      summarize(Lat=unique(pos_stop_lat_dec),Lon=unique(pos_stop_lon_dec))
-    Pos_Stop$order<-"end"
-    Pos_Station<-rbind(Pos_Start,Pos_Stop)
-    Pos_Station$id_station<-with(Pos_Station,paste(project,vessel_identifier,trip_code,station_number))
-
-    Zoom<-ggplot() +coord_quickmap()+theme_classic()+
-      theme(legend.position="bottom",axis.text=element_text(size=18),legend.title=element_text(size=20),
-          legend.text = element_text(size=18),
-      panel.border = element_rect(color = "#1b98e0", fill = NA,linewidth = 3))+
+  
+  if (protocol == "paired") {
+    Pos_Start <- data %>% group_by(
+      project,
+      vessel_identifier,
+      trip_code,
+      tag_operation,
+      station_number,
+      gear_label
+    ) %>%
+      summarize(Lat = unique(pos_start_lat_dec),
+                Lon = unique(pos_start_lon_dec))
+    Pos_Start$order <- "start"
+    Pos_Stop <-
+      data %>% group_by(project,
+                        vessel_identifier,
+                        trip_code,
+                        tag_operation,
+                        station_number,
+                        gear_label) %>%
+      summarize(Lat = unique(pos_stop_lat_dec),
+                Lon = unique(pos_stop_lon_dec))
+    Pos_Stop$order <- "end"
+    Pos_Station <- rbind(Pos_Start, Pos_Stop)
+    Pos_Station$id_station <-
+      with(
+        Pos_Station,
+        paste(
+          project,
+          vessel_identifier,
+          trip_code,
+          tag_operation,
+          station_number
+        )
+      )
+    
+    Zoom <- ggplot() + coord_quickmap() + theme_classic() +
+      theme(
+        legend.position = "bottom",
+        panel.border = element_rect(
+          color = "#1b98e0",
+          fill = NA,
+          linewidth = 3
+        )
+      ) +
       guides(col = FALSE)  +
-      xlab("")+ylab("")+
-      labs(linetype="Engin")+
-      annotation_map(map_data("world"),alpha=0.5,fill="grey",col="white")+ #Add the map as a base layer before the points
-      geom_polygon(data = ZoneMer_f, aes( x = long, y = lat, group = group), alpha=0.2,fill="#69b3a2", color="white")+
-      geom_text(data=df_ICES,aes(x=x,y=y,label=name),col="white",fontface=3)+
-      coord_sf(xlim = xlim, ylim = ylim, expand = TRUE,crs = CRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")) +
-      geom_line(data=Pos_Station,aes(group =id_station,x=Lon,y=Lat,color=as.factor(trip_code),linetype=gear_label),
-                arrow = arrow(type = "closed",length=unit(0.075, "inches")))
+      xlab("") + ylab("") +
+      labs(linetype = "Engin") +
+      annotation_map(map_data("world"),
+                     alpha = 0.5,
+                     fill = "grey",
+                     col = "white") + #Add the map as a base layer before the points
+      geom_sf(
+        data = target_polygones_sf,
+        alpha = 0.2,
+        fill = "#69b3a2",
+        color = "white"
+      ) +
+      labs(
+        x = "long",
+        y = "lat"
+      ) +
+      geom_text(
+        data = df_ICES,
+        aes(x = x, y = y, label = name),
+        col = "white",
+        fontface = 3
+      ) +
+      coord_sf(
+        xlim = xlim,
+        ylim = ylim,
+        expand = TRUE
+      ) +
+      geom_line(
+        data = Pos_Station,
+        aes(
+          group = id_station,
+          x = Lon,
+          y = Lat,
+          color = as.factor(tag_operation),
+          linetype = gear_label
+        ),
+        arrow = arrow(type = "closed", length = unit(0.075, "inches"))
+      )
   }
-
-  Maps<-ggarrange(Map,Zoom)
-
-
+  
+  if (protocol == "unpaired") {
+    Pos_Start <-
+      data %>% group_by(project,
+                        vessel_identifier,
+                        trip_code,
+                        station_number,
+                        gear_label) %>%
+      summarize(Lat = unique(pos_start_lat_dec),
+                Lon = unique(pos_start_lon_dec))
+    Pos_Start$order <- "start"
+    Pos_Stop <-
+      data %>% group_by(project,
+                        vessel_identifier,
+                        trip_code,
+                        station_number,
+                        gear_label) %>%
+      summarize(Lat = unique(pos_stop_lat_dec),
+                Lon = unique(pos_stop_lon_dec))
+    Pos_Stop$order <- "end"
+    Pos_Station <- rbind(Pos_Start, Pos_Stop)
+    Pos_Station$id_station <-
+      with(Pos_Station,
+           paste(project, vessel_identifier, trip_code, station_number))
+    
+    Zoom <- ggplot() + coord_quickmap() + theme_classic() +
+      theme(
+        legend.position = "bottom",
+        axis.text = element_text(size = 18),
+        legend.title = element_text(size = 20),
+        legend.text = element_text(size = 18),
+        panel.border = element_rect(
+          color = "#1b98e0",
+          fill = NA,
+          linewidth = 3
+        )
+      ) +
+      guides(col = FALSE)  +
+      xlab("") + ylab("") +
+      labs(linetype = "Engin") +
+      annotation_map(map_data("world"),
+                     alpha = 0.5,
+                     fill = "grey",
+                     col = "white") + #Add the map as a base layer before the points
+      geom_sf(
+        data = target_polygones_sf,
+        alpha = 0.2,
+        fill = "#69b3a2",
+        color = "white"
+      ) +
+      labs(
+        x = "long",
+        y = "lat"
+      ) +
+      geom_text(
+        data = df_ICES,
+        aes(x = x, y = y, label = name),
+        col = "white",
+        fontface = 3
+      ) +
+      coord_sf(
+        xlim = xlim,
+        ylim = ylim,
+        expand = TRUE
+      ) +
+      geom_line(
+        data = Pos_Station,
+        aes(
+          group = id_station,
+          x = Lon,
+          y = Lat,
+          color = as.factor(trip_code),
+          linetype = gear_label
+        ),
+        arrow = arrow(type = "closed", length = unit(0.075, "inches"))
+      )
+  }
+  
+  Maps <- ggarrange(Map, Zoom)
+  Maps
+  
   return(Maps)
 }
 ```
@@ -242,6 +441,7 @@ output <- create_maps(
   protocol = "twin",
   data = TAB
 )
+output
 ```
 
 ```{r tests-create_maps}
@@ -273,13 +473,13 @@ test_that("create_maps works", {
     zones = c("8.a","8.b","7.d","7.e","7.h"),
     protocol = "twin",
     data = TAB
-    )
+  )
   
   #' @description Testing the class of the output from `create_maps`
   expect_s3_class(
     object = output,
     class = c("gg", "ggplot", "ggarrange")
-    )
+  )
 })
 ```
 
@@ -287,9 +487,11 @@ test_that("create_maps works", {
 ```{r development-inflate, eval=FALSE}
 # Run but keep eval=FALSE to avoid infinite loop
 # Execute in the console directly
-fusen::inflate(flat_file = "dev/flat_create_maps.Rmd",
-               vignette_name = "Create maps",
-               overwrite = TRUE,
-               check = FALSE)
+fusen::inflate(
+  flat_file = "dev/flat_create_maps.Rmd",
+  vignette_name = NA,
+  overwrite = TRUE,
+  check = FALSE
+)
 ```
 

@@ -66,7 +66,7 @@ The catch sampling methodology consists of (Figure 1) :
 
 - Once the species in the bulk sample have been sorted, individuals of the species of interest are measured. The minimum size of the measured samples is assessed by the observer; the objective being to be able to describe the length distribution of the captured species. If a small length range is observed for a species, the distribution will stabilize fairly quickly and a small number of individuals (minimum 30) will be required. The sample size will be increased if a large length range is observed.
 
-![Figure 1 : Catch sampling protocol (landed fraction and discarded fraction). The same procedure is implemented separately for the STD trawl and for the TEST trawl](figure/catch_sampling_protocol.png){width="80%"}
+![Figure 1 : Catch sampling protocol (landed fraction and discarded fraction). The same procedure is implemented separately for the STD trawl and for the TEST trawl](catch_sampling_protocol.png){width="80%"}
 
 
 ## 2) Data format
@@ -78,7 +78,7 @@ The input data format is banked in the form of 4 data tables based on the [ICES 
 The TR table contains information relating to the fishing trip and the two compared gears.
 
 ```{r tr, echo = FALSE}
-readr::read_csv(file = here::here("vignettes","table","descriptif_tables-TR.csv"),
+readr::read_csv(file = here::here("vignettes", "descriptif_tables-TR.csv"),
                 show_col_types = FALSE) %>%
   knitr::kable()
 ```
@@ -88,7 +88,7 @@ readr::read_csv(file = here::here("vignettes","table","descriptif_tables-TR.csv"
 The HH table contains information relating to the FO for each gear. For twin gears, both gears are deployed at each FO, so there are two different lines for each FO, while for single gears, there is one line for each FO (as only one gear is deployed at each FO).
 
 ```{r hh, echo = FALSE}
-readr::read_csv(file = here::here("vignettes","table","descriptif_tables-HH.csv"),
+readr::read_csv(file = here::here("vignettes", "descriptif_tables-HH.csv"),
                 show_col_types = FALSE) %>%
   knitr::kable()
 ```
@@ -98,7 +98,7 @@ readr::read_csv(file = here::here("vignettes","table","descriptif_tables-HH.csv"
 The SL table contains information relating to the weight of the studies species, for the strata FO x species x catch category (and eventually x landing category x commercial size category x subsampling category x sex).
 
 ```{r sl, echo = FALSE}
-readr::read_csv(file = here::here("vignettes","table","descriptif_tables-SL.csv"),
+readr::read_csv(file = here::here("vignettes", "descriptif_tables-SL.csv"),
                 show_col_types = FALSE) %>%
   knitr::kable()
 ```
@@ -108,7 +108,7 @@ readr::read_csv(file = here::here("vignettes","table","descriptif_tables-SL.csv"
 The HL table contains information relating to the size of individuals of the species studied, within the strata recorded in HL.
 
 ```{r hl, echo = FALSE}
-readr::read_csv(file = here::here("vignettes","table","descriptif_tables-HL.csv"),
+readr::read_csv(file = here::here("vignettes", "descriptif_tables-HL.csv"),
                 show_col_types = FALSE) %>%
   knitr::kable()
 ```
