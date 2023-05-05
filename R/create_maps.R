@@ -3,7 +3,8 @@
 #' create_maps
 #'
 #' @inheritParams create_selectivity_sheet
-#' @param ices_data sp object The spatial polygon data.frame of the study area
+#' @param data_zones_sf A sf object. The spatial polygons of the zones of interests.
+#' By default using ICES zones data. See https://gis.ices.dk/shapefiles/ICES_areas.zip.
 #' 
 #' @importFrom dplyr group_by summarize mutate filter select
 #' @importFrom ggplot2 ggplot coord_quickmap theme_light theme element_text annotation_map 
@@ -11,7 +12,7 @@
 #' @importFrom ggplot2 element_rect geom_line arrow unit guides xlab ylab labs geom_sf
 #' @importFrom ggpubr ggarrange
 #' @importFrom sf st_set_agr st_centroid st_drop_geometry st_bbox
-#' @importFrom purrr map
+#' @importFrom maps map
 #' @importFrom stringr str_c
 #'
 #' @return ggplot A ggplot object of the map and zoom graphs
@@ -70,7 +71,7 @@ create_maps <- function(
     data,
     zones = NULL,
     protocol,
-    ices_data = readRDS(
+    data_zones_sf = readRDS(
       file = system.file("ices_data_sf.rds", package = "inser")
     )
 ){
@@ -80,7 +81,7 @@ create_maps <- function(
   ## Map ----
   
   if(!is.null(zones)) {
-    target_polygones_sf <- ices_data %>%
+    target_polygones_sf <- data_zones_sf %>%
       mutate(
         area = paste(SubArea, Division, sep = ".")
       ) %>%
@@ -88,7 +89,7 @@ create_maps <- function(
         area %in% zones
       )
   } else {
-    target_polygones_sf <- ices_data
+    target_polygones_sf <- data_zones_sf
   }
   
   ICESp <- ggplot() +
@@ -123,8 +124,8 @@ create_maps <- function(
     st_set_agr("constant") %>%
     st_centroid() %>%
     mutate(
-      x = as.numeric(purrr::map(geometry, 1)),
-      y = as.numeric(purrr::map(geometry, 2))
+      x = as.numeric(lapply(geometry, function(x) getElement(x, 1))),
+      y = as.numeric(lapply(geometry, function(x) getElement(x, 2)))
     ) %>%
     st_drop_geometry()
   

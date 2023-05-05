@@ -22,7 +22,7 @@ Imports:
     glue,
     knitr,
     magrittr,
-    purrr,
+    maps,
     rmarkdown,
     sf,
     stats,
@@ -32,6 +32,7 @@ Imports:
     utils
 Suggests: 
     here,
+    purrr,
     readr,
     testthat (>= 3.0.0)
 VignetteBuilder: 
