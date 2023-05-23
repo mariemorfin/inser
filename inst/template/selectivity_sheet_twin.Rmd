@@ -64,10 +64,11 @@ nrow_info<-nrow(tab_OP)
 
 if(length(which(is.na(tab_OP$fishing_duration)==FALSE))>0){
   ggplot(tab_OP,aes(y=fishing_duration))+
-  geom_boxplot(width=0.5)+labs(y=lg[["1_duration_labs"]])+
+  geom_boxplot()+labs(y=lg[["1_duration_labs"]])+
   geom_point(aes(x=0,y=mean(fishing_duration)),shape=4) + 
   theme(legend.position = "None",axis.text=element_text(size=8),
         axis.title=element_text(size=10),axis.text.x=element_blank())+
+    theme_light()+
     xlab("")
 }
 
@@ -79,13 +80,13 @@ if(nNA>0){cat(sprintf(lg[["1_missing_values"]],nNA,nrow_info))}
 
 ```{r, echo=FALSE,warning=FALSE,fig.cap=lg[['1_depth_caption']],comment="",message=FALSE,fig.asp=0.5}
 
-
 if(length(which(is.na(tab_OP$gear_depth)==FALSE))>0){
   ggplot(tab_OP,aes(y=gear_depth))+
-  geom_boxplot(width=0.5)+labs(y=lg[["1_depth_labs"]])+
+  geom_boxplot(width=0.2)+labs(y=lg[["1_depth_labs"]])+
   geom_point(aes(x=0,y=mean(gear_depth)),shape=4) + 
   theme(legend.position = "None",axis.text=element_text(size=8),
         axis.title=element_text(size=10),axis.text.x=element_blank())+
+       theme_light()+
     xlab("")
 }
 
@@ -101,10 +102,11 @@ if(nNA>0){cat(sprintf(lg[["1_missing_values"]],nNA,nrow_info))}
 if(length(which(is.na(tab_OP$gear_speed)==FALSE))>0){
   
     ggplot(tab_OP,aes(y=gear_speed))+
-  geom_boxplot(width=0.5)+labs(y=lg[["1_speed_labs"]])+
+  geom_boxplot(width=0.2)+labs(y=lg[["1_speed_labs"]])+
   geom_point(aes(x=0,y=mean(gear_speed)),shape=4) + 
   theme(legend.position = "None",axis.text=element_text(size=8),
         axis.title=element_text(size=10),axis.text.x=element_blank())+
+       theme_light()+
     xlab("")
   
 }
@@ -118,10 +120,11 @@ if(nNA>0){cat(sprintf(lg[["1_missing_values"]],nNA,nrow_info))}
 if(length(which(is.na(tab_OP$sea_state)==FALSE))>0){
   
     ggplot(tab_OP,aes(y=sea_state))+
-  geom_boxplot(width=0.5)+labs(y=lg[["1_sea_state_labs"]])+
+  geom_boxplot(width=0.2)+labs(y=lg[["1_sea_state_labs"]])+
   geom_point(aes(x=0,y=mean(sea_state)),shape=4) + 
   theme(legend.position = "None",axis.text=element_text(size=8),
         axis.title=element_text(size=10),axis.text.x=element_blank())+
+       theme_light()+
     xlab("")
   
 }
@@ -136,10 +139,11 @@ if(nNA>0){cat(sprintf(lg[["1_missing_values"]],nNA,nrow_info))}
 if(length(which(is.na(tab_OP$wind_force_beaufort)==FALSE))>0){
 
       ggplot(tab_OP,aes(y=wind_force_beaufort))+
-  geom_boxplot(width=0.5)+labs(y=lg[["1_wind_labs"]])+
+  geom_boxplot(width=0.2)+labs(y=lg[["1_wind_labs"]])+
   geom_point(aes(x=0,y=mean(wind_force_beaufort)),shape=4) + 
   theme(legend.position = "None",axis.text=element_text(size=8),
         axis.title=element_text(size=10),axis.text.x=element_blank())+
+       theme_light()+
     xlab("")
 }
 
@@ -164,7 +168,8 @@ if(length(which(is.na(tab_OP2$seabed_features)))==0){
 ggplot(tab_OP2,aes(x=seabed_features))+ geom_bar(stat = 'count',width=0.2) +
  labs(y = lg[["1_FO"]],x=lg[["1_seabed_labs"]])+
   theme(legend.position = "None",axis.text=element_text(size=8),
-        axis.title=element_text(size=10))
+        axis.title=element_text(size=10))+
+       theme_light()
 }
 
 nNA<-length(which(is.na(tab_OP2$seabed_features)==T))
@@ -177,6 +182,7 @@ if(nNA>0){cat(sprintf(lg[["1_missing_values"]],nNA,nrow_info2))}
 if(length(which(is.na(tab_OP2$wind_cardinal_direction)))==0){
 ggplot(tab_OP2,aes(x=wind_cardinal_direction))+ geom_bar(stat = 'count',width=0.2) +
  labs(y = lg[["1_FO"]],x=lg[["1_wind_dir_labs"]])+
+       theme_light()+
   theme(legend.position = "None",axis.text=element_text(size=8),
         axis.title=element_text(size=10))
 }
@@ -192,6 +198,7 @@ tab_OP2$diurnal_operation<-factor(tab_OP2$diurnal_operation,levels=c("Y","N"),la
 
 ggplot(tab_OP2,aes(x=diurnal_operation))+ geom_bar(stat = 'count',width=0.2) +
  labs(y = lg[["1_FO"]],x="")+
+   theme_light()+
   theme(legend.position = "None",axis.text=element_text(size=8),
         axis.title=element_text(size=10))
 }
@@ -279,10 +286,11 @@ nrow_info<- nrow(tab_capture)
 if(length(which(is.na(tab_capture$catch_weight)==FALSE))>0){
   
   ggplot(tab_capture,aes(y=catch_weight,x=gear_label))+
-  geom_boxplot(width=0.5,aes(fill=gear_label))+labs(y=lg[["2_1_catch_labs"]])+
-   stat_summary(fun=mean, geom="point", shape=4, position = position_dodge(0.75),lwd=2)+
+  geom_boxplot(width=0.2,aes(fill=gear_label))+labs(y=lg[["2_1_catch_labs"]])+
+   stat_summary(fun="mean", geom="point", shape=4, position = position_dodge(0.75),lwd=2)+
   theme(legend.position = "None",axis.text=element_text(size=8),
         axis.title=element_text(size=10))+
+       theme_light()+
     xlab("")
 }
 nNA<-length(which(is.na(tab_capture$catch_weight)==T))
@@ -297,16 +305,16 @@ if(nNA>0){cat(sprintf(lg[["1_missing_values"]],nNA,nrow_info))}
 if(length(which(is.na(tab_capture$sorting_time)==FALSE))>0){
   
   ggplot(tab_capture,aes(y=sorting_time,x=gear_label))+
-  geom_boxplot(width=0.5,aes(fill=gear_label))+labs(y=lg[["2_1_sorting_labs"]])+
-   stat_summary(fun=mean, geom="point", shape=4, position = position_dodge(0.75),lwd=2)+
+  geom_boxplot(width=0.2,aes(fill=gear_label))+labs(y=lg[["2_1_sorting_labs"]])+
+   stat_summary(fun="mean", geom="point", shape=4, position = position_dodge(0.75),lwd=2)+
   theme(legend.position = "None",axis.text=element_text(size=8),
         axis.title=element_text(size=10))+
+       theme_light()+
+      labs(fill = lg[["0_gear"]])+
     xlab("")
 }
 nNA<-length(which(is.na(tab_capture$sorting_time)==T))
 if(nNA>0){cat(sprintf(lg[["1_missing_values"]],nNA,nrow_info))}
-
-## Test sorting duration?
 
 ```
 
@@ -349,7 +357,6 @@ if(class(test1) =="htest"){
   if(test1$p.value <= 0.05){
      med<-  abs(round(median(diff_DIS),3))
     sign<-c(lg[["2_1_less"]],lg[["2_1_more"]])[as.numeric(eval(median(diff_DIS)>0))+1]
-    
         cat(sprintf(lg[["2_1_sorting_test_med"]],med,sign,pvalue) )
       }
   
@@ -357,7 +364,7 @@ if(class(test1) =="htest"){
      mean<-  abs(round(mean(diff_DIS),3))
     sign<-c(lg[["2_1_less"]],lg[["2_1_more"]])[as.numeric(eval(mean(diff_DIS)>0))+1]
     
-       cat(sprintf(lg[["2_1_sorting_test_mean"]],med,sign,pvalue) )
+       cat(sprintf(lg[["2_1_sorting_test_mean"]],mean,sign,pvalue) )
       }
    
 }
@@ -395,11 +402,12 @@ cat(sprintf(lg[["2_1_sorting_var2"]],sign,rate))
 if(length(which(is.na(tab_capture$discard_weight)))==0){
   ggplot(tab_capture,aes(y=discard_weight,x=gear_label,fill=gear_label))+
   geom_boxplot(width=0.5)+labs(y = lg[["2_1_discard_weight_labs"]])+
-  xlab("Engin")+
+  xlab(lg[["0_gear"]])+
     theme_light()+
+      labs(fill = lg[["0_gear"]])+
     theme(legend.position = "None",axis.text=element_text(size=8),
         axis.title=element_text(size=10))+
-  stat_summary(fun=mean, geom="point", shape=4, position = position_dodge(0.75),lwd=2)
+  stat_summary(fun="mean", geom="point", shape=4, position = position_dodge(0.75),lwd=2)
 }
 
 # ##Comparaison des poids pêchés sur le total de la liste
@@ -424,7 +432,7 @@ if(length(which(is.na(tab_capture$discard_weight)))==0){
 
 ```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
 
-#Pour chaque OP et fraction, difference de biomasse TEST-STD:
+#For each fishing operation and catch category, discards weights difference TEST-STD:
 
 tab_diff<-tab_capture %>% group_by(project,vessel_identifier,trip_code,station_number)%>%
   summarize(weight_DIS_STD=discard_weight[gear_label=="STD"],weight_DIS_TEST=discard_weight[gear_label=="TEST"],
@@ -486,13 +494,13 @@ Tot_STD<-sum(tab_diff$weight_DIS_STD)
 
 Var_Rate<-(Tot_TEST-Tot_STD)/Tot_STD*100
 
-sign<-c("diminution" ,"augmentation")[as.numeric(eval(Var_Rate>0))+1]
+sign<-c(lg[["2_1_decrease"]] ,lg[["2_1_increase"]])[as.numeric(eval(Var_Rate>0))+1]
 rate<-abs(round(Var_Rate,2))
 cat(sprintf(lg[["2_1_discard_var1"]],sign,rate))
 
 Var_Rate2<-with(tab_diff,diff_DIS/weight_DIS_STD)*100
   
-sign<-c("diminution" ,"augmentation")[as.numeric(eval(mean(Var_Rate2)>0))+1]
+sign<-c(lg[["2_1_decrease"]] ,lg[["2_1_increase"]])[as.numeric(eval(mean(Var_Rate2)>0))+1]
 rate<-abs(round(mean(Var_Rate2),2))
 cat(sprintf(lg[["2_1_discard_var2"]],sign,rate))
 
@@ -520,7 +528,7 @@ cat(List_DIS,sep=", ")
 ```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
 List_sp<-unique(data$species)
 
-#Boxplot of landings weights for each fishing operation: 
+#Boxplot of landings/discards weights for each fishing operation: 
 weight_species<-data %>% group_by(project,vessel_identifier,trip_code,station_number,gear_label,catch_category,species)%>%
  summarize(weight=sum(weight)*10^(-3))%>%as.data.frame()
 
@@ -533,7 +541,7 @@ for(sp in 1:length(List_sp)){
   
   List_ggplot[[sp]]<-ggplot(filter(weight_species,species==List_sp[sp]),aes(y=weight,x=catch_category,fill=gear_label))+
     geom_boxplot()+labs(y = lg[["2_2_catch_labs"]])+ggtitle(List_sp[sp]) +
-    stat_summary(fun=mean, geom="point", shape=4, position = position_dodge(0.75),lwd=2)+
+    stat_summary(fun="mean", geom="point", shape=4, position = position_dodge(0.75),lwd=2)+
     xlab("")+
     theme_light()+
     scale_x_discrete(labels=c(lg[["2_2_DIS"]],lg[["2_2_LAN"]]))+
@@ -592,14 +600,12 @@ row.names(test_DIS)<-List_DIS
 test_DIS<-as.data.frame(test_DIS)
 
 for(ii in 1:length(List_DIS)){
-  #Test apparié:  (H0) Diff_Poids=0 versus (H1) Diff_Poids non nulle sur médiane ou moyenne
-  #+ Taux de variation TEST/STD
+  #Paired test :  (H0) Diff_Poids=0 versus (H1) Diff_Poids not nul in mean/median
+  #+ Variation rate TEST/STD
   test_DIS[ii,]<-f_test_paired(tab_diff,List_DIS[ii],"DIS")
 }
 
 names(test_DIS)<-names(f_test_paired(tab_diff,List_DIS[ii],"DIS"))
-
-# kable(test_PR[,-4],digits=2,caption="Résultats des tests de différence de biomasses débarquées et rejetées pour chaque espèce. Si la distribution était gaussienne, un test de Fisher sur la moyenne a été effectué, sinon un test de Kolmogorov-Smirnov sur la médiane a été effectué. La statistique testée est identifiée par '*'.")
 
 test_DIS$pvalue[test_DIS$pvalue< 10^(-2)]<-"< 10-2"
 test_DIS$pvalue[test_DIS$pvalue>0.1]<-">0.1"
@@ -670,7 +676,7 @@ for(sp in 1:length(List_M)){
         labs(fill=lg[["0_gear"]])+
     ylim(c(0,max(length_ALL$n)))+
    #ggtitle(paste0(List_M[sp]," (Total)"))  
-    ggtitle("Total")
+    ggtitle(lg[["3_whole"]])
    
   #print(p1)
   
@@ -715,7 +721,7 @@ for(sp in 1:length(List_M)){
   print(p)
 
   ##List by species of escapment rates (STD-SEL)/STD: 
-  #on the whoel catch and lower/upper min_length.
+  #on the whole catch and lower/upper min_length.
   
   nSTD<-sum(filter(length_ALL,gear_label=="STD")$n,na.rm=T)
   nSEL<-sum(filter(length_ALL,gear_label=="TEST")$n,na.rm=T)
@@ -777,6 +783,7 @@ for(sp in 1:length(List_M)){
  p<-ggplot(data=Rel_Sel)+
     geom_point(aes(x=length_class,y=rel_sel,size=n_STD+n_TEST))+
      guides(size=guide_legend(title = "n"))+
+      theme_light()+
     xlab(Nom_Taille)+ylab(lg[["3_rel_selectivity"]])+
    geom_hline(yintercept=0.5, linetype="dashed", color = "grey")+
      geom_vline(xintercept=taille_com,size=1, linetype="dashed", color = "green")+

@@ -63,15 +63,15 @@ The sheet is generated in Word format for easy editing. It presents 'relative' s
 
 - **LAN biomass for a defined list of species**
 
-  - Boxplots of LAN weights for both gears (STD and TEST)
-  - Comparison test of the mean or median of the weights caught over the whole trial by each gear
-  - Estimation of the variation of the LAN on the cumulated weights caught and intra pairs
+- Boxplots of LAN weights for both gears (STD and TEST)
+- Comparison test of the mean or median of the weights caught over the whole trial by each gear
+- Estimation of the variation of the LAN on the cumulated weights caught and intra pairs
 
 - **DIS biomass for a defined list of discarded species**
 
-  - Distribution of DIS weights of both gears
-  - Comparison test of the mean or median of the weights caught at the scale of the FO 
-  - Estimation of cumulative and intra-pair variation in DIS
+- Distribution of DIS weights of both gears
+- Comparison test of the mean or median of the weights caught at the scale of the FO 
+- Estimation of cumulative and intra-pair variation in DIS
 
 
 
