@@ -6,3 +6,5 @@
 ^ci/lib$
 ^README\.Rmd$
 ^data-raw$
+^\.github$
+^docs$

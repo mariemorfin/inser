@@ -5,10 +5,7 @@
 
 <!-- badges: start -->
 
-[![pipeline
-status](https://forge.thinkr.fr/ifremer-lorient/inser/badges/main/pipeline.svg)](https://forge.thinkr.fr/ifremer-lorient/inser/-/commits/main)
-[![coverage
-report](https://forge.thinkr.fr/ifremer-lorient/inser/badges/main/coverage.svg)](http://ifremer-lorient.pages.thinkr.fr/inser/coverage.html)
+[![R-CMD-check](https://github.com/ThinkR-open/inser/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ThinkR-open/inser/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The {inser} package generates a synthetic sheet of fishing gear
