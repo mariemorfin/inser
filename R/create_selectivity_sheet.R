@@ -89,58 +89,61 @@
 #' 
 #' # Clear tmp folder
 #' unlink(output_dir, recursive = TRUE)
-create_selectivity_sheet<-function(data,protocol,output_dir = NULL,output_file = NULL,min_length = NULL,language="EN",zones = NULL){
+create_selectivity_sheet <- function(
+    data,
+    protocol,
+    output_dir = NULL,
+    output_file = NULL,
+    min_length = NULL,
+    language = "EN",
+    zones = NULL
+) {
+  
+  # Check argumetns protocol and language were provided with legible values
+  protocol <- match.arg(
+    arg = protocol, 
+    choices = c("twin", "paired", "unpaired")
+  )
+  language <- match.arg(
+    arg = language, 
+    choices = c("FR", "EN")
+  )
+  
   #How to make by default the same parameters as in the render() function?
-
+  
   ##Control function parameters?
   
   ##Mapping : A mettre dans le Rmd? (comme scripts Rmd séparés par language + protocol, 
   ##Comment faire si ni zones ni area sont renseignées ?
   
-  Maps<-create_maps(data,zones,protocol)
+  Maps <- create_maps(
+    data = data, 
+    zones = zones,
+    protocol = protocol
+  )
   
   # Setup template report path
-  sheet_folder <- system.file("script_origin","Scripts", package = "inser")
+  path_templates <- system.file("template", package = "inser")
   
   # Setup language translation object
-  lg <- create_translate_dict(language = language)
-
-
-  if(protocol=="twin"){
-    if(language=="EN"){
-      render(file.path(sheet_folder, "selectivity_sheet_twin_EN.Rmd"),
-             output_dir = output_dir,output_file = output_file)
-    }
-    if(language=="FR"){
-      render(file.path(sheet_folder, "selectivity_sheet_twin_FR.Rmd"),
-             output_dir = output_dir,output_file = output_file)
-    }
-  }
-
-  if(protocol=="paired"){
-    if(language=="EN"){
-      render(file.path(sheet_folder, "selectivity_sheet_paired_EN.Rmd"),
-             output_dir = output_dir,
-             output_file = output_file)
-    }
-    if(language=="FR"){
-      render(file.path(sheet_folder, "selectivity_sheet_paired_FR.Rmd"),
-             output_dir = output_dir,
-             output_file = output_file)
-    }
-  }
+  lg <- create_translate_dict(
+    path = system.file("template", "translation_2_utf8.csv", package = "inser"),
+    language = language
+  )
   
-  if(protocol=="unpaired"){
-    if(language=="EN"){
-      render(file.path(sheet_folder, "selectivity_sheet_unpaired_EN.Rmd"),
-             output_dir = output_dir,
-             output_file = output_file)
-    }
-    if(language=="FR"){
-      render(file.path(sheet_folder, "selectivity_sheet_unpaired_FR.Rmd"),
-             output_dir = output_dir,
-             output_file = output_file)
-    }
-  }
-
+  path_template_rmd <- file.path(
+    path_templates,
+    sprintf(
+      "selectivity_sheet_%s.Rmd",
+      protocol
+    )
+  )
+  
+  render(
+    input = path_template_rmd,
+    output_dir = output_dir,
+    output_file = output_file,
+    params = list(lg = lg)
+  )
+  
 }
