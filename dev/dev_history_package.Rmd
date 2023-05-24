@@ -66,6 +66,9 @@ usethis::use_testthat()
 # GitHub Actions ----
 usethis::use_github_action_check_release()
 usethis::use_pkgdown_github_pages()
+
+usethis::use_coverage()
+usethis::use_github_action("test-coverage")
 ```
 
 ## Add general information/documentation about the package
@@ -112,18 +115,6 @@ usethis::use_proprietary_license("ThinkR")
 # usethis::use_readme_rmd()
 papillon::generate_readme_rmd()
 papillon::generate_readme_rmd(parts = "description")
-
-# _Badges GitLab
-usethis::use_badge(
-  badge_name = "pipeline status",
-  href = "https://forge.thinkr.fr/ifremer-lorient/inser/-/commits/main",
-  src = "https://forge.thinkr.fr/ifremer-lorient/inser/badges/main/pipeline.svg"
-)
-usethis::use_badge(
-  badge_name = "coverage report",
-  href = "http://ifremer-lorient.pages.thinkr.fr/inser/coverage.html",
-  src = "https://forge.thinkr.fr/ifremer-lorient/inser/badges/main/coverage.svg"
-  )
 ```
 
 ### NEWS

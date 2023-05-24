@@ -8,3 +8,4 @@
 ^data-raw$
 ^\.github$
 ^docs$
+^codecov\.yml$
