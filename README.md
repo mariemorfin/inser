@@ -16,42 +16,13 @@ standard gear.
 
 ## Installation
 
-In order to install the package you first need to create a gitlab token.
-
-Go to User Settings \> Access Tokens.
-
-Give your token an explicit name.
-
-Choose no expiration date.
-
-Choose `api` as scope.
-
-Save your token in your .Renviron file. (`usethis::edit_r_environ()`)
-like so:
-
-    FORGE_THINKR_TOKEN=<put your gitlab token here>
-
-Then run this code:
+You can install the development version of {inser} from GitHub with:
 
 ``` r
-install.packages(c("git2r", "remotes"))
-
-options(
-  remotes.git_credentials = git2r::cred_user_pass(
-    username = "gitlab-ci-token", 
-    password = Sys.getenv("FORGE_THINKR_TOKEN")
-  )
-)
-
-remotes::install_git(
-  url = "https://forge.thinkr.fr/ifremer-lorient/inser/",
-  upgrade = FALSE,
-  dependencies = TRUE,
-  build_vignettes = TRUE
-)
+remotes::install_github("ThinkR-open/inser")
 ```
 
 ## Package Documentation
 
 The package documentation website can be found here:
-<https://ifremer-lorient.pages.thinkr.fr/inser/>
+<https://thinkr-open.github.io/inser/>
