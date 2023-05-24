@@ -5,7 +5,7 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/ThinkR-open/inser/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ThinkR-open/inser/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/mariemorfin/inser/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mariemorfin/inser/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The {inser} package generates a synthetic sheet of fishing gear
@@ -19,10 +19,10 @@ standard gear.
 You can install the development version of {inser} from GitHub with:
 
 ``` r
-remotes::install_github("ThinkR-open/inser")
+remotes::install_github("mariemorfin/inser")
 ```
 
 ## Package Documentation
 
 The package documentation website can be found here:
-<https://thinkr-open.github.io/inser/>
+<https://mariemorfin.github.io/inser/>

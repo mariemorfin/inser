@@ -96,9 +96,8 @@ params:
   - use inline r evaluation code
   - _example_ : `` `r
   lg[['0_main_title']]` `` will be shown in the text as : `r lg[['0_main_title']]`
-  
-<!-- line break in r inline code prevents it to be evaluated so we can show the verbatim -->
 
+<!-- line break in r inline code prevents it to be evaluated so we can show the verbatim -->
 
 * **Translating graph caption and labels**
   - use direct call to the list object
@@ -155,10 +154,10 @@ if(nNA>0){
 * **Rendering report**
   - Once the report is correctly including the calls to the translation object, we can render it with `rmarkdown::render()`
   - The rendering language will be determined by the translation dictionary `lg` passed as parameter the call to `rmarkdown::render()`
-  
-  
+    
 Rendering an English version
   
+
 ```{r vign-render-en}
 # select template file
 template_file <- system.file("template","selectivity_sheet_template.Rmd", package = "inser")
@@ -176,6 +175,7 @@ rmarkdown::render(
 ```
 
 Rendering a French version
+
 
 ```{r vign-render-fr}
 # create the FR translator

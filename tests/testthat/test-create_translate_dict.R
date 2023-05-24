@@ -7,7 +7,10 @@ test_that("create_translate_dict works", {
   dir.create(output_dir)
   file.copy(from = system.file("template", "translation.csv", package = "inser"),
             to = file.path(output_dir, "notacsvfile.txt"))
-  bad_ext_file <- file.path(output_dir, "notacsvfile.txt")
+  bad_ext_file <- normalizePath(
+    file.path(output_dir, "notacsvfile.txt"),
+    winslash = "/"
+  )
   
   #' @description Test `create_translate_dict` returns error for incorrect csv or language
   expect_error(
