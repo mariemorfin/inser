@@ -8,6 +8,13 @@
 \description{
 Generate a synthetic sheet of fishing gear selectivity indicators (statistics, graphics and tests) from catch comparison data collected at sea. These data can be obtained from three types of experimental protocols: 'twin', 'single paired' or 'independent' sampling, for which a test gear is compared to a standard gear.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://thinkr-open.github.io/inser/}
+}
+
+}
 \author{
 \strong{Maintainer}: Marie Morfin \email{first.last@example.com} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
 

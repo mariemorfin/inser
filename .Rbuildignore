@@ -4,7 +4,7 @@
 ^_pkgdown\.yml$
 ^pkgdown$
 ^ci/lib$
-^\.gitlab-ci\.yml$
-^\.gitlab$
 ^README\.Rmd$
 ^data-raw$
+^\.github$
+^docs$
