@@ -6,6 +6,8 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/mariemorfin/inser/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mariemorfin/inser/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/mariemorfin/inser/branch/main/graph/badge.svg)](https://app.codecov.io/gh/mariemorfin/inser?branch=main)
 <!-- badges: end -->
 
 The {inser} package generates a synthetic sheet of fishing gear

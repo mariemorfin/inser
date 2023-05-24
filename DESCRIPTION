@@ -32,6 +32,7 @@ Imports:
     tools,
     utils
 Suggests: 
+    covr,
     here,
     purrr,
     readr,
