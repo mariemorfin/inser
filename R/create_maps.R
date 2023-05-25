@@ -11,7 +11,7 @@
 #' @importFrom ggplot2 map_data aes geom_text geom_rect coord_sf theme_classic labs
 #' @importFrom ggplot2 element_rect geom_line arrow unit guides xlab ylab labs geom_sf
 #' @importFrom ggpubr ggarrange
-#' @importFrom sf st_set_agr st_centroid st_drop_geometry st_bbox
+#' @importFrom sf st_set_agr st_centroid st_drop_geometry st_bbox st_make_valid
 #' @importFrom maps map
 #' @importFrom stringr str_c
 #'
@@ -122,6 +122,7 @@ create_maps <- function(
       name = area
     ) %>%
     st_set_agr("constant") %>%
+    st_make_valid()%>%
     st_centroid() %>%
     mutate(
       x = as.numeric(lapply(geometry, function(x) getElement(x, 1))),

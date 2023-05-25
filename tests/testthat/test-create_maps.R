@@ -35,4 +35,13 @@ test_that("create_maps works", {
     object = output,
     class = c("gg", "ggplot", "ggarrange")
   )
+  
+  #' @description Test case with non valid geometry (centroid)
+  output_4c <- create_maps(data = TAB, zones = "4.c", protocol = "twin")
+  
+  expect_s3_class(
+    object = output_4c,
+    class = c("gg", "ggplot", "ggarrange")
+  )
 })
+
