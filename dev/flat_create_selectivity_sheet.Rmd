@@ -86,7 +86,7 @@ The sheet is generated in Word format for easy editing. It presents 'relative' s
 #' @param output_file character Name of the file for the sheet
 #' @param min_length numeric Optional. For species analyzed in length, the minimum targeted length for selectivity (e.g., MCRS) for graphics and statistics. A data.frame with a column ‘species’ and a column ‘min_length’ for the corresponding minimum length.
 #' @param language character English by default (“EN”). Can be passed in French (“FR”).
-#' @param zones character The vector of zones used in the report. Default to NULL uses all the available area
+#' @param zones character The vector of zones used in the report.
 #'
 #' @importFrom rmarkdown render
 #  imports within Rmd templates
@@ -110,7 +110,7 @@ create_selectivity_sheet <- function(
     output_file = NULL,
     min_length = NULL,
     language = "EN",
-    zones = NULL
+    zones
 ) {
   
   # Check argumetns protocol and language were provided with legible values
