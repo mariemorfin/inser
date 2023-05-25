@@ -173,7 +173,11 @@ create_maps <- function(
       fill = NA,
       colour = "#1b98e0",
       linewidth = 1
-    ) 
+    ) +
+    theme(
+      axis.text = element_text(size = 30)
+    ) +
+    labs(x = "", y = "")
   
   ## Zoom ----
   
@@ -211,6 +215,9 @@ create_maps <- function(
       coord_quickmap() +
       theme_classic() +
       theme(
+           axis.text = element_text(size = 30),
+        legend.title = element_text(size = 32),
+        legend.text = element_text(size = 30),
         panel.border = element_rect(
           color = "#1b98e0",
           fill = NA,
@@ -248,7 +255,8 @@ create_maps <- function(
         data = Pos_Station,
         aes(group = id_station, x = Lon, y = Lat),
         color = "grey",
-        arrow = arrow(type = "closed", length = unit(0.075, "inches"))
+        arrow = arrow(type = "closed", length = unit(0.075, "inches")),
+          linewidth = 3
       )
   }
   
@@ -289,6 +297,9 @@ create_maps <- function(
     
     Zoom <- ggplot() + coord_quickmap() + theme_classic() +
       theme(
+           axis.text = element_text(size = 30),
+        legend.title = element_text(size = 32),
+        legend.text = element_text(size = 30),
         legend.position = "bottom",
         panel.border = element_rect(
           color = "#1b98e0",
@@ -333,7 +344,8 @@ create_maps <- function(
           color = as.factor(tag_operation),
           linetype = gear_label
         ),
-        arrow = arrow(type = "closed", length = unit(0.075, "inches"))
+        arrow = arrow(type = "closed", length = unit(0.075, "inches")),
+        linewidth = 3
       )
   }
   
@@ -364,9 +376,9 @@ create_maps <- function(
     Zoom <- ggplot() + coord_quickmap() + theme_classic() +
       theme(
         legend.position = "bottom",
-        axis.text = element_text(size = 18),
-        legend.title = element_text(size = 20),
-        legend.text = element_text(size = 18),
+        axis.text = element_text(size = 30),
+        legend.title = element_text(size = 32),
+        legend.text = element_text(size = 30),
         panel.border = element_rect(
           color = "#1b98e0",
           fill = NA,
@@ -410,10 +422,15 @@ create_maps <- function(
           color = as.factor(trip_code),
           linetype = gear_label
         ),
-        arrow = arrow(type = "closed", length = unit(0.075, "inches"))
+        arrow = arrow(type = "closed", length = unit(0.075, "inches")),
+        linewidth = 2
       )
   }
   
+  Zoom<-Zoom +
+    labs(x = "", y = "")
+  
+
   Maps <- ggarrange(Map, Zoom)
   Maps
   

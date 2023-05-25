@@ -11,7 +11,7 @@ library(testthat)
 
 ```{r development-load}
 # Load already included functions if relevant
-load_all(export_all = FALSE)
+pkgload::load_all()
 ```
 
 ## Sythetic sheet of fishing gear selectivity
@@ -222,6 +222,8 @@ create_selectivity_sheet(data = TAB,
                          language = "FR",
                          zones=zones,
                          min_length=min_length)
+
+# rstudioapi::filesPaneNavigate(output_dir)
 
 # Clear tmp folder
 unlink(output_dir, recursive = TRUE)
