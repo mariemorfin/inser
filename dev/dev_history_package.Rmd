@@ -126,7 +126,7 @@ usethis::use_news_md()
 ### Code of conduct
 
 ```{r}
-usethis::use_code_of_conduct()
+usethis::use_code_of_conduct(contact = "narie.morfin@ifremer.fr")
 ```
 
 ### Contributing guide
