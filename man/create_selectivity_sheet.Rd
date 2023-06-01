@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_selectivity_sheet.R
 \name{create_selectivity_sheet}
 \alias{create_selectivity_sheet}
-\title{create_selectivity_sheet Title}
+\title{create_selectivity_sheet}
 \usage{
 create_selectivity_sheet(
   data,
@@ -96,6 +96,8 @@ create_selectivity_sheet(data = TAB,
                          language = "FR",
                          zones=zones,
                          min_length=min_length)
+
+# rstudioapi::filesPaneNavigate(output_dir)
 
 # Clear tmp folder
 unlink(output_dir, recursive = TRUE)

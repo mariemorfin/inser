@@ -75,7 +75,7 @@ The sheet is generated in Word format for easy editing. It presents 'relative' s
 # `create_selectivity_sheet()`
 
 ```{r function-create_selectivity_sheet}
-#' create_selectivity_sheet Title
+#' create_selectivity_sheet
 #'
 #' @description Generate a selectivity sheet describing data and gathering a set of selectivity indicators.
 #' 
