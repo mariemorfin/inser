@@ -32,5 +32,5 @@ The package documentation website can be found here:
 ## Code of Conduct
 
 Please note that the inser project is released with a [Contributor Code
-of Conduct](https://thinkr-open.github.io/inser/CODE_OF_CONDUCT.html).
+of Conduct](https://mariemorfin.github.io/inser/CODE_OF_CONDUCT.html).
 By contributing to this project, you agree to abide by its terms.
