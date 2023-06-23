@@ -76,7 +76,7 @@ create_maps <- function(
     )
 ){
   
-  ## Create two maps: Map and Zoom
+ ## Create two maps: Map and Zoom
   
   ## Map ----
   
@@ -89,7 +89,10 @@ create_maps <- function(
         area %in% zones
       )
   } else {
-    target_polygones_sf <- data_zones_sf
+    target_polygones_sf <- data_zones_sf %>%
+    mutate(
+      area = paste(SubArea, Division, sep = ".")
+    )
   }
   
   ICESp <- ggplot() +
@@ -133,26 +136,26 @@ create_maps <- function(
   
   bbox_target_polygones_sf <- st_bbox(target_polygones_sf)
   
-  lon_min <- floor(bbox_target_polygones_sf["xmin"])
-  lon_max <- ceiling(bbox_target_polygones_sf["xmax"])
-  lat_min <- floor(bbox_target_polygones_sf["ymin"])
-  lat_max <- ceiling(bbox_target_polygones_sf["ymax"])
-  by_lat <- round((lat_max - lat_min) / 5)
-  by_lon <- round((lon_max - lon_min) / 5)
+  # lon_min <- floor(bbox_target_polygones_sf["xmin"])
+  # lon_max <- ceiling(bbox_target_polygones_sf["xmax"])
+  # lat_min <- floor(bbox_target_polygones_sf["ymin"])
+  # lat_max <- ceiling(bbox_target_polygones_sf["ymax"])
+  # by_lat <- round((lat_max - lat_min) / 5)
+  # by_lon <- round((lon_max - lon_min) / 5)
   
   rangeX <- with(data, abs(
-    min(pos_start_lon_dec, pos_stop_lon_dec) - max(pos_start_lon_dec, pos_stop_lon_dec)
+    min(pos_start_lon_dec, pos_stop_lon_dec,na.rm=TRUE) - max(pos_start_lon_dec, pos_stop_lon_dec,na.rm=TRUE)
   ))
   rangeY <- with(data, abs(
-    min(pos_start_lat_dec, pos_stop_lat_dec) - max(pos_start_lat_dec, pos_stop_lat_dec)
+    min(pos_start_lat_dec, pos_stop_lat_dec,na.rm=TRUE) - max(pos_start_lat_dec, pos_stop_lat_dec,na.rm=TRUE)
   ))
   xlim = with(data, c(
-    min(pos_start_lon_dec, pos_stop_lon_dec) - 0.15 * rangeX,
-    max(pos_start_lon_dec, pos_stop_lon_dec) + 0.15 * rangeX
+    min(pos_start_lon_dec, pos_stop_lon_dec,na.rm=TRUE) - 0.15 * rangeX,
+    max(pos_start_lon_dec, pos_stop_lon_dec,na.rm=TRUE) + 0.15 * rangeX
   ))
   ylim = with(data, c(
-    min(pos_start_lat_dec, pos_stop_lat_dec) - 0.15 * rangeY,
-    max(pos_start_lat_dec, pos_stop_lat_dec) + 0.15 * rangeY
+    min(pos_start_lat_dec, pos_stop_lat_dec,na.rm=TRUE) - 0.15 * rangeY,
+    max(pos_start_lat_dec, pos_stop_lat_dec,na.rm=TRUE) + 0.15 * rangeY
   ))
   
   
@@ -180,6 +183,9 @@ create_maps <- function(
     labs(x = "", y = "")
   
   ## Zoom ----
+  
+  if(is.na(sum(xlim))==FALSE & is.na(sum(ylim))==FALSE ){
+    
   
   PosX <- seq(floor(xlim[1]), ceiling(xlim[2]), 5 / 60)
   Deg <- ceiling(PosX)
@@ -215,7 +221,7 @@ create_maps <- function(
       coord_quickmap() +
       theme_classic() +
       theme(
-           axis.text = element_text(size = 30),
+        axis.text = element_text(size = 30),
         legend.title = element_text(size = 32),
         legend.text = element_text(size = 30),
         panel.border = element_rect(
@@ -256,7 +262,7 @@ create_maps <- function(
         aes(group = id_station, x = Lon, y = Lat),
         color = "grey",
         arrow = arrow(type = "closed", length = unit(0.075, "inches")),
-          linewidth = 3
+        linewidth = 3
       )
   }
   
@@ -297,7 +303,7 @@ create_maps <- function(
     
     Zoom <- ggplot() + coord_quickmap() + theme_classic() +
       theme(
-           axis.text = element_text(size = 30),
+        axis.text = element_text(size = 30),
         legend.title = element_text(size = 32),
         legend.text = element_text(size = 30),
         legend.position = "bottom",
@@ -430,9 +436,11 @@ create_maps <- function(
   Zoom<-Zoom +
     labs(x = "", y = "")
   
-
-  Maps <- ggarrange(Map, Zoom)
-  Maps
   
+  Maps <- ggarrange(Map, Zoom)
+  }else{
+    Maps <- Map}
+  
+  #Maps
   return(Maps)
 }
