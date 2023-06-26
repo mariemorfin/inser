@@ -651,10 +651,10 @@ test_LAN$moyenne<-round(test_LAN$moyenne,2)
 test_LAN$mediane<-round(test_LAN$mediane,2)
 
 if("Fisher" %in% test_LAN$test){
-test_LAN$moyenne[test_LAN$test=="Fisher"]<-paste(test_LAN$moyenne[test_LAN$test=="Fisher"],"*",sep="")
+test_LAN$moyenne[which(test_LAN$test=="Fisher")]<-paste(test_LAN$moyenne[which(test_LAN$test=="Fisher")],"*",sep="")
 }
 if("Kolmogorov" %in% test_LAN$test){
-test_LAN$mediane[test_LAN$test=="Kolmogorov"]<-paste(test_LAN$moyenne[test_LAN$test=="Kolmogorov"],"*",sep="")
+test_LAN$mediane[which(test_LAN$test=="Kolmogorov")]<-paste(test_LAN$mediane[which(test_LAN$test=="Kolmogorov")],"*",sep="")
 }
 
 test_LAN$pvalue[test_LAN$pvalue< 10^(-2)]<-"< 10-2"
@@ -692,7 +692,7 @@ if("Fisher" %in% test_DIS$test){
 test_DIS$moyenne[which(test_DIS$test=="Fisher")]<-paste(test_DIS$moyenne[which(test_DIS$test=="Fisher")],"*",sep="")
 }
 if("Kolmogorov" %in% test_DIS$test){
-test_DIS$mediane[which(test_DIS$test=="Kolmogorov")]<-paste(test_DIS$moyenne[which(test_DIS$test=="Kolmogorov")],"*",sep="")
+test_DIS$mediane[which(test_DIS$test=="Kolmogorov")]<-paste(test_DIS$mediane[which(test_DIS$test=="Kolmogorov")],"*",sep="")
 }
 
 

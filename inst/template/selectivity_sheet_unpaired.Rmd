@@ -448,17 +448,17 @@ if(class(test1_STD) =="htest" & class(test1_TEST) =="htest" & class(test1b) =="h
     #Otherwise Mann-Whitney/Wilcoxon test:
     test2<-tryCatch(wilcox.test(DIS_STD,DIS_TEST, paired =F, correct = T, exact = F), error = function(e){"e"})
   }
-}
-
-if(class(test2) == "htest"){#if no error
+  
+  if(class(test2) == "htest"){#if no error
     
-      if(test2$p.value<=0.05){
+    if(test2$p.value<=0.05){
       
       cat(lg[["2_1_discard_test_diff"]],"\n")
- }else{ cat(lg[["2_1_discard_test_nodiff"]],"\n")}
-      
-}    
-      
+    }else{ cat(lg[["2_1_discard_test_nodiff"]],"\n")}
+    
+  }    
+
+
    pvalue<-round(test2$p.value,4)
   if(test1_TEST$p.value > 0.05 & test1_STD$p.value > 0.05 & test1b$p.value > 0.05){
     diff_DIS<-mean(DIS_TEST)-mean(DIS_STD)
@@ -475,6 +475,7 @@ if(class(test2) == "htest"){#if no error
  
     cat(sprintf(lg[["2_1_discard_test_med"]],med,sign,pvalue))
       }
+}
    
 ```
 
@@ -563,10 +564,10 @@ test_LAN$moyenne<-round(test_LAN$moyenne,2)
 test_LAN$mediane<-round(test_LAN$mediane,2)
 
 if("Fisher" %in% test_LAN$test){
-  test_LAN$moyenne[test_LAN$test=="Fisher"]<-paste(test_LAN$moyenne[test_LAN$test=="Fisher"],"*",sep="")
+  test_LAN$moyenne[which(test_LAN$test=="Fisher")]<-paste(test_LAN$moyenne[which(test_LAN$test=="Fisher")],"*",sep="")
 }
 if("Kolmogorov" %in% test_LAN$test){
-  test_LAN$mediane[test_LAN$test=="Kolmogorov"]<-paste(test_LAN$moyenne[test_LAN$test=="Kolmogorov"],"*",sep="")
+  test_LAN$mediane[which(test_LAN$test=="Kolmogorov")]<-paste(test_LAN$mediane[which(test_LAN$test=="Kolmogorov")],"*",sep="")
 }
 
 test_LAN$pvalue[test_LAN$pvalue< 10^(-2)]<-"< 10-2"
@@ -604,7 +605,7 @@ if("Fisher" %in% test_DIS$test){
   test_DIS$moyenne[which(test_DIS$test=="Fisher")]<-paste(test_DIS$moyenne[which(test_DIS$test=="Fisher")],"*",sep="")
 }
 if("Kolmogorov" %in% test_DIS$test){
-  test_DIS$mediane[which(test_DIS$test=="Kolmogorov")]<-paste(test_DIS$moyenne[which(test_DIS$test=="Kolmogorov")],"*",sep="")
+  test_DIS$mediane[which(test_DIS$test=="Kolmogorov")]<-paste(test_DIS$mediane[which(test_DIS$test=="Kolmogorov")],"*",sep="")
 }
 
 names(test_DIS)<-c("p-value",lg[["2_2_mean_diff"]],lg[["2_2_median_diff"]],"Test",lg[["2_2_var1"]])

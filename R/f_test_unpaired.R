@@ -160,7 +160,6 @@ f_test_unpaired <- function(weight_species,
           }
         )
     }
-  }
   
   ## Test results:
   if (inherits(test2, "htest")) {
@@ -184,7 +183,7 @@ f_test_unpaired <- function(weight_species,
         )
     }
     
-  } else{
+  } }else{
     tab_test <-
       data.frame(
         pvalue = NA,
