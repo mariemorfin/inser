@@ -112,7 +112,7 @@ create_selectivity_sheet <- function(
     zones
 ) {
   
-  # Check argumetns protocol and language were provided with legible values
+  # Check arguments protocol and language were provided with legible values
   protocol <- match.arg(
     arg = protocol, 
     choices = c("twin", "paired", "unpaired")
@@ -125,10 +125,7 @@ create_selectivity_sheet <- function(
   #How to make by default the same parameters as in the render() function?
   
   ##Control function parameters?
-  
-  ##Mapping : A mettre dans le Rmd? (comme scripts Rmd séparés par language + protocol, 
-  ##Comment faire si ni zones ni area sont renseignées ?
-  
+
   Maps <- create_maps(
     data = data, 
     zones = zones,

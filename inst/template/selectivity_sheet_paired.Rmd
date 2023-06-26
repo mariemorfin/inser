@@ -594,15 +594,18 @@ cat(List_LAN,sep=", ")
 ### `r lg[["2_2_list_DIS"]]`
 ```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
 List_DIS<-unique(filter(data,catch_category=="DIS")$species)
-cat(List_DIS,", ")
+cat(List_DIS,sep=", ")
 ```
 
 ```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
-List_sp<-unique(data$species)
+List_sp<-unique(List_LAN,List_DIS)
+
+#Remove lines with NA value in gear_label/catch_category/species (no species observed from a gear of a given station)
+data<-filter(data,is.na(gear_label)==FALSE & is.na(catch_category)==FALSE & is.na(species)==FALSE)
 
 #Boxplot of weights by fishing operation for each catch category and gear: 
 weight_species<-data %>% group_by(project,vessel_identifier,trip_code,tag_operation,gear_label,catch_category,species)%>%
- summarize(weight=sum(weight))%>%as.data.frame()
+ summarize(weight=sum(weight)*10^(-3))%>%as.data.frame()
 
 weight_species<-as.data.frame(complete(weight_species,nesting(project,vessel_identifier,trip_code,tag_operation),gear_label,catch_category,species,fill=list(weight=0)))
 
@@ -626,7 +629,7 @@ for(sp in 1:length(List_sp)){
 
 ```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
 
-##Pour chaque espèce et fraction, test apparié (STD/TEST) sur les différences de poids par capture
+##For each species and fraction, paired test (STD/TEST) on the weights differences by catch
 tab_diff<-weight_species %>% group_by(project,vessel_identifier,trip_code,tag_operation,catch_category,species)%>%
   summarize(diff_weight=weight[gear_label=="TEST"]-weight[gear_label=="STD"],
             weight_STD=weight[gear_label=="STD"],weight_TEST=weight[gear_label=="TEST"])
@@ -637,8 +640,8 @@ test_LAN<-as.data.frame(test_LAN)
 
 for(ii in 1:length(List_LAN)){
   
-  #Test apparié:  (H0) Diff_Poids=0 versus (H1) Diff_Poids non nulle sur médiane ou moyenne
-  #+ Taux de variation TEST/STD
+  #Paired test:  (H0) Diff_Poids=0 versus (H1) Diff_Poids not nul, for the median or mean
+  #+ Variation rate TEST/STD
   test_LAN[ii,]<-f_test_paired( tab_diff, List_LAN[ii],"LAN")
 }
 
@@ -647,8 +650,12 @@ names(test_LAN)<-names(f_test_paired(tab_diff,List_LAN[ii],"LAN"))
 test_LAN$moyenne<-round(test_LAN$moyenne,2)
 test_LAN$mediane<-round(test_LAN$mediane,2)
 
+if("Fisher" %in% test_LAN$test){
 test_LAN$moyenne[test_LAN$test=="Fisher"]<-paste(test_LAN$moyenne[test_LAN$test=="Fisher"],"*",sep="")
+}
+if("Kolmogorov" %in% test_LAN$test){
 test_LAN$mediane[test_LAN$test=="Kolmogorov"]<-paste(test_LAN$moyenne[test_LAN$test=="Kolmogorov"],"*",sep="")
+}
 
 test_LAN$pvalue[test_LAN$pvalue< 10^(-2)]<-"< 10-2"
 test_LAN$pvalue[test_LAN$pvalue>0.1]<-">0.1"
@@ -680,8 +687,13 @@ test_DIS$pvalue[test_DIS$pvalue>0.1]<-">0.1"
 test_DIS$moyenne<-round(test_DIS$moyenne,2)
 test_DIS$mediane<-round(test_DIS$mediane,2)
 
+
+if("Fisher" %in% test_DIS$test){
 test_DIS$moyenne[which(test_DIS$test=="Fisher")]<-paste(test_DIS$moyenne[which(test_DIS$test=="Fisher")],"*",sep="")
+}
+if("Kolmogorov" %in% test_DIS$test){
 test_DIS$mediane[which(test_DIS$test=="Kolmogorov")]<-paste(test_DIS$moyenne[which(test_DIS$test=="Kolmogorov")],"*",sep="")
+}
 
 
 names(test_DIS)<-c("p-value",lg[["2_2_mean_diff"]],lg[["2_2_median_diff"]],"Test",lg[["2_2_var1"]],lg[["2_2_var2"]])
@@ -709,6 +721,13 @@ cat(List_M,sep=", ")
 
 ```{r, echo=FALSE,message=FALSE,warning=FALSE,comment="",message=FALSE,fig.width=18,fig.height=6}
 
+#Remove lines with NA value in length_class (no species observed from a gear of a given station)
+data<-filter(data,is.na(length_class)==FALSE)
+
+if(class(min_length)=="NULL"){
+    min_length<-data.frame(min_length=NA,species=List_M)
+}
+
 List_E<-vector(mode="list",length=length(List_M))
 
 for(sp in 1:length(List_M)){
@@ -720,7 +739,13 @@ for(sp in 1:length(List_M)){
  #x-Axis title
  unit<-unique(filter(data,species==List_M[sp])$length_code)
  type<-unique(filter(data,species==List_M[sp])$measure_type)
-
+ 
+ if(length(unit)>1 | length(unit)>1 ) {
+    stop(
+      paste("more than one unit or length code for ",List_M[sp]) 
+    )
+  }  
+ 
   if(type=="CL" | type=="LC"){
    Nom_Taille<-sprintf(lg[["3_CL_labs"]], unit) 
   }
@@ -728,8 +753,8 @@ for(sp in 1:length(List_M)){
      Nom_Taille<-sprintf(lg[["3_TL_labs"]], unit) 
   }
  
-  Taille_com<-filter(min_length,species==List_M[sp])$min_length
-  
+  Taille_com<-as.numeric(filter(min_length,species==List_M[sp])$min_length)
+
   #Size counts in the catches
   length_ALL<-filter(data,species==List_M[sp]) %>%
   group_by(gear_label,length_class)%>%
@@ -839,7 +864,7 @@ for(sp in 1:length(List_M)){
   Rel_Sel<-length_sp %>% group_by(length_class)%>%
     summarize(rel_sel=n[gear_label=="TEST"]/sum(n),n_STD=sum(n[gear_label=="STD"]),n_TEST=sum(n[gear_label=="TEST"]))%>%as.data.frame()
 
-  taille_com<-filter(min_length,species==List_M[sp])$min_length
+  taille_com<-as.numeric(filter(min_length,species==List_M[sp])$min_length)
     
  #Titre en abscisse
  unit<-unique(filter(data,species==List_M[sp])$length_code)
