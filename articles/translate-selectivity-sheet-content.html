@@ -135,16 +135,19 @@ named list that will be accessible when calling the
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create the EN translator</span></span>
 <span><span class="va">lg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_translate_dict.html">create_translate_dict</a></span><span class="op">(</span>language <span class="op">=</span> <span class="st">"EN"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Using the EN version of the selectivity template</span></span>
-<span></span>
+<span><span class="co">#&gt; Using the EN version of the selectivity template</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># call main title by its ID</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">lg</span><span class="op">[[</span><span class="st">"0_main_title"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Selectivity sheet - InseR</span></span>
-<span></span>
+<span><span class="co">#&gt; Selectivity sheet - InseR</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># create the FR translator</span></span>
 <span><span class="va">lg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_translate_dict.html">create_translate_dict</a></span><span class="op">(</span>language <span class="op">=</span> <span class="st">"FR"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Using the FR version of the selectivity template</span></span>
-<span></span>
+<span><span class="co">#&gt; Using the FR version of the selectivity template</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># call main title by its ID</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">lg</span><span class="op">[[</span><span class="st">"0_main_title"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Fiche de sélectivité - InseR</span></span></code></pre></div>
@@ -170,14 +173,15 @@ English</li>
 <li>a <strong><code>FR</code> column</strong> : the line of text in
 French</li>
 </ul>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># load csv</span></span>
 <span><span class="va">csv_lg</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">read_csv2</a></span><span class="op">(</span></span>
 <span>  file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"template"</span>, <span class="st">"translation.csv"</span>, package <span class="op">=</span> <span class="st">"inser"</span><span class="op">)</span>,</span>
 <span>  show_col_types <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Using <span style="color: #0000BB;">"','"</span> as decimal and <span style="color: #0000BB;">"'.'"</span> as grouping mark. Use `read_delim()` for more control.</span></span>
-<span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Using <span style="color: #0000BB;">"','"</span> as decimal and <span style="color: #0000BB;">"'.'"</span> as grouping mark. Use `read_delim()` for more control.</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># show a preview</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">csv_lg</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
@@ -253,13 +257,13 @@ translator at several places, as explained below.</p>
 </ul>
 </li>
 </ul>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="sc">---</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>title<span class="sc">:</span> <span class="st">"`r lg[['0_main_title']]`"</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>subtitle<span class="sc">:</span> <span class="st">"`r lg[['0_sub_title_twin']]`"</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>output<span class="sc">:</span> word_document</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>params<span class="sc">:</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  lg<span class="sc">:</span> <span class="cn">NULL</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="sc">---</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="sc">---</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>title<span class="sc">:</span> <span class="st">"`r lg[['0_main_title']]`"</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>subtitle<span class="sc">:</span> <span class="st">"`r lg[['0_sub_title_twin']]`"</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>output<span class="sc">:</span> word_document</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>params<span class="sc">:</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>  lg<span class="sc">:</span> <span class="cn">NULL</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="sc">---</span></span></code></pre></div>
 <ul>
 <li>
 <strong>Translating chapter and text</strong>
@@ -288,7 +292,7 @@ construction will render the proper plot label</li>
 </ul>
 </li>
 </ul>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">tab_OP</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">fishing_duration</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html" class="external-link">geom_boxplot</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">lg</span><span class="op">[[</span><span class="st">"1_duration_labs"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
@@ -309,7 +313,7 @@ character line</li>
 </ul>
 </li>
 </ul>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get dummy variable values</span></span>
 <span><span class="va">nNA</span> <span class="op">&lt;-</span> <span class="fl">2</span></span>
 <span><span class="va">nrow_info</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
@@ -336,14 +340,15 @@ dictionary <code>lg</code> passed as parameter the call to
 </li>
 </ul>
 <p>Rendering an English version</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># select template file</span></span>
 <span><span class="va">template_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"template"</span>,<span class="st">"selectivity_sheet_template.Rmd"</span>, package <span class="op">=</span> <span class="st">"inser"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># load EN translation object</span></span>
 <span><span class="va">lg_en</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_translate_dict.html">create_translate_dict</a></span><span class="op">(</span>language <span class="op">=</span> <span class="st">"EN"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Using the EN version of the selectivity template</span></span>
-<span></span>
+<span><span class="co">#&gt; Using the EN version of the selectivity template</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># render template (will generate EN report)</span></span>
 <span><span class="fu">rmarkdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgs.rstudio.com/rmarkdown/reference/render.html" class="external-link">render</a></span><span class="op">(</span></span>
 <span>  input <span class="op">=</span> <span class="va">template_file</span>,</span>
@@ -352,11 +357,12 @@ dictionary <code>lg</code> passed as parameter the call to
 <span>  params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>lg <span class="op">=</span> <span class="va">lg_en</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>Rendering a French version</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create the FR translator</span></span>
 <span><span class="va">lg_fr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_translate_dict.html">create_translate_dict</a></span><span class="op">(</span>language <span class="op">=</span> <span class="st">"FR"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Using the FR version of the selectivity template</span></span>
-<span></span>
+<span><span class="co">#&gt; Using the FR version of the selectivity template</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># render template (will generate FR report)</span></span>
 <span><span class="fu">rmarkdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgs.rstudio.com/rmarkdown/reference/render.html" class="external-link">render</a></span><span class="op">(</span></span>
 <span>  input <span class="op">=</span> <span class="va">template_file</span>,</span>
@@ -380,7 +386,7 @@ dictionary <code>lg</code> passed as parameter the call to
 
       <footer><div class="thinkr">
   <p></p>
-<p>Developed by Marie Morfin, Swann Floc’hlay, Antoine Languillaume.</p>,<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+<p>Developed by Marie Morfin, Swann Floc’hlay, Antoine Languillaume.</p>,<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
 <div class="author">
