@@ -10,6 +10,8 @@
 coverage](https://codecov.io/gh/mariemorfin/inser/branch/main/graph/badge.svg)](https://app.codecov.io/gh/mariemorfin/inser?branch=main)
 <!-- badges: end -->
 
+**Warning: This package is still under development. All the calculations are are not yet entirely sound. Use with caution.**
+
 The {inser} package generates a synthetic sheet of fishing gear
 selectivity indicators from catch comparison data. These data can be
 obtained from three types of experimental protocols: ‘twin’, ‘single
