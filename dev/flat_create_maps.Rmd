@@ -116,18 +116,18 @@ create_maps <- function(
   # by_lon <- round((lon_max - lon_min) / 5)
   
   rangeX <- with(data, abs(
-    min(pos_start_lon_dec, pos_stop_lon_dec,na.rm=TRUE) - max(pos_start_lon_dec, pos_stop_lon_dec,na.rm=TRUE)
+    min(pos_start_lon, pos_stop_lon,na.rm=TRUE) - max(pos_start_lon, pos_stop_lon,na.rm=TRUE)
   ))
   rangeY <- with(data, abs(
-    min(pos_start_lat_dec, pos_stop_lat_dec,na.rm=TRUE) - max(pos_start_lat_dec, pos_stop_lat_dec,na.rm=TRUE)
+    min(pos_start_lat, pos_stop_lat,na.rm=TRUE) - max(pos_start_lat, pos_stop_lat,na.rm=TRUE)
   ))
   xlim = with(data, c(
-    min(pos_start_lon_dec, pos_stop_lon_dec,na.rm=TRUE) - 0.15 * rangeX,
-    max(pos_start_lon_dec, pos_stop_lon_dec,na.rm=TRUE) + 0.15 * rangeX
+    min(pos_start_lon, pos_stop_lon,na.rm=TRUE) - 0.15 * rangeX,
+    max(pos_start_lon, pos_stop_lon,na.rm=TRUE) + 0.15 * rangeX
   ))
   ylim = with(data, c(
-    min(pos_start_lat_dec, pos_stop_lat_dec,na.rm=TRUE) - 0.15 * rangeY,
-    max(pos_start_lat_dec, pos_stop_lat_dec,na.rm=TRUE) + 0.15 * rangeY
+    min(pos_start_lat, pos_stop_lat,na.rm=TRUE) - 0.15 * rangeY,
+    max(pos_start_lat, pos_stop_lat,na.rm=TRUE) + 0.15 * rangeY
   ))
   
   
@@ -175,13 +175,13 @@ create_maps <- function(
     Pos_Start <- data %>%
       group_by(project,
                vessel_identifier, trip_code, station_number) %>%
-      summarize(Lat = unique(pos_start_lat_dec),
-                Lon = unique(pos_start_lon_dec))
+      summarize(Lat = unique(pos_start_lat),
+                Lon = unique(pos_start_lon))
     Pos_Start$order <- "start"
     Pos_Stop <- data %>%
       group_by(project, vessel_identifier, trip_code, station_number) %>%
-      summarize(Lat = unique(pos_stop_lat_dec),
-                Lon = unique(pos_stop_lon_dec))
+      summarize(Lat = unique(pos_stop_lat),
+                Lon = unique(pos_stop_lon))
     Pos_Stop$order <- "end"
     Pos_Station <- rbind(Pos_Start, Pos_Stop)
     Pos_Station$id_station <- with(
@@ -247,8 +247,8 @@ create_maps <- function(
       station_number,
       gear_label
     ) %>%
-      summarize(Lat = unique(pos_start_lat_dec),
-                Lon = unique(pos_start_lon_dec))
+      summarize(Lat = unique(pos_start_lat),
+                Lon = unique(pos_start_lon))
     Pos_Start$order <- "start"
     Pos_Stop <-
       data %>% group_by(project,
@@ -257,8 +257,8 @@ create_maps <- function(
                         tag_operation,
                         station_number,
                         gear_label) %>%
-      summarize(Lat = unique(pos_stop_lat_dec),
-                Lon = unique(pos_stop_lon_dec))
+      summarize(Lat = unique(pos_stop_lat),
+                Lon = unique(pos_stop_lon))
     Pos_Stop$order <- "end"
     Pos_Station <- rbind(Pos_Start, Pos_Stop)
     Pos_Station$id_station <-
@@ -334,8 +334,8 @@ create_maps <- function(
                         trip_code,
                         station_number,
                         gear_label) %>%
-      summarize(Lat = unique(pos_start_lat_dec),
-                Lon = unique(pos_start_lon_dec))
+      summarize(Lat = unique(pos_start_lat),
+                Lon = unique(pos_start_lon))
     Pos_Start$order <- "start"
     Pos_Stop <-
       data %>% group_by(project,
@@ -343,8 +343,8 @@ create_maps <- function(
                         trip_code,
                         station_number,
                         gear_label) %>%
-      summarize(Lat = unique(pos_stop_lat_dec),
-                Lon = unique(pos_stop_lon_dec))
+      summarize(Lat = unique(pos_stop_lat),
+                Lon = unique(pos_stop_lon))
     Pos_Stop$order <- "end"
     Pos_Station <- rbind(Pos_Start, Pos_Stop)
     Pos_Station$id_station <-

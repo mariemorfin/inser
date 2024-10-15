@@ -138,7 +138,7 @@ test_that("prep_sel_data works", {
                  ),
                  time = c("06:30", "06:30", "06:30", "06:30", "06:30", "06:30"),
                  fishing_duration = c(3.75, 3.75, 3.75, 3.75, 3.75, 3.75),
-                 pos_start_lat_dec = c(
+                 pos_start_lat = c(
                    47.5138888888889,
                    47.5138888888889,
                    47.5138888888889,
@@ -146,7 +146,7 @@ test_that("prep_sel_data works", {
                    47.5138888888889,
                    47.5138888888889
                  ),
-                 pos_start_lon_dec = c(
+                 pos_start_lon = c(
                    -4.04305555555556,
                    -4.04305555555556,
                    -4.04305555555556,
@@ -154,7 +154,7 @@ test_that("prep_sel_data works", {
                    -4.04305555555556,
                    -4.04305555555556
                  ),
-                 pos_stop_lat_dec = c(
+                 pos_stop_lat = c(
                    47.5583333333333,
                    47.5583333333333,
                    47.5583333333333,
@@ -162,7 +162,7 @@ test_that("prep_sel_data works", {
                    47.5583333333333,
                    47.5583333333333
                  ),
-                 pos_stop_lon_dec = c(
+                 pos_stop_lon = c(
                    -4.19166666666667,
                    -4.19166666666667,
                    -4.19166666666667,
@@ -299,6 +299,7 @@ test_that("prep_sel_data works", {
     trim_ws = TRUE
   )
   HH<-read.table(file.path(OTB_data_folder, "HH.csv"),sep=";",header=TRUE, encoding = "WINDOWS-1252")#,colClasses = colClasses)
+  
   SL<-read.table(file.path(OTB_data_folder, "SL.csv"),sep=";",header=TRUE, encoding = "WINDOWS-1252")
   HL<-read.table(file.path(OTB_data_folder, "HL.csv"),sep=";",header=TRUE, encoding = "WINDOWS-1252")
   
@@ -425,7 +426,7 @@ test_that("prep_sel_data works", {
       ),
       time = c("06:30", "06:30", "06:30", "06:30", "06:30", "06:30"),
       fishing_duration = c(3.75, 3.75, 3.75, 3.75, 3.75, 3.75),
-      pos_start_lat_dec = c(
+      pos_start_lat = c(
         47.5138888888889,
         47.5138888888889,
         47.5138888888889,
@@ -433,7 +434,7 @@ test_that("prep_sel_data works", {
         47.5138888888889,
         47.5138888888889
       ),
-      pos_start_lon_dec = c(
+      pos_start_lon = c(
         -4.04305555555556,
         -4.04305555555556,
         -4.04305555555556,
@@ -441,7 +442,7 @@ test_that("prep_sel_data works", {
         -4.04305555555556,
         -4.04305555555556
       ),
-      pos_stop_lat_dec = c(
+      pos_stop_lat = c(
         47.5583333333333,
         47.5583333333333,
         47.5583333333333,
@@ -449,7 +450,7 @@ test_that("prep_sel_data works", {
         47.5583333333333,
         47.5583333333333
       ),
-      pos_stop_lon_dec = c(
+      pos_stop_lon = c(
         -4.19166666666667,
         -4.19166666666667,
         -4.19166666666667,

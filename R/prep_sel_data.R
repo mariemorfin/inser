@@ -79,6 +79,15 @@
 #'   encoding = "WINDOWS-1252"
 #' )
 #'
+#' # HH<-HH |>
+#' #   rename(pos_start_lat=pos_start_lat_dec) |>
+#' #   rename(pos_start_lon=pos_start_lon_dec) |>
+#' #     rename(pos_stop_lat=pos_stop_lat_dec) |>
+#' #   rename(pos_stop_lon=pos_stop_lon_dec)
+#' # 
+#' # write.table(HH,file=  file.path(OTT_data_folder, "HH.csv"),row.names = F,sep=";")
+#'
+#'
 #' TAB <- prep_sel_data(data = list(TR, HH, SL, HL))
 prep_sel_data<-function(data,filters=list(project="all",vessel="all",trip="all",station="all",species_LAN="all",species_DIS="all",species_length="all")){
 
@@ -236,10 +245,10 @@ prep_sel_data<-function(data,filters=list(project="all",vessel="all",trip="all",
   ##Add all the optional fields if not already reported
   
   list<-c("vessel_name","selective_device","departure_date_time","return_date_time","headline_cumulative_length",
-          "mesh_gauge_codend_mm","area","statistical_rectangle","pos_start_lat_dec","pos_stop_lat_dec","pos_start_lon_dec","pos_stop_lon_dec",
+          "mesh_gauge_codend_mm","area","statistical_rectangle","pos_start_lat","pos_stop_lat","pos_start_lon","pos_stop_lon",
  "water_depth","start_sorting_date_time","end_sorting_date_time","diurnal_operation","gear_speed","gear_depth",
-  "sea_state","wind_force","wind_cardinal_direction", "seabed_features","sub_gear_position", "catch_weight","discard_weight")#,
- #"landing_category","commercial_size_category","subsampling_category","sex")
+  "sea_state","wind_force","wind_cardinal_direction", "seabed_features","sub_gear_position", "catch_weight","discard_weight",
+ "landing_category","commercial_size_category","subsampling_category","sex")
   
   var<-list[which(!(list %in% names(TR_HH_SL_HL)))]
   if(length(var)>0){

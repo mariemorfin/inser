@@ -1,3 +1,17 @@
+flat_create_maps.Rmd:
+  path: dev/flat_create_maps.Rmd
+  state: active
+  R: R/create_maps.R
+  tests: tests/testthat/test-create_maps.R
+  vignettes: []
+  inflate:
+    flat_file: dev/flat_create_maps.Rmd
+    vignette_name: .na
+    open_vignette: true
+    check: false
+    document: true
+    overwrite: 'yes'
+    clean: ask
 flat_create_selectivity_sheet.Rmd:
   path: dev/flat_create_selectivity_sheet.Rmd
   state: active
