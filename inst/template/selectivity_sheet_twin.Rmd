@@ -56,7 +56,8 @@ Maps
 
 ```{r, echo=FALSE,warning=FALSE,fig.cap=lg[['1_duration_caption']],comment="",message=FALSE,fig.asp=0.5}
 
-tab_OP<- data %>% group_by(project,vessel_identifier,trip_code,station_number)%>%
+tab_OP<- data %>% 
+  group_by(project,vessel_identifier,trip_code,station_number)%>%
     summarize(fishing_duration=unique(fishing_duration),gear_depth=unique(gear_depth),
               wind_force_beaufort=unique(wind_force_beaufort),gear_speed=unique(gear_speed),sea_state=unique(sea_state))
 
@@ -322,7 +323,8 @@ if(nNA>0){cat(sprintf(lg[["1_missing_values"]],nNA,nrow_info))}
 ```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
 
 #For each FO and catch category, weight difference TEST-STD:
-tab_diff<-tab_capture %>% group_by(project,vessel_identifier,trip_code,station_number)%>%
+tab_diff <- tab_capture %>% 
+  group_by(project,vessel_identifier,trip_code,station_number)%>%
   summarize(weight_DIS_STD=sorting_time[gear_label=="STD"],weight_DIS_TEST=sorting_time[gear_label=="TEST"],
             diff_DIS=sorting_time[gear_label=="TEST"]-sorting_time[gear_label=="STD"])
 
@@ -434,7 +436,8 @@ if(length(which(is.na(tab_capture$discard_weight)))==0){
 
 #For each fishing operation and catch category, discards weights difference TEST-STD:
 
-tab_diff<-tab_capture %>% group_by(project,vessel_identifier,trip_code,station_number)%>%
+tab_diff <- tab_capture %>% 
+  group_by(project,vessel_identifier,trip_code,station_number)%>%
   summarize(weight_DIS_STD=discard_weight[gear_label=="STD"],weight_DIS_TEST=discard_weight[gear_label=="TEST"],
             diff_DIS=discard_weight[gear_label=="TEST"]-discard_weight[gear_label=="STD"])
 
@@ -532,8 +535,15 @@ List_sp<-unique(List_LAN,List_DIS)
 data<-filter(data,is.na(gear_label)==FALSE & is.na(catch_category)==FALSE & is.na(species)==FALSE)
 
 #Boxplot of landings/discards weights for each fishing operation: 
-weight_species<-data %>% group_by(project,vessel_identifier,trip_code,station_number,gear_label,catch_category,species)%>%
- summarize(weight=sum(weight)*10^(-3))%>%as.data.frame()
+weight_species<-data |>
+  group_by(project,vessel_identifier,trip_code,station_number,gear_label,catch_category,species,landing_category,commercial_size_category,subsampling_category,sex)|>
+ summarize(weight=unique(weight))|>
+  as.data.frame()
+
+weight_species<-weight_species %>% 
+  group_by(project,vessel_identifier,trip_code,station_number,gear_label,catch_category,species)%>%
+ summarize(weight=sum(weight)*10^(-3))%>%
+  as.data.frame()
 
 weight_species<-as.data.frame(complete(weight_species,nesting(project,vessel_identifier,trip_code,station_number),gear_label,catch_category,species,fill=list(weight=0)))
 
@@ -561,7 +571,8 @@ for(sp in 1:length(List_sp)){
 
 ##For each species and catch category, paired test (STD/TEST) on the weights difference
 #by catch
-tab_diff<-weight_species %>%group_by(project,vessel_identifier,trip_code,station_number,catch_category,species)%>%
+tab_diff<-weight_species %>%
+  group_by(project,vessel_identifier,trip_code,station_number,catch_category,species) %>%
   summarize(diff_weight=weight[gear_label=="TEST"]-weight[gear_label=="STD"],
             weight_STD=weight[gear_label=="STD"],weight_TEST=weight[gear_label=="TEST"])
 
@@ -573,7 +584,7 @@ for(ii in 1:length(List_LAN)){
   
   #Paired test: (H0): Diff_Poids=0 versus (H1) Diff_Poids not nul, on the mean/median
   #+ Variation rate TEST/STD
-  test_LAN[ii,]<-f_test_paired(tab_diff,List_LAN[ii],"LAN")
+  test_LAN[ii,]<-f_test_paired(tab_diff,sp=List_LAN[ii],cat="LAN")
 }
 names(test_LAN)<-names(f_test_paired(tab_diff,List_LAN[ii],"LAN"))
 

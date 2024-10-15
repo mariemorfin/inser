@@ -417,7 +417,8 @@ if(nNA>0){cat(sprintf(lg[["1_missing_values"]],nNA,nrow_info))}
 
 # Difference of biomass between TEST and STD for each fishing operation and fraction:
 
-tab_diff<-tab_capture %>% group_by(project,vessel_identifier,trip_code,tag_operation)%>%
+tab_diff<-tab_capture %>% 
+  group_by(project,vessel_identifier,trip_code,tag_operation)%>%
   summarize(weight_DIS_STD=sorting_time[gear_label=="STD"],weight_DIS_TEST=sorting_time[gear_label=="TEST"],
             diff_DIS=sorting_time[gear_label=="TEST"]-sorting_time[gear_label=="STD"])
 
@@ -604,8 +605,16 @@ List_sp<-unique(List_LAN,List_DIS)
 data<-filter(data,is.na(gear_label)==FALSE & is.na(catch_category)==FALSE & is.na(species)==FALSE)
 
 #Boxplot of weights by fishing operation for each catch category and gear: 
-weight_species<-data %>% group_by(project,vessel_identifier,trip_code,tag_operation,gear_label,catch_category,species)%>%
- summarize(weight=sum(weight)*10^(-3))%>%as.data.frame()
+weight_species<-data |>
+  group_by(project,vessel_identifier,trip_code,tag_operation,station_number,gear_label,catch_category,species,
+           landing_category,commercial_size_category,subsampling_category,sex)|>
+ summarize(weight=unique(weight))|>
+  as.data.frame()
+
+weight_species <- weight_species %>% 
+ group_by(project,vessel_identifier,trip_code,tag_operation,gear_label,catch_category,species)%>%
+ summarize(weight=sum(weight)*10^(-3))%>%
+  as.data.frame()
 
 weight_species<-as.data.frame(complete(weight_species,nesting(project,vessel_identifier,trip_code,tag_operation),gear_label,catch_category,species,fill=list(weight=0)))
 
