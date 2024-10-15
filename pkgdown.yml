@@ -1,12 +1,11 @@
 pandoc: 3.1.11
-pkgdown: 2.0.9
+pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   create-selectivity-sheet: create-selectivity-sheet.html
   selectivity-data: selectivity-data.html
   translate-selectivity-sheet-content: translate-selectivity-sheet-content.html
-last_built: 2024-05-28T08:22Z
+last_built: 2024-10-15T13:50Z
 urls:
   reference: https://thinkr-open.github.io/inser/reference
   article: https://thinkr-open.github.io/inser/articles
-
