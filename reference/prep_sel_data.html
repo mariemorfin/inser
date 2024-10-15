@@ -188,6 +188,15 @@ For more details on the input data format, see the related vignette :
 <span class="r-in"><span>  encoding <span class="op">=</span> <span class="st">"WINDOWS-1252"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># HH&lt;-HH |&gt;</span></span></span>
+<span class="r-in"><span><span class="co">#   rename(pos_start_lat=pos_start_lat_dec) |&gt;</span></span></span>
+<span class="r-in"><span><span class="co">#   rename(pos_start_lon=pos_start_lon_dec) |&gt;</span></span></span>
+<span class="r-in"><span><span class="co">#     rename(pos_stop_lat=pos_stop_lat_dec) |&gt;</span></span></span>
+<span class="r-in"><span><span class="co">#   rename(pos_stop_lon=pos_stop_lon_dec)</span></span></span>
+<span class="r-in"><span><span class="co"># </span></span></span>
+<span class="r-in"><span><span class="co"># write.table(HH,file=  file.path(OTT_data_folder, "HH.csv"),row.names = F,sep=";")</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">TAB</span> <span class="op">&lt;-</span> <span class="fu">prep_sel_data</span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">TR</span>, <span class="va">HH</span>, <span class="va">SL</span>, <span class="va">HL</span><span class="op">)</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>

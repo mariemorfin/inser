@@ -458,7 +458,7 @@ protocol criteria. If reported, invalid operations are removed.</td>
 <td align="left">ICES statistical rectangle</td>
 </tr>
 <tr class="even">
-<td align="left">pos_start_lat_dec</td>
+<td align="left">pos_start_lat</td>
 <td align="left">Dec</td>
 <td align="left">Optional</td>
 <td align="left">NA</td>
@@ -466,7 +466,7 @@ protocol criteria. If reported, invalid operations are removed.</td>
 position</td>
 </tr>
 <tr class="odd">
-<td align="left">pos_stop_lat_dec</td>
+<td align="left">pos_stop_lat</td>
 <td align="left">Dec</td>
 <td align="left">Optional</td>
 <td align="left">NA</td>
@@ -474,7 +474,7 @@ position</td>
 position</td>
 </tr>
 <tr class="even">
-<td align="left">pos_start_lon_dec</td>
+<td align="left">pos_start_lon</td>
 <td align="left">Dec</td>
 <td align="left">Optional</td>
 <td align="left">NA</td>
@@ -482,7 +482,7 @@ position</td>
 position</td>
 </tr>
 <tr class="odd">
-<td align="left">pos_stop_lon_dec</td>
+<td align="left">pos_stop_lon</td>
 <td align="left">Dec</td>
 <td align="left">Optional</td>
 <td align="left">NA</td>
@@ -934,6 +934,15 @@ create_selectivity_sheet() function.</p>
 <span>  colClasses <span class="op">=</span> <span class="va">colClasses</span>,</span>
 <span>  encoding <span class="op">=</span> <span class="st">"WINDOWS-1252"</span></span>
 <span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># HH&lt;-HH |&gt;</span></span>
+<span><span class="co">#   rename(pos_start_lat=pos_start_lat_dec) |&gt;</span></span>
+<span><span class="co">#   rename(pos_start_lon=pos_start_lon_dec) |&gt;</span></span>
+<span><span class="co">#     rename(pos_stop_lat=pos_stop_lat_dec) |&gt;</span></span>
+<span><span class="co">#   rename(pos_stop_lon=pos_stop_lon_dec)</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># write.table(HH,file=  file.path(OTT_data_folder, "HH.csv"),row.names = F,sep=";")</span></span>
+<span></span>
 <span></span>
 <span><span class="va">TAB</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prep_sel_data.html">prep_sel_data</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">TR</span>, <span class="va">HH</span>, <span class="va">SL</span>, <span class="va">HL</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
