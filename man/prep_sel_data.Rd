@@ -88,5 +88,14 @@ HH <- read.table(
   encoding = "WINDOWS-1252"
 )
 
+# HH<-HH |>
+#   rename(pos_start_lat=pos_start_lat_dec) |>
+#   rename(pos_start_lon=pos_start_lon_dec) |>
+#     rename(pos_stop_lat=pos_stop_lat_dec) |>
+#   rename(pos_stop_lon=pos_stop_lon_dec)
+# 
+# write.table(HH,file=  file.path(OTT_data_folder, "HH.csv"),row.names = F,sep=";")
+
+
 TAB <- prep_sel_data(data = list(TR, HH, SL, HL))
 }

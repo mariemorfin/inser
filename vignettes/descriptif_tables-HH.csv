@@ -10,10 +10,10 @@ haul_time,String,Obligatory,HH:MM:SS,"Haul starting time. ""HH:MM:SS"" (ISO 8601
 fishing_duration,Integer,Obligatory,NA,minutes
 fishing_validity,String,Optional,Code list,"I = Invalid ou V = Valid. Haul validity according to protocol criteria. If reported, invalid operations are removed."
 statistical_rectangle,String,Optional,Code list,ICES statistical rectangle
-pos_start_lat_dec,Dec,Optional,NA,Latitude in decimal degrees of the shooting position
-pos_stop_lat_dec,Dec,Optional,NA,Latitude in decimal degrees of the hauling position
-pos_start_lon_dec,Dec,Optional,NA,Longitude in decimal degrees of the shooting position
-pos_stop_lon_dec,Dec,Optional,NA,Longitude in decimal degrees of the hauling position
+pos_start_lat,Dec,Optional,NA,Latitude in decimal degrees of the shooting position
+pos_stop_lat,Dec,Optional,NA,Latitude in decimal degrees of the hauling position
+pos_start_lon,Dec,Optional,NA,Longitude in decimal degrees of the shooting position
+pos_stop_lon,Dec,Optional,NA,Longitude in decimal degrees of the hauling position
 water_depth,Integer,Optional,1 - 999 999,Water depth in metres
 start_sorting_date_time,String,Optional,NA,"""YYYY-MM-DD HH:MM:SS"" (ISO 8601) in UTC"
 end_sorting_date_time,String,Optional,NA,"""YYYY-MM-DD HH:MM:SS"" (ISO 8601)"

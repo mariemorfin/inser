@@ -307,7 +307,7 @@ prep_sel_data<-function(data,filters=list(project="all",vessel="all",trip="all",
   ##Add all the optional fields if not already reported
   
   list<-c("vessel_name","selective_device","departure_date_time","return_date_time","headline_cumulative_length",
-          "mesh_gauge_codend_mm","area","statistical_rectangle","pos_start_lat_dec","pos_stop_lat_dec","pos_start_lon_dec","pos_stop_lon_dec",
+          "mesh_gauge_codend_mm","area","statistical_rectangle","pos_start_lat","pos_stop_lat","pos_start_lon","pos_stop_lon",
  "water_depth","start_sorting_date_time","end_sorting_date_time","diurnal_operation","gear_speed","gear_depth",
   "sea_state","wind_force","wind_cardinal_direction", "seabed_features","sub_gear_position", "catch_weight","discard_weight",
  "landing_category","commercial_size_category","subsampling_category","sex")
@@ -370,6 +370,15 @@ HH <- read.table(
   colClasses = colClasses,
   encoding = "WINDOWS-1252"
 )
+
+# HH<-HH |>
+#   rename(pos_start_lat=pos_start_lat_dec) |>
+#   rename(pos_start_lon=pos_start_lon_dec) |>
+#     rename(pos_stop_lat=pos_stop_lat_dec) |>
+#   rename(pos_stop_lon=pos_stop_lon_dec)
+# 
+# write.table(HH,file=  file.path(OTT_data_folder, "HH.csv"),row.names = F,sep=";")
+
 
 TAB <- prep_sel_data(data = list(TR, HH, SL, HL))
 ```
@@ -513,7 +522,7 @@ test_that("prep_sel_data works", {
                  ),
                  time = c("06:30", "06:30", "06:30", "06:30", "06:30", "06:30"),
                  fishing_duration = c(3.75, 3.75, 3.75, 3.75, 3.75, 3.75),
-                 pos_start_lat_dec = c(
+                 pos_start_lat = c(
                    47.5138888888889,
                    47.5138888888889,
                    47.5138888888889,
@@ -521,7 +530,7 @@ test_that("prep_sel_data works", {
                    47.5138888888889,
                    47.5138888888889
                  ),
-                 pos_start_lon_dec = c(
+                 pos_start_lon = c(
                    -4.04305555555556,
                    -4.04305555555556,
                    -4.04305555555556,
@@ -529,7 +538,7 @@ test_that("prep_sel_data works", {
                    -4.04305555555556,
                    -4.04305555555556
                  ),
-                 pos_stop_lat_dec = c(
+                 pos_stop_lat = c(
                    47.5583333333333,
                    47.5583333333333,
                    47.5583333333333,
@@ -537,7 +546,7 @@ test_that("prep_sel_data works", {
                    47.5583333333333,
                    47.5583333333333
                  ),
-                 pos_stop_lon_dec = c(
+                 pos_stop_lon = c(
                    -4.19166666666667,
                    -4.19166666666667,
                    -4.19166666666667,
@@ -674,6 +683,7 @@ test_that("prep_sel_data works", {
     trim_ws = TRUE
   )
   HH<-read.table(file.path(OTB_data_folder, "HH.csv"),sep=";",header=TRUE, encoding = "WINDOWS-1252")#,colClasses = colClasses)
+  
   SL<-read.table(file.path(OTB_data_folder, "SL.csv"),sep=";",header=TRUE, encoding = "WINDOWS-1252")
   HL<-read.table(file.path(OTB_data_folder, "HL.csv"),sep=";",header=TRUE, encoding = "WINDOWS-1252")
   
@@ -800,7 +810,7 @@ test_that("prep_sel_data works", {
       ),
       time = c("06:30", "06:30", "06:30", "06:30", "06:30", "06:30"),
       fishing_duration = c(3.75, 3.75, 3.75, 3.75, 3.75, 3.75),
-      pos_start_lat_dec = c(
+      pos_start_lat = c(
         47.5138888888889,
         47.5138888888889,
         47.5138888888889,
@@ -808,7 +818,7 @@ test_that("prep_sel_data works", {
         47.5138888888889,
         47.5138888888889
       ),
-      pos_start_lon_dec = c(
+      pos_start_lon = c(
         -4.04305555555556,
         -4.04305555555556,
         -4.04305555555556,
@@ -816,7 +826,7 @@ test_that("prep_sel_data works", {
         -4.04305555555556,
         -4.04305555555556
       ),
-      pos_stop_lat_dec = c(
+      pos_stop_lat = c(
         47.5583333333333,
         47.5583333333333,
         47.5583333333333,
@@ -824,7 +834,7 @@ test_that("prep_sel_data works", {
         47.5583333333333,
         47.5583333333333
       ),
-      pos_stop_lon_dec = c(
+      pos_stop_lon = c(
         -4.19166666666667,
         -4.19166666666667,
         -4.19166666666667,
