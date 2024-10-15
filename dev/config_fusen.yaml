@@ -1,0 +1,28 @@
+flat_create_selectivity_sheet.Rmd:
+  path: dev/flat_create_selectivity_sheet.Rmd
+  state: active
+  R: R/create_selectivity_sheet.R
+  tests: tests/testthat/test-create_selectivity_sheet.R
+  vignettes: vignettes/create-selectivity-sheet.Rmd
+  inflate:
+    flat_file: dev/flat_create_selectivity_sheet.Rmd
+    vignette_name: Create selectivity sheet
+    open_vignette: true
+    check: false
+    document: true
+    overwrite: 'yes'
+    clean: ask
+flat_prep_sel_data.Rmd:
+  path: dev/flat_prep_sel_data.Rmd
+  state: active
+  R: R/prep_sel_data.R
+  tests: tests/testthat/test-prep_sel_data.R
+  vignettes: vignettes/selectivity-data.Rmd
+  inflate:
+    flat_file: dev/flat_prep_sel_data.Rmd
+    vignette_name: Selectivity data
+    open_vignette: true
+    check: false
+    document: true
+    overwrite: 'yes'
+    clean: ask

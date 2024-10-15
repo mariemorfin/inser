@@ -522,9 +522,16 @@ List_sp<-unique(List_LAN,List_DIS)
 data<-filter(data,is.na(gear_label)==FALSE & is.na(catch_category)==FALSE & is.na(species)==FALSE)
 
 #Boxplot of landings/discards weights for each fishing operation: 
+weight_species <- data |>
+  group_by(project,vessel_identifier,trip_code,station_number,gear_label,catch_category,species,
+           landing_category,commercial_size_category,subsampling_category,sex)|>
+ summarize(weight=unique(weight))|>
+  as.data.frame()
 
-weight_species<-data %>% group_by(project,vessel_identifier,trip_code,station_number,gear_label,catch_category,species)%>%
- summarize(weight=sum(weight)*10^(-3))%>%as.data.frame()
+weight_species <- weight_species %>% 
+  group_by(project,vessel_identifier,trip_code,station_number,gear_label,catch_category,species)%>%
+ summarize(weight=sum(weight)*10^(-3))%>%
+  as.data.frame()
 
 weight_species<-as.data.frame(complete(weight_species,nesting(project,vessel_identifier,trip_code,station_number),gear_label,catch_category,species,fill=list(weight=0)))
 
