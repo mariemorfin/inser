@@ -67,18 +67,27 @@ test_that("create_selectivity_sheet works in French", {
   )
   
   #' @description Testing the "twin" report from `create_selectivity_sheet()` is created
-  expect_true(file.exists(file.path(output_dir, "fiche_InseR_twin.docx")))
+  #expect_true(file.exists(file.path(output_dir, "fiche_InseR_twin.docx")))
+   expect_true(file.exists(file.path(output_dir, "fiche_InseR_twin.html")))
   
   # unzip doc to access figures and tables
-  unzip(
-    zipfile = file.path(output_dir, "fiche_InseR_twin.docx"),
-    exdir = file.path(output_dir, "unzip_twin")
-  )
+  # unzip(
+  #   zipfile = file.path(output_dir, "fiche_InseR_twin.docx"),
+  #   exdir = file.path(output_dir, "unzip_twin")
+  # )
+
   
   #' @description Testing all figures are present in the "twin" report
-  expect_length(
-    list.files(
-      file.path(output_dir, "unzip_twin", "word", "media")
+  # expect_length(
+  #   list.files(
+  #     file.path(output_dir, "unzip_twin", "word", "media")
+  #   ),
+  #   28
+  # )
+  
+    expect_length(
+   list.files(
+      file.path(output_dir, "fiche_InseR_twin_files/figure-html")
     ),
     28
   )
@@ -241,22 +250,29 @@ test_that("create_selectivity_sheet works in English", {
   )
   
   #' @description Testing the "twin" report from `create_selectivity_sheet()` is created
-  expect_true(file.exists(file.path(output_dir, "fiche_InseR_twin.docx")))
-  
-  # unzip doc to access figures and tables
-  unzip(
-    zipfile = file.path(output_dir, "fiche_InseR_twin.docx"),
-    exdir = file.path(output_dir, "unzip_twin")
-  )
+  #expect_true(file.exists(file.path(output_dir, "fiche_InseR_twin.docx")))
+   expect_true(file.exists(file.path(output_dir, "fiche_InseR_twin.html")))
+
+  # # unzip doc to access figures and tables
+  # unzip(
+  #   zipfile = file.path(output_dir, "fiche_InseR_twin.docx"),
+  #   exdir = file.path(output_dir, "unzip_twin")
+  # )
+  # 
   
   #' @description Testing all figures are present in the "twin" report
-  expect_length(
-    list.files(
-      file.path(output_dir, "unzip_twin", "word", "media")
+  # expect_length(
+  #   list.files(
+  #     file.path(output_dir, "unzip_twin", "word", "media")
+  #   ),
+  #   28
+  # )
+    expect_length(
+   list.files(
+      file.path(output_dir, "fiche_InseR_twin_files/figure-html")
     ),
     28
   )
-  
   
   # Setup OTB input data
   OTB_data_folder <- system.file("script_origin","Data","Example_OTB_alternate", package = "inser")

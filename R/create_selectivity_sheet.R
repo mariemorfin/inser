@@ -126,7 +126,7 @@ create_selectivity_sheet <- function(
   
   # Setup language translation object
   lg <- create_translate_dict(
-    path = system.file("template", "translation_2_utf8.csv", package = "inser"),
+    path = system.file("template", "translation_3_utf8.csv", package = "inser"),
     language = language
   )
   

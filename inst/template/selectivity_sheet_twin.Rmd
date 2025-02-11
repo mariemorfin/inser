@@ -1,13 +1,25 @@
 ---
 title: "`r lg[['0_main_title']]`"
 subtitle: "`r lg[['0_sub_title_twin']]`"
-output: word_document
+output: 
+  html_document: 
+    keep_md: true
+    toc: true
+    toc_float: true
+    number_sections: true
+    fig_caption: TRUE
+    theme: lumen
 params:
   lg: NULL
 ---
 
+<br/>
+<br/>
 
-# `r lg[['0_title_device']]`
+
+# `r lg[['1_title']]`
+
+## `r lg[['0_title_device']]`
 
 ```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
 
@@ -24,9 +36,8 @@ kable(df)
 
 ```
 
-# 1.`r lg[['1_title']]`
 
-### `r lg[['1_subtitle_vessel_trip']]`
+## `r lg[['1_subtitle_vessel_trip']]`
 
 ```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
 
@@ -45,16 +56,22 @@ kable(df)
 ```
 
 
-### `r lg[['1_subtitle_maps']]`
-```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE,fig.width=30,fig.height=12}
+## `r lg[['1_subtitle_maps']]`
+
+```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE,fig.width=30,fig.height=12,fig.cap=lg[['1_maps_figure']]}
 
 Maps
 
+
+#cat(lg[['1_figure_maps']])
 ```
+<br/>
 
-### `r lg[['1_subtitle_fishing_conditions']]`
+## `r lg[['1_subtitle_fishing_conditions']]`
 
-```{r, echo=FALSE,warning=FALSE,fig.cap=lg[['1_duration_caption']],comment="",message=FALSE,fig.asp=0.5}
+<br/>
+
+```{r, echo=FALSE,warning=FALSE,fig.cap=lg[['1_duration_caption']],fig.width=5,comment="",message=FALSE,fig.asp=0.5}
 
 tab_OP<- data %>% 
   group_by(project,vessel_identifier,trip_code,station_number)%>%
@@ -64,13 +81,15 @@ tab_OP<- data %>%
 nrow_info<-nrow(tab_OP)
 
 if(length(which(is.na(tab_OP$fishing_duration)==FALSE))>0){
-  ggplot(tab_OP,aes(y=fishing_duration))+
-  geom_boxplot()+labs(y=lg[["1_duration_labs"]])+
-  geom_point(aes(x=0,y=mean(fishing_duration)),shape=4) + 
-  theme(legend.position = "None",axis.text=element_text(size=8),
-        axis.title=element_text(size=10),axis.text.x=element_blank())+
-    theme_light()+
-    xlab("")
+  ggplot(tab_OP,aes(x=fishing_duration))+
+  #geom_boxplot()+
+  #geom_point(aes(x=0,y=mean(fishing_duration)),shape=4) + 
+  geom_bar()+
+  labs(x=lg[["1_duration_labs"]])+
+  theme(legend.position = "None",axis.text=element_text(size=10),
+        axis.title=element_text(size=12),axis.text.x=element_blank())+
+    theme_light()#+
+    #xlab("")
 }
 
 nNA<-length(which(is.na(tab_OP$fishing_duration)==T))
@@ -79,16 +98,19 @@ if(nNA>0){cat(sprintf(lg[["1_missing_values"]],nNA,nrow_info))}
   
 ```
 
+<br/>
 ```{r, echo=FALSE,warning=FALSE,fig.cap=lg[['1_depth_caption']],comment="",message=FALSE,fig.asp=0.5}
 
 if(length(which(is.na(tab_OP$gear_depth)==FALSE))>0){
-  ggplot(tab_OP,aes(y=gear_depth))+
-  geom_boxplot(width=0.2)+labs(y=lg[["1_depth_labs"]])+
-  geom_point(aes(x=0,y=mean(gear_depth)),shape=4) + 
+  ggplot(tab_OP,aes(x=gear_depth))+
+  geom_bar()+
+  #geom_boxplot(width=0.2)+
+    labs(x=lg[["1_depth_labs"]])+
+  #geom_point(aes(x=0,y=mean(gear_depth)),shape=4) + 
   theme(legend.position = "None",axis.text=element_text(size=8),
         axis.title=element_text(size=10),axis.text.x=element_blank())+
-       theme_light()+
-    xlab("")
+       theme_light()#+
+   # xlab("")
 }
 
 nNA<-length(which(is.na(tab_OP$gear_depth)==T))
@@ -98,17 +120,20 @@ if(nNA>0){cat(sprintf(lg[["1_missing_values"]],nNA,nrow_info))}
   cat("\n   \n") 
 ```
 
+<br/>
+
 ```{r, echo=FALSE,warning=FALSE,fig.cap=lg[['1_speed_caption']],comment="",message=FALSE,fig.asp=0.5}
 
 if(length(which(is.na(tab_OP$gear_speed)==FALSE))>0){
   
-    ggplot(tab_OP,aes(y=gear_speed))+
-  geom_boxplot(width=0.2)+labs(y=lg[["1_speed_labs"]])+
-  geom_point(aes(x=0,y=mean(gear_speed)),shape=4) + 
+    ggplot(tab_OP,aes(x=gear_speed))+
+  geom_bar()+
+    #geom_boxplot(width=0.2)+
+  labs(x=lg[["1_speed_labs"]])+
+  #geom_point(aes(x=0,y=mean(gear_speed)),shape=4) + 
   theme(legend.position = "None",axis.text=element_text(size=8),
         axis.title=element_text(size=10),axis.text.x=element_blank())+
-       theme_light()+
-    xlab("")
+       theme_light()#+xlab("")
   
 }
 
@@ -120,13 +145,14 @@ if(nNA>0){cat(sprintf(lg[["1_missing_values"]],nNA,nrow_info))}
 
 if(length(which(is.na(tab_OP$sea_state)==FALSE))>0){
   
-    ggplot(tab_OP,aes(y=sea_state))+
-  geom_boxplot(width=0.2)+labs(y=lg[["1_sea_state_labs"]])+
-  geom_point(aes(x=0,y=mean(sea_state)),shape=4) + 
+    ggplot(tab_OP,aes(x=sea_state))+
+  #geom_boxplot(width=0.2)+
+  geom_bar()+
+  labs(x=lg[["1_sea_state_labs"]])+
+ # geom_point(aes(x=0,y=mean(sea_state)),shape=4) + 
   theme(legend.position = "None",axis.text=element_text(size=8),
         axis.title=element_text(size=10),axis.text.x=element_blank())+
-       theme_light()+
-    xlab("")
+       theme_light()#+xlab("")
   
 }
 
@@ -135,17 +161,20 @@ if(nNA>0){cat(sprintf(lg[["1_missing_values"]],nNA,nrow_info))}
   
 ```
 
+<br/>
+
 ```{r, echo=FALSE,warning=FALSE,fig.cap=lg[['1_wind_caption']],comment="",message=FALSE,fig.asp=0.5}
 
 if(length(which(is.na(tab_OP$wind_force_beaufort)==FALSE))>0){
 
-      ggplot(tab_OP,aes(y=wind_force_beaufort))+
-  geom_boxplot(width=0.2)+labs(y=lg[["1_wind_labs"]])+
-  geom_point(aes(x=0,y=mean(wind_force_beaufort)),shape=4) + 
-  theme(legend.position = "None",axis.text=element_text(size=8),
-        axis.title=element_text(size=10),axis.text.x=element_blank())+
-       theme_light()+
-    xlab("")
+      ggplot(tab_OP,aes(x=wind_force_beaufort))+
+  geom_bar()+
+    #geom_boxplot(width=0.2)+
+    labs(x=lg[["1_wind_labs"]])+
+  #geom_point(aes(x=0,y=mean(wind_force_beaufort)),shape=4) + 
+  theme(legend.position = "None",axis.text=element_text(size=10),
+        axis.title=element_text(size=12),axis.text.x=element_blank())+
+       theme_light()#+xlab("")
 }
 
 nNA<-length(which(is.na(tab_OP$wind_force_beaufort)==T))
@@ -154,6 +183,7 @@ if(nNA>0){cat(sprintf(lg[["1_missing_values"]],nNA,nrow_info))}
 
 ```
 
+<br/>
 
 ```{r, echo=FALSE,warning=FALSE,fig.cap=lg[['1_seabed_caption']],comment="",message=FALSE,fig.asp=0.5}
 
@@ -262,9 +292,9 @@ kable(df)
 
 
 
-# 2. `r lg[['2_title']]`
+# `r lg[['2_title']]`
 
-## 2.1. `r lg[['2_1_subtitle']]`
+## `r lg[['2_1_subtitle']]`
 
 ### `r lg[['2_1_subtitle_catch_weight']]`
 
@@ -398,6 +428,7 @@ cat(sprintf(lg[["2_1_sorting_var2"]],sign,rate))
 
 
 ### `r lg[['2_1_subtitle_discard_weight']]`
+<br/>
 
 ```{r, echo=FALSE,warning=FALSE,message=FALSE,fig.width=3}
 
@@ -511,9 +542,11 @@ cat(sprintf(lg[["2_1_discard_var2"]],sign,rate))
 
 
 
-## 2.2. `r lg[["2_2_subtitle"]]`
+## `r lg[["2_2_subtitle"]]`
 
 ### `r lg[["2_2_list_LAN"]]`
+<br/>
+
 ```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
 List_LAN<-unique(filter(data,catch_category=="LAN")$species)
 cat(List_LAN,sep=", ")
@@ -521,6 +554,8 @@ cat(List_LAN,sep=", ")
 ```
 
 ### `r lg[["2_2_list_DIS"]]`
+<br/>
+
 ```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
 List_DIS<-unique(filter(data,catch_category=="DIS")$species)
 cat(List_DIS,sep=", ")
@@ -605,12 +640,13 @@ test_LAN$pvalue[test_LAN$pvalue>0.1]<-">0.1"
 names(test_LAN)<-c("p-value",lg[["2_2_mean_diff"]],lg[["2_2_median_diff"]],"Test",lg[["2_2_var1"]],lg[["2_2_var2"]])
 
 
-kable(test_LAN[,-c(4)],digits=2,caption=lg[["2_2_LAN_table_caption"]])
+knitr::kable(test_LAN[,-c(4)],digits=2,caption=lg[["2_2_LAN_table_caption"]])
 
 
 ```
 
 *`r lg[["2_2_DIS"]]`*
+
 ```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
 
 test_DIS<-matrix(NA,ncol=6,nrow=length(List_DIS))
@@ -645,9 +681,11 @@ kable(test_DIS[,-c(4)],digits=2,caption=lg[["2_2_DIS_table_caption"]])
 
 
 
-# 3. `r lg[["3_title"]]`
+# `r lg[["3_title"]]`
 
-### `r lg[["3_list_size"]]`
+## `r lg[["3_list_size"]]`
+<br/>
+
 ```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
 
 List_M<-unique(filter(data,is.na(number_at_length)==FALSE)$species)
@@ -655,7 +693,8 @@ cat(List_M,sep=", ")
 
 ```
 
-### `r lg[["3_size_distribution"]]`
+## `r lg[["3_size_distribution"]]`
+<br/>
 
 ```{r, echo=FALSE,message=FALSE,warning=FALSE,comment="",message=FALSE,fig.width=18,fig.height=6}
 
@@ -776,6 +815,13 @@ for(sp in 1:length(List_M)){
 }
 
 
+
+```
+
+<br/>
+
+
+```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE,fig.asp=0.7}
 Tab_E<-bind_rows(List_E)
 
 names(Tab_E)<-c(lg[["3_species"]],lg[["3_global"]],lg[["3_taille_com"]],lg[["3_undersize"]])
@@ -785,7 +831,8 @@ kable(Tab_E,digits=2,caption=lg[["3_escapement"]])
 ```
 
 
-### `r lg[["3_selectivity_curve"]]`
+## `r lg[["3_selectivity_curve"]]`
+<br/>
 
 ```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE,fig.asp=0.7}
 
