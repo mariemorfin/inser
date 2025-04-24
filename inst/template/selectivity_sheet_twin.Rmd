@@ -21,12 +21,12 @@ params:
 
 ```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
 
-##Create a table with gear names, selective device, codend mesh size, 
-#headline length
+##Create a table with gear names, selective device, codend mesh size, headline length
 
   df<-data %>%
   group_by(gear_label) %>%
-  summarise(type=unique(gear_type),sel=unique(selective_device),mesh=unique(mesh_gauge_codend_mm),length=unique(headline_cumulative_length)) %>% as.data.frame()
+  summarise(type=unique(gear_type),sel=unique(selective_device),mesh=unique(mesh_gauge_codend_mm),length=unique(headline_cumulative_length)) %>% 
+  as.data.frame()
   
   names(df)<-c("",lg[["0_gear"]],lg[["0_selective_device"]],lg[["0_codend_mesh"]],lg[["0_headline"]])
   
@@ -54,7 +54,7 @@ kable(df)
 
 ## `r lg[['1_subtitle_maps']]`
 
-```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE,fig.width=30,fig.height=12,fig.cap=lg[['1_maps_figure']]}
+```{r maps, echo=FALSE,warning=FALSE,comment="",message=FALSE,fig.width=30,fig.height=12,fig.cap=lg[['1_maps_figure']]}
 
 Maps
 
@@ -67,7 +67,7 @@ Maps
 
 <br/>
 
-```{r, echo=FALSE,warning=FALSE,fig.cap=lg[['1_duration_caption']],fig.width=5,comment="",message=FALSE,fig.asp=0.5}
+```{r fishing_duration, echo=FALSE,warning=FALSE,fig.cap=lg[['1_duration_caption']],fig.width=5,comment="",message=FALSE,fig.asp=0.5}
 
 tab_OP<- data %>% 
   group_by(project,vessel_identifier,trip_code,station_number)%>%
@@ -96,7 +96,7 @@ if(nNA>0){cat(sprintf(lg[["1_missing_values"]],nNA,nrow_info))}
 
 <br/>
 
-```{r, echo=FALSE,warning=FALSE,fig.cap=lg[['1_depth_caption']],comment="",message=FALSE,fig.asp=0.5,fig.width=5}
+```{r fishing_depth, echo=FALSE,warning=FALSE,fig.cap=lg[['1_depth_caption']],comment="",message=FALSE,fig.asp=0.5,fig.width=5}
 
 if(length(which(is.na(tab_OP$gear_depth)==FALSE))>0){
   ggplot(tab_OP,aes(x=gear_depth))+
@@ -119,7 +119,7 @@ if(nNA>0){cat(sprintf(lg[["1_missing_values"]],nNA,nrow_info))}
 
 <br/>
 
-```{r, echo=FALSE,warning=FALSE,fig.cap=lg[['1_speed_caption']],comment="",message=FALSE,fig.asp=0.5,fig.width=5}
+```{r vessel_speed, echo=FALSE,warning=FALSE,fig.cap=lg[['1_speed_caption']],comment="",message=FALSE,fig.asp=0.5,fig.width=5}
 
 if(length(which(is.na(tab_OP$gear_speed)==FALSE))>0){
   
@@ -139,7 +139,9 @@ if(nNA>0){cat(sprintf(lg[["1_missing_values"]],nNA,nrow_info))}
   
 ```
 
-```{r, echo=FALSE,warning=FALSE,fig.cap=lg[['1_sea_state_caption']],comment="",message=FALSE,fig.asp=0.5,fig.width=5}
+<br/>
+
+```{r sea_state, echo=FALSE,warning=FALSE,fig.cap=lg[['1_sea_state_caption']],comment="",message=FALSE,fig.asp=0.5,fig.width=5}
 
 if(length(which(is.na(tab_OP$sea_state)==FALSE))>0){
   
@@ -155,13 +157,15 @@ if(length(which(is.na(tab_OP$sea_state)==FALSE))>0){
 }
 
 nNA<-length(which(is.na(tab_OP$gear_speed)==T))
-if(nNA>0){cat(sprintf(lg[["1_missing_values"]],nNA,nrow_info))}
+if(nNA>0){
+  cat(sprintf(lg[["1_missing_values"]],nNA,nrow_info))
+  }
   
 ```
 
 <br/>
 
-```{r, echo=FALSE,warning=FALSE,fig.cap=lg[['1_wind_caption']],comment="",message=FALSE,fig.asp=0.5,fig.width=5}
+```{r wind_force, echo=FALSE,warning=FALSE,fig.cap=lg[['1_wind_caption']],comment="",message=FALSE,fig.asp=0.5,fig.width=5}
 
 if(length(which(is.na(tab_OP$wind_force_beaufort)==FALSE))>0){
 
@@ -183,7 +187,7 @@ if(nNA>0){cat(sprintf(lg[["1_missing_values"]],nNA,nrow_info))}
 
 <br/>
 
-```{r, echo=FALSE,warning=FALSE,fig.cap=lg[['1_seabed_caption']],comment="",message=FALSE,fig.asp=0.5,fig.width==5}
+```{r seabed, echo=FALSE,warning=FALSE,fig.cap=lg[['1_seabed_caption']],comment="",message=FALSE,fig.asp=0.5,fig.width=5}
 
 #fishing conditions /fishing operation : categorical variables
 
@@ -207,7 +211,7 @@ if(nNA>0){cat(sprintf(lg[["1_missing_values"]],nNA,nrow_info2))}
  
 ```
 
-```{r, echo=FALSE,warning=FALSE,fig.cap=lg[['1_wind_dir_caption']],comment="",message=FALSE,fig.asp=0.5,fig.width=5}
+```{r wind_direction, echo=FALSE,warning=FALSE,fig.cap=lg[['1_wind_dir_caption']],comment="",message=FALSE,fig.asp=0.5,fig.width=5}
 
 if(length(which(is.na(tab_OP2$wind_cardinal_direction)))==0){
 ggplot(tab_OP2,aes(x=wind_cardinal_direction))+ 
@@ -222,7 +226,9 @@ nNA<-length(which(is.na(tab_OP2$wind_cardinal_direction)==T))
 if(nNA>0){cat(sprintf(lg[["1_missing_values"]],nNA,nrow_info2))}
 ```
 
-```{r, echo=FALSE,warning=FALSE,fig.cap=lg[['1_day_caption']],comment="",message=FALSE,fig.asp=0.5,fig.width=5}
+<br/>
+
+```{r day_night, echo=FALSE,warning=FALSE,fig.cap=lg[['1_day_caption']],comment="",message=FALSE,fig.asp=0.5,fig.width=5}
 if(length(which(is.na(tab_OP2$diurnal_operation)))==0){
 tab_OP2$diurnal_operation<-factor(tab_OP2$diurnal_operation,levels=c("Y","N"),labels=c(lg[["1_day"]],lg[["1_night"]]))
 
@@ -239,7 +245,13 @@ if(nNA>0){cat(sprintf(lg[["1_missing_values"]],nNA,nrow_info2))}
   
 ```
 
-`r lg[['1_subtitle_fishing_summary']]`
+<br/> <br/>
+
+<p style="text-align: center;color:blue">
+
+**`r lg[['1_subtitle_fishing_summary']]`**
+
+</p>
 
 ```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
 
@@ -278,12 +290,13 @@ df$nNA<-apply(tab_OP[,varC],2,function(x){length(which(is.na(x)==TRUE))})
 # df<-rbind(df,df2)
 
 if(sum(df$nNA>0)){
-names(df)<-c("","Min","Max",lg[["1_mean"]],lg[["1_median"]],lg[["1_difference"]],lg[["1_values"]])
-
-kable(df)
-}else{df<-select(df,-nNA)
-names(df)<-c("","Min","Max",lg[["1_mean"]],lg[["1_median"]],lg[["1_difference"]])
-kable(df)
+  names(df)<-c("","Min","Max",lg[["1_mean"]],lg[["1_median"]],lg[["1_difference"]],lg[["1_values"]])
+  
+  kable(df)
+  }else{
+  df<-select(df,-nNA)
+  names(df)<-c("","Min","Max",lg[["1_mean"]],lg[["1_median"]],lg[["1_difference"]])
+  kable(df)
 }
 
 ```
@@ -296,7 +309,7 @@ kable(df)
 
 ### `r lg[['2_1_subtitle_catch_weight']]`
 
-```{r, echo=FALSE,warning=FALSE,fig.cap=lg[['2_1_catch_caption']],comment="",message=FALSE,fig.asp=0.5}
+```{r total_catch_weight, echo=FALSE,warning=FALSE,fig.cap=lg[['2_1_catch_caption']],comment="",message=FALSE,fig.asp=0.5}
 
 #Comparison of catches weights, sorting time, discards weights / fishing operation:
 
@@ -330,7 +343,7 @@ if(nNA>0){cat(sprintf(lg[["1_missing_values"]],nNA,nrow_info))}
 
 ### `r lg[['2_1_subtitle_sorting']]`
 
-```{r, echo=FALSE,warning=FALSE,fig.cap=lg[['2_1_sorting_caption']],comment="",message=FALSE,fig.asp=0.5}
+```{r sorting_time, echo=FALSE,warning=FALSE,fig.cap=lg[['2_1_sorting_caption']],comment="",message=FALSE,fig.asp=0.5}
 
 if(length(which(is.na(tab_capture$sorting_time)==FALSE))>0){
   
@@ -415,6 +428,7 @@ if(is.na(Var_Rate)==FALSE){
 cat(sprintf(lg[["2_1_sorting_var1"]],sign,rate))
 
 Var_Rate2<-with(tab_diff,diff_DIS/weight_DIS_STD)*100
+  sign<-c(lg[["2_1_decrease"]] ,lg[["2_1_increase"]])[as.numeric(eval(Var_Rate2>0))+1]
    rate<-abs(round(mean(Var_Rate2),2))
    
 cat(paste0(lg[['2_1_subtitle_sorting_variation']]," : \n"))
@@ -424,11 +438,11 @@ cat(sprintf(lg[["2_1_sorting_var2"]],sign,rate))
 }
 ```
 
-### `r lg[['2_1_subtitle_discard_weight']]`
+### `r lg[['2_1_subtitle_frac_weight']]`
 
 <br/>
 
-```{r, echo=FALSE,warning=FALSE,message=FALSE,fig.width=6}
+```{r fraction_weights, echo=FALSE,warning=FALSE,message=FALSE,fig.width=6}
 
 # Report the landing weight and discard rate by FO
 tab_capture<-tab_capture %>% 
@@ -457,39 +471,41 @@ gg_LAN<-ggplot(tab_capture,aes(y=landing_weight,x=gear_label,fill=gear_label))+
   ggarrange(gg_LAN,gg_DIS)
 }
 
-mean_rate<-round(mean(tab_capture$discard_rate)*100)
 
-if(is.na(mean_rate)==FALSE){
-  cat(paste0("\n",lg[['2_2_discard_rate']],mean_rate,"%."))
-}
-
-# ##Comparaison des poids pêchés sur le total de la liste
-# 
-# #Table des poids pour chaque Num_Trait, Engin, Fraction:
-# tab_catch_list<-TAB%>%
-#   group_by(project,vessel_identifier,trip_code,station_number,gear_label,catch_category)%>%
-#   summarize(weight=sum(weight,na.rm=T))%>% as.data.frame()
-# 
-# tab_catch_list<-as.data.frame(complete(tab_catch_list,nesting(project,vessel_identifier,trip_code,station_number),gear_label,catch_category, fill = list(weight = 0)))
-# 
-# ##Boxplots du poids des rejets 
-# ggplot(filter(tab_catch_list,catch_category=="DIS"),aes(y=weight,x=gear_label,fill=gear_label))+
-#   geom_boxplot(width=0.5)+labs(y = "Poids des rejets ciblés par capture (Kg)")+
-#   theme(legend.position = "None",axis.text=element_text(size=12),
-#         axis.title=element_text(size=14))+
-#   stat_summary(fun=mean, geom="point", shape=4, position = position_dodge(0.75),lwd=2)
-
-
-```
-
-```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
-
-#For each fishing operation and catch category, discards weights difference TEST-STD:
+#For each fishing operation and catch category, discards/landings weights difference TEST-STD:
 
 tab_diff <- tab_capture %>% 
   group_by(project,vessel_identifier,trip_code,station_number)%>%
   summarize(weight_DIS_STD=discard_weight[gear_label=="STD"],weight_DIS_TEST=discard_weight[gear_label=="TEST"],
-            diff_DIS=discard_weight[gear_label=="TEST"]-discard_weight[gear_label=="STD"])
+            diff_DIS=discard_weight[gear_label=="TEST"]-discard_weight[gear_label=="STD"],
+            weight_LAN_STD=landing_weight[gear_label=="STD"],weight_LAN_TEST=landing_weight[gear_label=="TEST"],
+            diff_LAN=landing_weight[gear_label=="TEST"]-landing_weight[gear_label=="STD"])
+
+
+```
+
+**`r lg[['2_1_subtitle_discard_variation']]`**
+
+```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
+
+tab_rate<-tab_capture |> group_by(gear_label) |>
+  summarize(mean_rate=round(mean(discard_rate)*100))
+
+
+mean_rate<-tab_rate |> filter(gear_label=="STD") |> select(mean_rate)
+
+if(is.na(mean_rate)==FALSE){
+  sprintf(lg[['2_2_discard_rate_STD']],mean_rate)
+}
+
+mean_rate<-tab_rate |> filter(gear_label=="TEST") |> select(mean_rate)
+if(is.na(mean_rate)==FALSE){
+  sprintf(lg[['2_2_discard_rate_TEST']],mean_rate)
+}
+```
+
+```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
+
 
 diff_DIS<-tab_diff$diff_DIS
 
@@ -536,8 +552,6 @@ if(class(test1) =="htest"){
 
 ```
 
-**`r lg[['2_1_subtitle_discard_variation']]`**
-
 ```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
 
 #Variation rate (TEST-STD)/STD
@@ -558,33 +572,107 @@ cat(sprintf(lg[["2_1_discard_var2"]],sign,rate))
 
 ```
 
+**`r lg[['2_1_subtitle_landing_variation']]`**
+
+```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
+
+
+diff_LAN<-tab_diff$diff_LAN
+
+#Shapiro-Wilk normality test
+test1<-tryCatch(shapiro.test(diffLAN), error = function(e){"e"})
+
+#if no "error":
+if(class(test1) =="htest"){
+  
+  #If normality not rejected (p-value >0.05), Student test:
+  if(test1$p.value > 0.05){
+    test2<-tryCatch(t.test(x=diff_LAN,mu=0) , error = function(e){"e"})
+  }
+  #If normality rejected (p-value <= 0.05), Mann-Whitney/Wilcoxon test:
+  if(test1$p.value <= 0.05){
+    test2<-tryCatch(wilcox.test(diff_LAN, paired =F, correct = T, exact = F), error = function(e){"e"})
+  }
+  
+  if(class(test2) == "htest"){#if no error
+    
+    if(test2$p.value<=0.05){
+      
+      cat(lg[["2_1_landing_test_diff"]],"\n")
+ }else{ cat(lg[["2_1_landing_test_nodiff"]],"\n")}
+      
+  }    
+      
+  if(test1$p.value <= 0.05){
+        
+    med<-abs(round(median(diff_LAN),3))
+    sign<-c(lg[["2_1_less"]],lg[["2_1_more"]])[as.numeric(eval(median(diff_LAN)>0))+1]
+    pvalue<-round(test2$p.value,4)
+    cat(sprintf(lg[["2_1_discard_test_med"]],med,sign,pvalue))
+      }
+  
+  if(test1$p.value > 0.05){
+   mean<-abs(round(mean(diff_LAN),3))
+    sign<-c(lg[["2_1_less"]],lg[["2_1_more"]])[as.numeric(eval(mean(diff_LAN)>0))+1]
+    pvalue<-round(test2$p.value,4)
+    cat(sprintf(lg[["2_1_landing_test_mean"]],mean,sign,pvalue))
+      }
+   
+}
+
+```
+
+```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
+
+#Variation rate (TEST-STD)/STD
+Tot_TEST<-sum(tab_diff$weight_LAN_TEST)
+Tot_STD<-sum(tab_diff$weight_LAN_STD)
+
+Var_Rate<-(Tot_TEST-Tot_STD)/Tot_STD*100
+
+sign<-c(lg[["2_1_decrease"]] ,lg[["2_1_increase"]])[as.numeric(eval(Var_Rate>0))+1]
+rate<-abs(round(Var_Rate,2))
+
+if(is.na(rate)==FALSE){
+cat(sprintf(lg[["2_1_landing_var1"]],sign,rate))
+}
+
+Var_Rate2<-with(tab_diff,diff_LAN/weight_LAN_STD)*100
+  
+sign<-c(lg[["2_1_decrease"]] ,lg[["2_1_increase"]])[as.numeric(eval(mean(Var_Rate2)>0))+1]
+rate<-abs(round(mean(Var_Rate2),2))
+
+if(is.na(rate)==FALSE){
+cat(sprintf(lg[["2_1_landing_var2"]],sign,rate))  
+}
+
+
+```
+
 <br/>
 
 ## `r lg[["2_2_subtitle"]]`
-
-### `r lg[["2_2_list_LAN"]]`
 
 <br/>
 
 ```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
 List_LAN<-unique(filter(data,catch_category=="LAN")$species)
-cat(List_LAN,sep=", ")
+List_DIS<-unique(filter(data,catch_category=="DIS")$species)
 
+# cat(List_LAN,sep=", ")
+
+List_sp<-unique(List_LAN,List_DIS)
 ```
 
-### `r lg[["2_2_list_DIS"]]`
+**`r lg[["2_2_list_species"]]`**
+
+`r List_sp`
 
 <br/>
 
-```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
-List_DIS<-unique(filter(data,catch_category=="DIS")$species)
-cat(List_DIS,sep=", ")
-  cat("\n   \n")
-  cat("\n   \n") 
-```
 
-```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
-List_sp<-unique(List_LAN,List_DIS)
+```{r fraction_species_weights, echo=FALSE,warning=FALSE,comment="",message=FALSE,fig.asp=0.5}
+
 
 #Remove lines with NA value in gear_label/catch_category/species (no species observed from a gear of a given station)
 data<-filter(data,is.na(gear_label)==FALSE & is.na(catch_category)==FALSE & is.na(species)==FALSE)
@@ -664,7 +752,7 @@ knitr::kable(test_LAN[,-c(4)],digits=2,caption=lg[["2_2_LAN_table_caption"]])
 
 ```
 
-*`r lg[["2_2_DIS"]]`*
+<br/>
 
 ```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
 
@@ -702,22 +790,26 @@ kable(test_DIS[,-c(4)],digits=2,caption=lg[["2_2_DIS_table_caption"]])
 
 # `r lg[["3_title"]]`
 
-## `r lg[["3_list_size"]]`
+**`r lg[["3_list_size"]]`**
 
-<br/>
 
 ```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE}
 
 List_M<-unique(filter(data,is.na(number_at_length)==FALSE)$species)
-cat(List_M,sep=", ")
+#cat(List_M,sep=", ")
 
 ```
+
+
+
+`r List_M`
+
 
 ## `r lg[["3_size_distribution"]]`
 
 <br/>
 
-```{r, echo=FALSE,message=FALSE,warning=FALSE,comment="",message=FALSE,fig.width=18,fig.height=6}
+```{r size_distribution_species, echo=FALSE,message=FALSE,warning=FALSE,comment="",message=FALSE,fig.width=18,fig.height=6}
 
 #Remove lines with NA value in length_class (no species observed from a gear of a given station)
 data<-filter(data,is.na(length_class)==FALSE)
@@ -840,6 +932,7 @@ for(sp in 1:length(List_M)){
 ```
 
 <br/>
+<br/>
 
 ```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE,fig.asp=0.7}
 Tab_E<-bind_rows(List_E)
@@ -850,11 +943,13 @@ kable(Tab_E,digits=2,caption=lg[["3_escapement"]])
 
 ```
 
+<br/>
+
 ## `r lg[["3_selectivity_curve"]]`
 
 <br/>
 
-```{r, echo=FALSE,warning=FALSE,comment="",message=FALSE,fig.asp=0.7}
+```{r relative_size_selectivity_species, echo=FALSE,warning=FALSE,comment="",message=FALSE,fig.asp=0.7}
 
 for(sp in 1:length(List_M)){
   
@@ -897,6 +992,4 @@ for(sp in 1:length(List_M)){
 
 ```
 
-
 Figure : `r lg[["3_2_figure_caption"]]`
-

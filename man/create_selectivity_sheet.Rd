@@ -30,7 +30,7 @@ create_selectivity_sheet(
 \item{zones}{character The vector of zones used in the report.}
 }
 \value{
-None A Word document is generated in the output_dir as well as all the figures in png.
+None A HTML file is generated in the output_dir as well as all the figures in png.
 For more details on the selectivity sheet format, see the related vignette :
 \code{vignette("create-selectivity-sheet", package = "inser")}
 }

@@ -131,18 +131,26 @@ test_that("create_selectivity_sheet works in French", {
   )
   
   #' @description Testing the "paired" report from `create_selectivity_sheet()` is created
-  expect_true(file.exists(file.path(output_dir, "fiche_InseR_paired.docx")))
+  #expect_true(file.exists(file.path(output_dir, "fiche_InseR_paired.docx")))
+  expect_true(file.exists(file.path(output_dir, "fiche_InseR_paired.html")))
   
-  # unzip doc to access figures and tables
-  unzip(
-    zipfile = file.path(output_dir, "fiche_InseR_paired.docx"),
-    exdir = file.path(output_dir, "unzip_paired")
-  )
+  # # unzip doc to access figures and tables
+  # unzip(
+  #   zipfile = file.path(output_dir, "fiche_InseR_paired.docx"),
+  #   exdir = file.path(output_dir, "unzip_paired")
+  # )
+  # 
+  # #' @description Testing all figures are present in the "paired" report
+  # expect_length(
+  #   list.files(
+  #     file.path(output_dir, "unzip_paired", "word", "media")
+  #   ),
+  #   28
+  # )
   
-  #' @description Testing all figures are present in the "paired" report
-  expect_length(
-    list.files(
-      file.path(output_dir, "unzip_paired", "word", "media")
+      expect_length(
+   list.files(
+      file.path(output_dir, "fiche_InseR_paired_files/figure-html")
     ),
     28
   )
@@ -163,22 +171,30 @@ test_that("create_selectivity_sheet works in French", {
   )
   
   #' @description Testing the "unpaired" report from `create_selectivity_sheet()` is created
-  expect_true(file.exists(file.path(output_dir, "fiche_InseR_unpaired.docx")))
+  #expect_true(file.exists(file.path(output_dir, "fiche_InseR_unpaired.docx")))
+   expect_true(file.exists(file.path(output_dir, "fiche_InseR_unpaired.html")))
   
-  # unzip doc to access figures and tables
-  unzip(
-    zipfile = file.path(output_dir, "fiche_InseR_unpaired.docx"),
-    exdir = file.path(output_dir, "unzip_unpaired")
-  )
-  
-  #' @description Testing all figures are present in the "unpaired" report
-  expect_length(
-    list.files(
-      file.path(output_dir, "unzip_unpaired", "word", "media")
+  #  # unzip doc to access figures and tables
+  # unzip(
+  #   zipfile = file.path(output_dir, "fiche_InseR_unpaired.docx"),
+  #   exdir = file.path(output_dir, "unzip_unpaired")
+  # )
+  # 
+  # #' @description Testing all figures are present in the "unpaired" report
+  # expect_length(
+  #   list.files(
+  #     file.path(output_dir, "unzip_unpaired", "word", "media")
+  #   ),
+  #   28
+  # )
+      
+   expect_length(
+   list.files(
+      file.path(output_dir, "fiche_InseR_unpaired_files/figure-html")
     ),
     28
   )
-  
+      
   # Clear tmp folder
   unlink(output_dir, recursive = TRUE)
 })
@@ -259,7 +275,7 @@ test_that("create_selectivity_sheet works in English", {
   #   exdir = file.path(output_dir, "unzip_twin")
   # )
   # 
-  
+     
   #' @description Testing all figures are present in the "twin" report
   # expect_length(
   #   list.files(
@@ -312,18 +328,24 @@ test_that("create_selectivity_sheet works in English", {
   )
   
   #' @description Testing the "paired" report from `create_selectivity_sheet()` is created
-  expect_true(file.exists(file.path(output_dir, "fiche_InseR_paired.docx")))
+  expect_true(file.exists(file.path(output_dir, "fiche_InseR_paired.html")))
   
-  # unzip doc to access figures and tables
-  unzip(
-    zipfile = file.path(output_dir, "fiche_InseR_paired.docx"),
-    exdir = file.path(output_dir, "unzip_paired")
-  )
-  
-  #' @description Testing all figures are present in the "paired" report
-  expect_length(
-    list.files(
-      file.path(output_dir, "unzip_paired", "word", "media")
+  # # unzip doc to access figures and tables
+  # unzip(
+  #   zipfile = file.path(output_dir, "fiche_InseR_paired.docx"),
+  #   exdir = file.path(output_dir, "unzip_paired")
+  # )
+  # 
+  # #' @description Testing all figures are present in the "paired" report
+  # expect_length(
+  #   list.files(
+  #     file.path(output_dir, "unzip_paired", "word", "media")
+  #   ),
+  #   28
+  # )
+      expect_length(
+   list.files(
+      file.path(output_dir, "fiche_InseR_paired_files/figure-html")
     ),
     28
   )
@@ -344,18 +366,24 @@ test_that("create_selectivity_sheet works in English", {
   )
   
   #' @description Testing the "unpaired" report from `create_selectivity_sheet()` is created
-  expect_true(file.exists(file.path(output_dir, "fiche_InseR_unpaired.docx")))
+  expect_true(file.exists(file.path(output_dir, "fiche_InseR_unpaired.html")))
   
-  # unzip doc to access figures and tables
-  unzip(
-    zipfile = file.path(output_dir, "fiche_InseR_unpaired.docx"),
-    exdir = file.path(output_dir, "unzip_unpaired")
-  )
-  
-  #' @description Testing all figures are present in the "unpaired" report
-  expect_length(
-    list.files(
-      file.path(output_dir, "unzip_unpaired", "word", "media")
+  # # unzip doc to access figures and tables
+  # unzip(
+  #   zipfile = file.path(output_dir, "fiche_InseR_unpaired.docx"),
+  #   exdir = file.path(output_dir, "unzip_unpaired")
+  # )
+  # 
+  # #' @description Testing all figures are present in the "unpaired" report
+  # expect_length(
+  #   list.files(
+  #     file.path(output_dir, "unzip_unpaired", "word", "media")
+  #   ),
+  #   28
+  # )
+      expect_length(
+   list.files(
+      file.path(output_dir, "fiche_InseR_unpaired_files/figure-html")
     ),
     28
   )
