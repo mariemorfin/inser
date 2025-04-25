@@ -21,7 +21,7 @@
 #' @importFrom stats shapiro.test t.test wilcox.test
 #' @importFrom tidyr complete nesting
 #' 
-#' @return None A Word document is generated in the output_dir as well as all the figures in png.
+#' @return None A HTML file is generated in the output_dir as well as all the figures in png.
 #' For more details on the selectivity sheet format, see the related vignette :
 #' \code{vignette("create-selectivity-sheet", package = "inser")}
 #' @export
@@ -126,7 +126,7 @@ create_selectivity_sheet <- function(
   
   # Setup language translation object
   lg <- create_translate_dict(
-    path = system.file("template", "translation_2_utf8.csv", package = "inser"),
+    path = system.file("template", "translation_3_utf8.csv", package = "inser"),
     language = language
   )
   
