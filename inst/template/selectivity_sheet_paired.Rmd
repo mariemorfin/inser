@@ -423,12 +423,12 @@ if(length(which(is.na(tab_capture$sorting_time)==FALSE))>0){
   theme(legend.position = "None",axis.text=element_text(size=8),
         axis.title=element_text(size=10))+
     xlab("")
-  
+
   g_tag<-ggplot(tab_tag)+
        theme_light()+
     xlab("STD")+ylab("TEST")+
     geom_point(aes(x=sorting_time_STD,y=sorting_time_TEST))
-  
+
   ggarrange(g_OP,g_tag)
 }
 

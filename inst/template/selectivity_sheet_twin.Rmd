@@ -424,12 +424,13 @@ Var_Rate<-(Tot_TEST-Tot_STD)/Tot_STD*100
 
 if(is.na(Var_Rate)==FALSE){
   sign<-c(lg[["2_1_decrease"]] ,lg[["2_1_increase"]])[as.numeric(eval(Var_Rate>0))+1]
-  rate<-abs(round(Var_Rate,2))
+  rate<-abs(round(Var_Rate))
 cat(sprintf(lg[["2_1_sorting_var1"]],sign,rate))
 
 Var_Rate2<-with(tab_diff,diff_DIS/weight_DIS_STD)*100
-  sign<-c(lg[["2_1_decrease"]] ,lg[["2_1_increase"]])[as.numeric(eval(Var_Rate2>0))+1]
-   rate<-abs(round(mean(Var_Rate2),2))
+
+  sign<-c(lg[["2_1_decrease"]] ,lg[["2_1_increase"]])[as.numeric(eval(mean(Var_Rate2)>0))+1]
+   rate<-abs(round(mean(Var_Rate2)))
    
 cat(paste0(lg[['2_1_subtitle_sorting_variation']]," : \n"))
 
@@ -490,7 +491,6 @@ tab_diff <- tab_capture %>%
 
 tab_rate<-tab_capture |> group_by(gear_label) |>
   summarize(mean_rate=round(mean(discard_rate)*100))
-
 
 mean_rate<-tab_rate |> filter(gear_label=="STD") |> select(mean_rate)
 
