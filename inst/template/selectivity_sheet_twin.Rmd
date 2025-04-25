@@ -316,7 +316,7 @@ if(sum(df$nNA>0)){
 ##sorting time calculation
 data$sorting_start_date_time<-as.POSIXct(data$sorting_start_date_time,format="%Y-%m-%d %H:%M:%S")
 data$sorting_end_date_time<-as.POSIXct(data$sorting_end_date_time,format="%Y-%m-%d %H:%M:%S")
-data$sorting_time<-with(data,difftime(sorting_end_date_time,sorting_start_date_time,units="mins"))
+data$sorting_time<-as.numeric(with(data,difftime(sorting_end_date_time,sorting_start_date_time,units="mins")))
 
 tab_capture<- data %>% 
   group_by(project,vessel_identifier,trip_code,station_number,gear_label)%>%

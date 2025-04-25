@@ -312,7 +312,7 @@ kable(df)
 ##sorting time calculation
 data$sorting_start_date_time<-as.POSIXct(data$sorting_start_date_time,format="%Y-%m-%d %H:%M:%S")
 data$sorting_end_date_time<-as.POSIXct(data$sorting_end_date_time,format="%Y-%m-%d %H:%M:%S")
-data$sorting_time<-with(data,difftime(sorting_end_date_time,sorting_start_date_time,units="mins"))
+data$sorting_time<-as.numeric(with(data,difftime(sorting_end_date_time,sorting_start_date_time,units="mins")))
 
 #By catch
 tab_capture<- data %>% 
