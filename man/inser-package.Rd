@@ -16,7 +16,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Marie Morfin \email{first.last@example.com} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
+\strong{Maintainer}: Marie Morfin \email{first.last@example.com} (\href{https://orcid.org/0000-0002-1637-5910}{ORCID})
 
 Authors:
 \itemize{

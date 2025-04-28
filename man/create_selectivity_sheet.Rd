@@ -93,7 +93,7 @@ create_selectivity_sheet(data = TAB,
                          output_dir = output_dir,
                          output_file = "fiche_InseR_twin",
                          protocol = "twin",
-                         language = "FR",
+                         language = "EN",
                          zones=zones,
                          min_length=min_length)
 

@@ -23,7 +23,7 @@ library(inser)
 
 
 
-## Sythetic sheet of fishing gear selectivity
+## Synthetic sheet of fishing gear selectivity
 
 <div align="center">**Acronyms**</div>
 
@@ -37,7 +37,7 @@ DIS: Part of the catch not retained by the fisherman (= Discards)
 
 FO: Fishing Operation
 
-The sheet is generated in Word format for easy editing. It presents 'relative' selectivity indicators between the TEST gear and the STD gear. They quantify and characterize the improvement or decrease in the selectivity of the TEST gear compared to the STD gear.
+The sheet is generated in Html format. It presents 'relative' selectivity indicators between the TEST gear and the STD gear. They quantify and characterize the improvement or decrease in the selectivity of the TEST gear compared to the STD gear.
 
 <br>
 
@@ -79,6 +79,7 @@ The sheet is generated in Word format for easy editing. It presents 'relative' s
 - Histograms of length distribution of the catches of the two gears (from the total catch and by fraction)
 - Relative selectivity by size class (TEST/(TEST+STD))
 - Estimate of the escapement rate of individuals below commercial size (1-TEST/STD)
+
 
 
 # `create_selectivity_sheet()`
@@ -139,7 +140,7 @@ create_selectivity_sheet(data = TAB,
                          output_dir = output_dir,
                          output_file = "fiche_InseR_twin",
                          protocol = "twin",
-                         language = "FR",
+                         language = "EN",
                          zones=zones,
                          min_length=min_length)
 

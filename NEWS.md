@@ -1,3 +1,7 @@
+# inser 0.3.0
+
+* `create_selectivity_sheet()` generate html files. #24
+
 # inser 0.2.0
 
 * The `zones` parameter of `create_selectivity_sheet()` does not have a default value anymore. #7
