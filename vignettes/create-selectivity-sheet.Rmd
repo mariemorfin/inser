@@ -23,7 +23,7 @@ library(inser)
 
 
 
-## Sythetic sheet of fishing gear selectivity
+## Synthetic sheet of fishing gear selectivity
 
 <div align="center">**Acronyms**</div>
 

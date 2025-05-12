@@ -26,6 +26,7 @@ flat_create_selectivity_sheet.Rmd:
     document: true
     overwrite: 'yes'
     clean: ask
+    codecov: false
 flat_prep_sel_data.Rmd:
   path: dev/flat_prep_sel_data.Rmd
   state: active

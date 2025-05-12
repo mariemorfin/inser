@@ -3,7 +3,7 @@ Title: Generate Fishing Gear Selectivity Indicator Sheets
 Version: 0.2.0
 Authors@R: c(
     person("Marie", "Morfin", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID")),
+           comment = c(ORCID = "0000-0002-1637-5910")),
     person("Swann", "Floc'hlay", , "swann@thinkr.fr", role = "aut",
            comment = c(ORCID = "0000-0003-1477-830X")),
     person("Antoine", "Languillaume", , "antoine@thinkr.fr", role = "aut",
@@ -15,7 +15,7 @@ Description: Generate a synthetic sheet of fishing gear selectivity
     experimental protocols: 'twin', 'single paired' or 'independent'
     sampling, for which a test gear is compared to a standard gear.
 License: file LICENSE
-URL: https://thinkr-open.github.io/inser/
+URL: https://github.com/mariemorfin/inser/
 Imports: 
     dplyr,
     ggplot2,
@@ -35,10 +35,11 @@ Suggests:
     here,
     purrr,
     readr,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    xfun (>= 0.51) 
 VignetteBuilder: 
     knitr
-Config/fusen/version: 0.6.0
+Config/fusen/version: 0.7.1
 Config/Needs/website: ThinkR-open/thinkrtemplate
 Config/testthat/edition: 3
 Encoding: UTF-8
